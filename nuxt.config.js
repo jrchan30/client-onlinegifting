@@ -30,7 +30,8 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Montserrat:400,700,200',
+        href:
+          'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
       },
       {
         rel: 'stylesheet',
@@ -40,55 +41,29 @@ export default {
         crossorigin: 'anonymous',
         defer: true,
       },
-      {
-        rel: 'stylesheet',
-        href: '/css/bootstrap.min.css',
-        defer: true,
-      },
-      {
-        rel: 'stylesheet',
-        href: '/css/now-ui-kit.css?v=1.3.0',
-        defer: true,
-      },
-      // {
-      //   rel: 'stylesheet',
-      //   href: '/demo/demo.css',
-      // },
     ],
     script: [
       {
-        src: '/js/core/jquery.min.js',
-        type: 'text/javascript',
+        src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js',
+        integrity:
+          'sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj',
+        crossorigin: 'anonymous',
         body: true,
       },
       {
-        src: '/js/core/popper.min.js',
-        type: 'text/javascript',
+        src:
+          'https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js',
+        integrity:
+          'sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN',
+        crossorigin: 'anonymous',
         body: true,
       },
       {
-        src: '/js/core/bootstrap.min.js',
-        type: 'text/javascript',
-        body: true,
-      },
-      {
-        src: '/js/plugins/bootstrap-switch.js',
-        type: 'text/javascript',
-        body: true,
-      },
-      {
-        src: '/js/plugins/nouislider.min.js',
-        type: 'text/javascript',
-        body: true,
-      },
-      {
-        src: '/js/plugins/bootstrap-datepicker.js',
-        type: 'text/javascript',
-        body: true,
-      },
-      {
-        src: '/js/now-ui-kit.js?v=1.3.0',
-        type: 'text/javascript',
+        src:
+          'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js',
+        integrity:
+          'sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV',
+        crossorigin: 'anonymous',
         body: true,
       },
     ],
@@ -96,7 +71,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['@/assets/style/bootstrap.min.css'],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins

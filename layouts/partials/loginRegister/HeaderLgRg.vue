@@ -1,10 +1,8 @@
 <template>
-  <div class="row justify-content-center mt-4" id="header-padding">
-    <img
-      class="width-image w-25 d-flex"
-      src="/image/OnlineGiftingTextEdited.svg"
-      alt=""
-    />
+  <div class="container-fluid">
+    <div class="row justify-content-center border-bottom my-3 pb-2">
+      <img class="w-25" src="/image/OnlineGiftingTextEdited.svg" alt="" />
+    </div>
   </div>
 </template>
 
@@ -12,8 +10,4 @@
 export default {}
 </script>
 
-<style>
-#header-padding {
-  padding-bottom: 2%;
-}
-</style>
+<style></style>

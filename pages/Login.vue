@@ -40,25 +40,23 @@
                   />
                 </div>
               </div>
+              <button
+                type="submit"
+                class="btn btn-primary btn-round btn-lg btn-block"
+              >
+                Login
+              </button>
               <div class="card-footer px-3">
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-round btn-lg btn-block register-btn"
-                >
-                  Login
-                </button>
-                <div class="pull-left">
+                <div class="">
                   <h6>
-                    <nuxt-link
-                      to="/register"
-                      class="font-color-custom text-custom"
+                    <nuxt-link to="/register" class="text-primary text-custom"
                       >Create Account
                     </nuxt-link>
                   </h6>
                 </div>
-                <div class="pull-right">
+                <div class="">
                   <h6 class="pb-4">
-                    <nuxt-link to="/" class="font-color-custom text-custom"
+                    <nuxt-link to="/" class="text-primary text-custom"
                       >Need Help?</nuxt-link
                     >
                   </h6>
@@ -74,7 +72,6 @@
 
 <script>
 export default {
-  // middleware: ,
   layout: 'LoginRegister',
   data() {
     return {
@@ -122,11 +119,6 @@ export default {
   .login-bg {
     background-size: 70%;
   }
-}
-
-.register-btn {
-  background-color: #336699;
-  width: 100%;
 }
 
 .form-field {

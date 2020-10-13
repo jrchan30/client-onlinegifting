@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <div class="bg-light">
-      <Nuxt />
+      <nuxt />
     </div>
     <FooterLgRg />
   </div>
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style>
-* {
-  outline: none;
+body {
+  font-family: 'Raleway', sans-serif;
 }
 </style>
