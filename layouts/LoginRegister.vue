@@ -1,20 +1,13 @@
 <template>
   <div>
-    <HeaderLgRg />
+    <LoginRegisterHeader />
     <Nuxt />
-    <FooterLgRg :class="classFooter" />
+    <LoginRegisterFooter :class="classFooter" />
   </div>
 </template>
 
 <script>
-import HeaderLgRg from '@/layouts/partials/loginRegister/HeaderLgRg'
-import FooterLgRg from '@/layouts/partials/loginRegister/FooterLgRg'
-
 export default {
-  components: {
-    HeaderLgRg,
-    FooterLgRg,
-  },
   computed: {
     classFooter() {
       if (this.$route.path === '/login') {
@@ -29,14 +22,18 @@ export default {
 </script>
 
 <style>
-.footer-lg {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+body,
+html {
+  height: 100%;
 }
 
-@media screen and (max-height: 630px) {
+.footer-lg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+@media screen and (max-height: 633px) {
   .footer-lg {
     position: relative;
   }
@@ -44,22 +41,13 @@ export default {
 
 .footer-rg {
   position: absolute;
-  right: 0;
   bottom: 0;
-  left: 0;
+  width: 100%;
 }
 
-@media screen and (max-height: 730px) {
+@media screen and (max-height: 925px) {
   .footer-rg {
     position: relative;
   }
-}
-
-.font-color-custom {
-  color: #336699;
-}
-
-.text-custom {
-  font-size: 10px;
 }
 </style>

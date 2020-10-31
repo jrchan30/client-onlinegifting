@@ -1,18 +1,18 @@
 <template>
-  <footer class="text-center footer">
+  <footer class="py-2 text-center">
     <div class="container">
       <div class="row">
         <nav class="col-6">
-          <ul class="text-secondary">
-            <li>
+          <ul class="text-secondary list-inline">
+            <li class="list-inline-item pr-3">
               <nuxt-link to=""> About Us </nuxt-link>
             </li>
-            <li>
+            <li class="list-inline-item">
               <nuxt-link to=""> Blog </nuxt-link>
             </li>
           </ul>
         </nav>
-        <div class="copyright text-secondary col-6" id="copyright">
+        <div class="text-secondary col-6">
           &copy;
           {{ new Date().getFullYear() }} Online Gifting | Coded and Designed by
           <a
@@ -31,10 +31,4 @@
 export default {}
 </script>
 
-<style scoped>
-.footer {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
-}
-</style>
+<style></style>

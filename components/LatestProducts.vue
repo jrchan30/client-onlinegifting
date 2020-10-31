@@ -1,12 +1,12 @@
 <template>
   <div class="py-2" v-if="LATEST">
-    <section class="row section-border shadow pb-2">
+    <section class="row section-border shadow pb-2 mx-0">
       <h1
         class="col-10 py-3 m-auto text-center text-uppercase font-weight-bold border-bottom"
       >
         Our Top 5 Latest Products
       </h1>
-      <div class="col-8">
+      <div class="col-12 col-md-8">
         <client-only>
           <carousel-3d
             :clickable="false"
@@ -34,9 +34,9 @@
           </carousel-3d>
         </client-only>
       </div>
-      <div class="col align-self-center">
-        <h2 class="text-custom">{{ current.name }}</h2>
-        <h3 class="text-custom">{{ current.description }}</h3>
+      <div class="col-12 col-md-4 align-self-center">
+        <p class="text-primary">{{ current.name }}</p>
+        <p class="">{{ current.description }}</p>
         <p class="card-text">Rp. {{ current.price }}</p>
         <nuxt-link :to="`/products/${current.id}`"
           ><button class="btn-primary">View</button></nuxt-link

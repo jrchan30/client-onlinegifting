@@ -1,125 +1,50 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="row justify-content-around align-items-center text-center">
-        <div class="col-6 d-none d-md-block">
-          <img src="/image/Login-Background.svg" alt="" />
-          <h2 class="pt-2 mb-0">Gifts for Your Loved Ones</h2>
-          <p>Simple, fast, and convenient gifting experience</p>
-        </div>
-        <div class="col-10 col-md-6 p-0">
-          <div class="card w-100">
-            <img
-              class="card-image-top w-50 p-4"
-              src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
-              alt=""
-            />
-            <h2 class="card-title font-weight-bold text-uppercase">Register</h2>
-            <form class="form" @submit.prevent="submit">
-              <alert-success :form="form">
-                We have sent you an email to activate your account.
-              </alert-success>
-              <div class="card-body form-field m-auto">
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons users_circle-08"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    v-model.trim="form.username"
-                    name="username"
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('username') }"
-                    placeholder="Username..."
-                  />
-                  <has-error :form="form" field="name"></has-error>
-                </div>
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons users_circle-08"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    v-model.trim="form.name"
-                    name="name"
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('name') }"
-                    placeholder="Name..."
-                  />
-                  <has-error :form="form" field="name"></has-error>
-                </div>
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons ui-1_email-85"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    v-model.trim="form.email"
-                    name="email"
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('email') }"
-                    placeholder="Email Address..."
-                  />
-                  <has-error :form="form" field="email"></has-error>
-                </div>
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons text_caps-small"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="password"
-                    v-model.trim="form.password"
-                    name="password"
-                    placeholder="Password..."
-                    class="form-control"
-                    :class="{ 'is-invalid': form.errors.has('password') }"
-                  />
-                  <has-error :form="form" field="password"></has-error>
-                </div>
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons text_caps-small"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="password"
-                    v-model.trim="form.password_confirmation"
-                    name="confirm_password"
-                    placeholder="Confirm Password..."
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="card-footer text-left px-3">
-                <button
-                  type="submit"
-                  class="btn btn-primary btn-round btn-lg btn-block register-btn"
+  <div class="container-fluid">
+    <div class="register-bg w-100">
+      <div class="row justify-content-center">
+        <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
+          <CardForm
+            @formSubmitted="formSubmit"
+            :loading="loading"
+            :alert-class="alert.class"
+            :alert-show="alert.show"
+          >
+            <template v-slot:alert><span v-html="alert.text"></span></template>
+            <template v-slot:title> Register </template>
+
+            <template v-slot:fields>
+              <div
+                v-for="(value, key, index) in form"
+                :key="index"
+                class="px-2"
+              >
+                <label
+                  :for="value.id"
+                  class="text-capitalize text-primary float-left mb-0"
+                  >{{ key }}</label
                 >
-                  <span v-if="form.busy">
-                    <i class="fas fa-spinner fa-spin"></i>
-                  </span>
-                  Register
-                </button>
-                <div class="pb-4">
-                  <h6 class="text-custom">
-                    Already Have an Account?
-                    <nuxt-link to="/login" class="font-color-custom">
-                      Login
-                    </nuxt-link>
-                  </h6>
-                </div>
+                <InputField
+                  class="pb-3"
+                  :errors="errors"
+                  :name="key"
+                  :keyValue="value.val"
+                  v-on:new-input="value.val = $event"
+                  :icon="value.icon"
+                  :placeholder="value.placeholder"
+                  :inputType="value.type"
+                  :id="value.id"
+                />
               </div>
-            </form>
-          </div>
+            </template>
+
+            <template v-slot:btnSubmit> Register </template>
+            <template v-slot:footer>
+              <p class="">
+                Already Have an Account?
+                <nuxt-link to="login">Login</nuxt-link>
+              </p>
+            </template>
+          </CardForm>
         </div>
       </div>
     </div>
@@ -131,110 +56,86 @@ export default {
   layout: 'LoginRegister',
   data() {
     return {
-      form: this.$vform({
-        username: '',
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-      }),
+      loading: false,
+      form: {
+        username: {
+          type: 'text',
+          val: '',
+          placeholder: 'Username...',
+          icon: 'fas fa-user',
+          id: 'registerUsername',
+        },
+        name: {
+          type: 'text',
+          val: '',
+          placeholder: 'Name...',
+          icon: 'fas fa-address-card',
+          id: 'registerName',
+        },
+        email: {
+          type: 'text',
+          val: '',
+          placeholder: 'Email...',
+          icon: 'fas fa-envelope',
+          id: 'registerEmail',
+        },
+        password: {
+          type: 'password',
+          val: '',
+          placeholder: 'Password...',
+          icon: 'fas fa-user-lock',
+          id: 'registerPassword',
+        },
+        password_confirmation: {
+          type: 'password',
+          val: '',
+          placeholder: 'Password Confirmation...',
+          icon: 'fas fa-user-lock',
+          id: 'registerPasswordConfirmation',
+        },
+      },
+      errors: {},
+      alert: {
+        class: '',
+        show: false,
+        text: '',
+      },
     }
   },
   methods: {
-    async submit() {
+    async formSubmit() {
+      this.loading = true
       try {
-        //JALANIN
-        this.form.post('http://localhost:8000/api/register')
-        console.log('success register')
+        await this.$axios.$post('/register', {
+          username: this.form.username.val,
+          name: this.form.name.val,
+          password: this.form.password.val,
+          password_confirmation: this.form.password_confirmation.val,
+          email: this.form.email.val,
+        })
+        // this.clear()
+        this.alert.class = 'alert-success'
+        this.alert.show = true
+        this.alert.text = `Success! Please verify your email <strong>${this.form.email.val}</strong>`
+        /**swal */
       } catch (e) {
-        console.log(e)
+        this.errors = e.response.data.errors
+      } finally {
+        this.loading = false
       }
     },
-    // async submit() {
-    //   try {
-    //     //JALANIN
-    //     this.$axios.$post('http://localhost:8000/register', this.form)
-    //     console.log('success register')
-    //   } catch (e) {
-    //     console.log(e)
-    //   } finally {
-    //     console.log('success (finally)')
-    //   }
-    // },
-    // async submit() {
-    //   $token = await this.$axios.$get(
-    //     'http://localhost:8000/sanctum/csrf-cookie'
-    //   )
-    //   this.$auth.token.set($token)
-    //   this.form
-    //     .post('laravelSanctum', 'http://localhost:8000/register', $token)
-    //     .then((res) => {
-    //       this.form.reset()
-    //       console.log(res)
-    //     })
-    //     .catch((error) => {
-    //       console.log(error)
-    //     })
-    // },
-    // async setToken() {
-    //   $token = await this.$axios.$get(
-    //     'http://localhost:8000/sanctum/csrf-cookie'
-    //   )
-    //   await this.$auth.token.set($token)
-    // },
-    // async submit() {
-    //   await setToken()
-    //   await this.$axios.$post('/register', {
-    //     data: {
-    //       name: this.form.name,
-    //       email: this.form.email,
-    //       password: this.form.password,
-    //     },
-    //   })
-    //   console.log(this.data)
-    // },
-    // submit() {
-    //   this.$axios
-    //     .$get('http://localhost:8000/sanctum/csrf-cookie', (res) => {
-    //       this.$auth.token.set($token)
-    //     })
-    //     .then(
-    //       this.form
-    //         .post('/register')
-    //         .then((res) => {
-    //           this.form.reset()
-    //           console.log(res)
-    //         })
-    //         .catch((error) => {
-    //           console.log(error)
-    //         })
-    //     )
-    // },
+    clear() {
+      Object.assign(this.$data, this.$options.data())
+    },
   },
 }
 </script>
 
 <style scoped>
-@media screen and (max-height: 850px) {
-  .footer {
-    position: relative;
-  }
-}
-
-.register-btn {
-  background-color: #336699;
-  width: 100%;
-}
-
-.form-field {
-  width: 90%;
-}
-
-#header-padding {
-  padding-bottom: 5%;
-}
-
-.card {
-  max-width: 320px;
+.register-bg {
+  background-image: url('/image/Background-2.svg');
+  background-size: cover;
+  background-position: bottom;
+  background-repeat: no-repeat;
 }
 </style>

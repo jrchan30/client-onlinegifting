@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="input-group pb-3">
+    <div class="input-group">
       <div class="input-group-prepend">
         <div
           class="input-group-text text-primary bg-transparent border-right-0"

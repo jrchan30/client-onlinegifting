@@ -100,6 +100,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxtjs/dotenv',
+    'vue-sweetalert2/nuxt',
   ],
   axios: {
     credentials: true,
@@ -111,14 +112,15 @@ export default {
     redirect: {
       home: false,
       login: '/login',
+      logout: '/login'
     },
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
         url: process.env.SANCTUM_URL,
-        endpoints: {
-          logout: { url: '/logout', method: 'post' },
-        },
+        // endpoints: {
+        //   logout: { url: '/logout', method: 'post' },
+        // },
       },
     },
   },

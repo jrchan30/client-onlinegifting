@@ -5,6 +5,15 @@
       src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
       alt=""
     />
+    <div
+      v-if="alertShow"
+      :class="alertClass"
+      class="alert mt-4 mb-0"
+      style="border-radius: 0"
+      role="alert"
+    >
+      <slot name="alert"></slot>
+    </div>
     <div class="card-body">
       <h2 class="card-title text-uppercase">
         <slot name="title"></slot>
@@ -12,22 +21,34 @@
       <div>
         <form @submit.prevent="formSubmit" @keyup.enter.prevent>
           <slot name="fields"></slot>
-          <button type="submit" class="btn btn-primary mt-4">
+          <button type="submit" class="btn btn-primary mt-2">
             <i v-if="loading" class="fas fa-spinner fa-spin"></i>
             <slot name="btnSubmit"></slot>
           </button>
         </form>
       </div>
     </div>
-    <div class="card-footer bg-white border-0"></div>
+    <div class="card-footer border-0 shadow">
+      <slot name="footer"></slot>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    loading: Boolean,
-    default: false,
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+    alertClass: {
+      type: String,
+      default: 'alert-danger',
+    },
+    alertShow: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     formSubmit() {

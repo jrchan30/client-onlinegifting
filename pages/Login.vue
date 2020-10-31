@@ -1,69 +1,40 @@
 <template>
-  <div>
-    <div class="container">
-      <div class="row justify-content-around align-items-center text-center">
-        <div class="login-bg d-none d-md-block"></div>
-        <div class="col-10 col-md-6 p-0">
-          <div class="card">
-            <img
-              class="card-image-top w-50 p-4"
-              src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
-              alt=""
-            />
-            <h2 class="card-title font-weight-bold text-uppercase">Login</h2>
-            <form class="form" method="post" @submit.prevent="login">
-              <div class="card-body form-field m-auto">
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons ui-1_email-85"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="text"
-                    v-model="loginForm.email"
-                    class="form-control"
-                    placeholder="Email Address..."
-                  />
-                </div>
-                <div class="input-group no-border input-lg">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text">
-                      <i class="now-ui-icons text_caps-small"></i>
-                    </span>
-                  </div>
-                  <input
-                    type="password"
-                    v-model="loginForm.password"
-                    placeholder="Password..."
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                class="btn btn-primary btn-round btn-lg btn-block"
+  <div class="login-bg">
+    <div class="container fill">
+      <div class="row justify-content-center fill">
+        <div class="col-10 col-md-4 col-lg-3 my-3 p-0 my-auto">
+          <CardForm @formSubmitted="formSubmit" :loading="loading">
+            <template v-slot:title>Login</template>
+
+            <template v-slot:fields>
+              <div
+                v-for="(value, key, index) in form"
+                :key="index"
+                class="px-2"
               >
-                Login
-              </button>
-              <div class="card-footer px-3">
-                <div class="">
-                  <h6>
-                    <nuxt-link to="/register" class="text-primary text-custom"
-                      >Create Account
-                    </nuxt-link>
-                  </h6>
-                </div>
-                <div class="">
-                  <h6 class="pb-4">
-                    <nuxt-link to="/" class="text-primary text-custom"
-                      >Need Help?</nuxt-link
-                    >
-                  </h6>
-                </div>
+                <label
+                  :for="value.id"
+                  class="text-capitalize text-primary float-left mb-0"
+                  >{{ key }}</label
+                >
+                <InputField
+                  class="pb-3"
+                  :errors="errors"
+                  :name="key"
+                  :keyValue="value.val"
+                  v-on:new-input="value.val = $event"
+                  :icon="value.icon"
+                  :placeholder="value.placeholder"
+                  :inputType="value.type"
+                  :id="value.id"
+                />
               </div>
-            </form>
-          </div>
+            </template>
+            <template v-slot:btnSubmit>Login</template>
+            <template v-slot:footer>
+              <nuxt-link to="register">Create Account</nuxt-link>
+            </template>
+          </CardForm>
         </div>
       </div>
     </div>
@@ -75,28 +46,44 @@ export default {
   layout: 'LoginRegister',
   data() {
     return {
-      loginForm: {
-        email: '',
-        password: '',
+      loading: false,
+      form: {
+        email: {
+          type: 'text',
+          val: '',
+          placeholder: 'Email Address...',
+          icon: 'fas fa-envelope',
+          id: 'loginEmail',
+        },
+        password: {
+          type: 'password',
+          val: '',
+          placeholder: 'Password...',
+          icon: 'fas fa-user-lock',
+          id: 'loginPassword',
+        },
       },
+      errors: {},
     }
   },
   methods: {
-    async login() {
+    async formSubmit() {
+      this.errors = {}
+      this.loading = true
       try {
         await this.$auth.loginWith('laravelSanctum', {
           data: {
-            email: this.loginForm.email,
-            password: this.loginForm.password,
+            email: this.form.email.val,
+            password: this.form.password.val,
           },
         })
-
         this.$router.push({
           path: '/home',
         })
-        console.log('success')
-      } catch (error) {
-        console.log(error.response)
+      } catch (e) {
+        this.errors = e.response.data.errors
+      } finally {
+        this.loading = false
       }
     },
   },
@@ -105,27 +92,14 @@ export default {
 
 <style scoped>
 .login-bg {
-  background-image: url(/image/Login-Background.svg);
-  background-size: 50%;
-  background-repeat: no-repeat;
-  position: absolute;
+  background-image: url('/image/Login-Background.svg');
+  background-size: 100vh;
   background-position: center;
-  width: 100%;
+  background-repeat: no-repeat;
+}
+
+.fill {
+  min-height: 70vh;
   height: 100%;
-  z-index: -1;
-}
-
-@media screen and (max-width: 1200px) {
-  .login-bg {
-    background-size: 70%;
-  }
-}
-
-.form-field {
-  width: 90%;
-}
-
-.card {
-  max-width: 320px;
 }
 </style>
