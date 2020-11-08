@@ -1,5 +1,5 @@
 <template>
-  <div class="py-2" v-if="LATEST">
+  <div v-if="LATEST" class="py-2">
     <section class="row section-border shadow pb-2 mx-0">
       <h1
         class="col-10 py-3 m-auto text-center text-uppercase font-weight-bold border-bottom"
@@ -10,7 +10,7 @@
         <client-only>
           <carousel-3d
             :clickable="false"
-            :controlsVisible="true"
+            :controls-visible="true"
             :controls-prev-html="'&laquo;'"
             :controls-next-html="'&raquo;'"
             :controls-width="60"
@@ -21,7 +21,7 @@
             :border="0"
             @before-slide-change="changeDescription"
           >
-            <slide v-for="(product, i) in LATEST" :index="i" :key="product.id">
+            <slide v-for="(product, i) in LATEST" :key="product.id" :index="i">
               <div v-if="product.images.length > 0">
                 <img
                   loading="lazy"
@@ -50,11 +50,6 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  data() {
-    return {
-      current: {},
-    }
-  },
   async fetch() {
     try {
       await this.GET_LATEST()
@@ -62,6 +57,11 @@ export default {
       console.log(e)
     }
     this.current = this.LATEST[0]
+  },
+  data() {
+    return {
+      current: {},
+    }
   },
   computed: {
     ...mapGetters({

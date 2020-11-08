@@ -56,21 +56,21 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  async mounted() {
-    await this.GET_LATEST()
-    this.current = this.LATEST[0]
-  },
   computed: {
     ...mapGetters({
       LATEST: 'products/LATEST',
     }),
     bindActive(index) {
-      if (index == 0) {
+      if (index === 0) {
         return 'active'
       } else {
         return ''
       }
     },
+  },
+  async mounted() {
+    await this.GET_LATEST()
+    this.current = this.LATEST[0]
   },
   methods: {
     ...mapActions({

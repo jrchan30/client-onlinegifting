@@ -6,9 +6,9 @@
     </div>
     <div class="row justify-content-around m-auto px-4 pb-5">
       <nuxt-link
-        to="/home"
         v-for="category in CATEGORIES"
         :key="category.id"
+        to="/home"
         class="d-inline p-2 text-decoration-none category-bubble mt-2"
       >
         {{ category.name }}
@@ -21,13 +21,13 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  async fetch() {
+    await this.GET_CATEGORIES()
+  },
   data() {
     return {
       isShowCategories: '',
     }
-  },
-  async fetch() {
-    await this.GET_CATEGORIES()
   },
   computed: {
     ...mapGetters({

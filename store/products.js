@@ -1,3 +1,5 @@
+import { formatPrice } from '@/plugins/customUtil'
+
 export const state = () => ({
   products: {},
   latest: {},
@@ -22,15 +24,26 @@ export const getters = {
 
 export const mutations = {
   SET_PRODUCTS(state, payload) {
+    payload.data.forEach((x) => {
+      x.price = formatPrice(x.price)
+      x.main_image = x.images[0].url
+    })
     state.products = payload
   },
   SET_PRODUCT(state, payload) {
+    payload.data.price = formatPrice(payload.data.price)
     state.product = payload
   },
   SET_LATEST(state, payload) {
+    payload.data.forEach((x) => {
+      x.price = formatPrice(x.price)
+    })
     state.latest = payload
   },
   SET_LOWPRICE(state, payload) {
+    payload.data.forEach((x) => {
+      x.price = formatPrice(x.price)
+    })
     state.lowPrice = payload
   },
 }

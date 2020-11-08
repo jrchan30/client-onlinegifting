@@ -25,13 +25,13 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  async fetch() {
+    await this.GET_LOWPRICE()
+  },
   data() {
     return {
       activeItem: null,
     }
-  },
-  async fetch() {
-    await this.GET_LOWPRICE()
   },
   computed: {
     ...mapGetters({

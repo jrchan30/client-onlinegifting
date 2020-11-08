@@ -7,7 +7,7 @@
         class="col-4 col-md-2 px-md-2 pb-2 pt-4"
       >
         <nuxt-link :to="`/products/${product.id}`" class="text-dark">
-          <div class="card h-md-100" v-if="product.images.length > 0">
+          <div v-if="product.images.length > 0" class="card h-md-100">
             <div class="card-hover">
               <img
                 class="card-img-top"
@@ -44,13 +44,13 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  async fetch() {
+    await this.GET_LOWPRICE()
+  },
   data() {
     return {
       activeItem: null,
     }
-  },
-  async fetch() {
-    await this.GET_LOWPRICE()
   },
   computed: {
     ...mapGetters({

@@ -1,17 +1,13 @@
 <template>
   <div>
-    <HomeSlider />
-    <div class="container">
-      <LatestProducts />
-      <!-- <ProductLowPrice /> -->
-      <ProductLowPriceTest />
-    </div>
+    <h1>RUSAK</h1>
   </div>
 </template>
 
 <script>
 export default {
   layout: 'default',
+  methods: {},
 }
 </script>
 

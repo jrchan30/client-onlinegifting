@@ -1,5 +1,13 @@
 <template>
-  <ItemsPage :items="products" />
+  <div>
+    <div v-if="PRODUCTS">
+      <ItemsPage
+        :items="products"
+        :is-fetching="$fetchState.pending"
+        :type="'products'"
+      />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -14,7 +22,10 @@ export default {
       PRODUCTS: 'products/PRODUCTS',
     }),
     products() {
-      return this.PRODUCTS.data.filter((i) => i.stock > 0)
+      if (this.PRODUCTS.data) {
+        return this.PRODUCTS.data.filter((i) => i.stock > 0)
+      }
+      return []
     },
   },
   methods: {

@@ -42,9 +42,9 @@
           </li>
           <li class="nav-item">
             <a
-              @click="logout"
               id="logout-cursor"
               class="nav-link text-primary navDiv"
+              @click="logout"
             >
               Logout
             </a>
@@ -60,9 +60,11 @@
 export default {
   methods: {
     async logout() {
-      await this.$auth.logout()
-
-      this.$router.push('/login')
+      try {
+        await this.$auth.logout()
+      } catch (err) {
+        alert(err)
+      }
     },
   },
 }

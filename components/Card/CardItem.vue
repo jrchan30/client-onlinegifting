@@ -24,16 +24,18 @@
               <slot name="rating"></slot>
             </div>
           </small>
-          <small>Stock: {{ stock }}</small>
-          <div class="progress">
-            <div
-              class="progress-bar progress-bar-striped bg-info"
-              role="progressbar"
-              :style="{ width: stock + '%' }"
-              :aria-valuenow="stock"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            ></div>
+          <div v-if="stock > 0">
+            <small>Stock: {{ stock }}</small>
+            <div class="progress">
+              <div
+                class="progress-bar progress-bar-striped bg-info"
+                role="progressbar"
+                :style="{ width: stock + '%' }"
+                :aria-valuenow="stock"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              ></div>
+            </div>
           </div>
           <!-- <Rating /> -->
         </div>

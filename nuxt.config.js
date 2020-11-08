@@ -101,6 +101,8 @@ export default {
     '@nuxtjs/auth-next',
     '@nuxtjs/dotenv',
     'vue-sweetalert2/nuxt',
+    '@nuxtjs/pwa',
+    'cookie-universal-nuxt',
   ],
   axios: {
     credentials: true,
@@ -110,19 +112,25 @@ export default {
   },
   auth: {
     redirect: {
-      home: false,
+      home: '/',
       login: '/login',
-      logout: '/login'
+      logout: '/login',
     },
     strategies: {
       laravelSanctum: {
         provider: 'laravel/sanctum',
         url: process.env.SANCTUM_URL,
-        // endpoints: {
-        //   logout: { url: '/logout', method: 'post' },
-        // },
+        user: {
+          property: 'data',
+        },
+        endpoints: {
+          logout: { url: '/logout', method: 'post' },
+        },
       },
     },
+  },
+  pwa: {
+    icon: false, // disables the icon module
   },
   /*
    ** Build configuration

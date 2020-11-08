@@ -1,12 +1,12 @@
 function moveActive() {
-  var tabsNewAnim = $('#navbarSupportedContent')
-  var activeItemNewAnim = tabsNewAnim.find('.active')
-  var activeWidthNewAnimHeight = activeItemNewAnim.innerHeight()
-  var activeWidthNewAnimWidth = activeItemNewAnim.innerWidth()
-  var itemPosNewAnimTop = activeItemNewAnim.position()
-  var itemPosNewAnimLeft = activeItemNewAnim.position()
+  const tabsNewAnim = $('#navbarSupportedContent')
+  const activeItemNewAnim = tabsNewAnim.find('.active')
+  const activeWidthNewAnimHeight = activeItemNewAnim.innerHeight()
+  const activeWidthNewAnimWidth = activeItemNewAnim.innerWidth()
+  const itemPosNewAnimTop = activeItemNewAnim.position()
+  const itemPosNewAnimLeft = activeItemNewAnim.position()
 
-  if($('#navbarSupportedContent').find('li').hasClass('active')){
+  if ($('#navbarSupportedContent').find('li').hasClass('active')) {
     $('.hori-selector').css({
       display: 'inline-block',
       top: itemPosNewAnimTop.top + 'px',
@@ -14,17 +14,17 @@ function moveActive() {
       height: activeWidthNewAnimHeight + 'px',
       width: activeWidthNewAnimWidth + 'px',
     })
-  }else{
+  } else {
     // $('#selector').fadeOut()
     $('.hori-selector').css({
-      display: 'none'
-  })
-}
+      display: 'none',
+    })
+  }
   $('#navbarSupportedContent').on('click', 'li', function (e) {
-    var activeWidthNewAnimHeight = $(this).innerHeight()
-    var activeWidthNewAnimWidth = $(this).innerWidth()
-    var itemPosNewAnimTop = $(this).position()
-    var itemPosNewAnimLeft = $(this).position()
+    const activeWidthNewAnimHeight = $(this).innerHeight()
+    const activeWidthNewAnimWidth = $(this).innerWidth()
+    const itemPosNewAnimTop = $(this).position()
+    const itemPosNewAnimLeft = $(this).position()
     $('.hori-selector').css({
       top: itemPosNewAnimTop.top + 'px',
       left: itemPosNewAnimLeft.left + 'px',

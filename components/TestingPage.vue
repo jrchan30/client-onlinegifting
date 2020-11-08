@@ -81,8 +81,8 @@
                 >PRICE</span
               >
               <span
-                class="font-weight-bold text-secondary ml-3"
                 id="price-value"
+                class="font-weight-bold text-secondary ml-3"
                 >Rp.{{ item.data.price }}</span
               >
             </div>
@@ -98,8 +98,8 @@
               <span class="font-weight-bold text-primary ml-3">
                 <i class="fas fa-minus-circle"></i>
                 <input
-                  type="number"
                   v-model="quantity"
+                  type="number"
                   min="1"
                   :max="item.data.stock"
                   oninput="validity.valid||(value='');"
@@ -129,26 +129,26 @@
         <div class="col-12 border-top border-bottom align-middle">
           <ul class="list-inline my-auto">
             <li
+              id="discussions"
               class="list-inline-item py-3 mr-2 mr-md-4 border-primary navDiv"
               :class="{ 'border-bottom': navigation == 1 }"
-              id="discussions"
               @click="navigation = 1"
             >
               DISCUSSIONS
             </li>
             <li
+              id="reviews"
               class="list-inline-item py-3 mr-2 mr-md-4 border-primary navDiv"
               :class="{ 'border-bottom': navigation == 2 }"
               @click="navigation = 2"
-              id="reviews"
             >
               REVIEWS
             </li>
             <li
+              id="policy"
               class="list-inline-item py-3 mr-2 mr-md-4 border-primary navDiv"
               :class="{ 'border-bottom': navigation == 3 }"
               @click="navigation = 3"
-              id="policy"
             >
               BUNDLED
             </li>
@@ -246,8 +246,8 @@
           <span class="font-weight-bold text-primary">
             <i class="fas fa-minus-circle"></i>
             <input
-              type="number"
               v-model="quantity"
+              type="number"
               min="1"
               :max="item.data.stock"
               oninput="validity.valid||(value='');"
@@ -267,12 +267,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+// import { mapActions, mapGetters } from 'vuex'
 export default {
   props: {
     item: {
       type: Object,
-      default: '',
+      default: () => {},
     },
   },
   data() {

@@ -1,5 +1,11 @@
 <template>
-  <ItemsPage :items="BUNDLES.data" />
+  <div v-if="BUNDLES">
+    <ItemsPage
+      :items="bundles"
+      :is-fetching="$fetchState.pending"
+      :type="'bundles'"
+    />
+  </div>
 </template>
 
 <script>
@@ -13,8 +19,17 @@ export default {
     ...mapGetters({
       BUNDLES: 'bundles/BUNDLES',
     }),
+
     bundles() {
-      return this.BUNDLES.data.filter((i) => i.stock > 0)
+      if (this.BUNDLES.data) {
+        return this.BUNDLES.data.filter((bundle) => {
+          const bundleProducts = bundle.products.filter(
+            (product) => product.stock > 0
+          )
+          return bundleProducts
+        })
+      }
+      return []
     },
   },
   methods: {

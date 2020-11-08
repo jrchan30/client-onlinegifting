@@ -4,10 +4,10 @@
       <div class="row justify-content-center">
         <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
           <CardForm
-            @formSubmitted="formSubmit"
             :loading="loading"
             :alert-class="alert.class"
             :alert-show="alert.show"
+            @formSubmitted="formSubmit"
           >
             <template v-slot:alert><span v-html="alert.text"></span></template>
             <template v-slot:title> Register </template>
@@ -24,15 +24,15 @@
                   >{{ key }}</label
                 >
                 <InputField
+                  :id="value.id"
                   class="pb-3"
                   :errors="errors"
                   :name="key"
-                  :keyValue="value.val"
-                  v-on:new-input="value.val = $event"
+                  :key-value="value.val"
                   :icon="value.icon"
                   :placeholder="value.placeholder"
-                  :inputType="value.type"
-                  :id="value.id"
+                  :input-type="value.type"
+                  @new-input="value.val = $event"
                 />
               </div>
             </template>
@@ -53,7 +53,8 @@
 
 <script>
 export default {
-  layout: 'LoginRegister',
+  layout: 'login-register',
+  middleware: ['guest'],
   data() {
     return {
       loading: false,
@@ -104,6 +105,8 @@ export default {
   },
   methods: {
     async formSubmit() {
+      this.errors = {}
+      this.alert = {}
       this.loading = true
       try {
         await this.$axios.$post('/register', {
@@ -117,7 +120,6 @@ export default {
         this.alert.class = 'alert-success'
         this.alert.show = true
         this.alert.text = `Success! Please verify your email <strong>${this.form.email.val}</strong>`
-        /**swal */
       } catch (e) {
         this.errors = e.response.data.errors
       } finally {

@@ -15,9 +15,9 @@
       >
         <i class="fas fa-bars text-white"></i>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div id="navbarSupportedContent" class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <div class="hori-selector" id="selector">
+          <div id="selector" class="hori-selector">
             <div class="left"></div>
             <div class="right"></div>
           </div>
@@ -108,8 +108,9 @@ export default {
     }
   },
   watch: {
-    $route: async function () {
+    async $route() {
       await this.$nuxt.$loading.start()
+      // eslint-disable-next-line no-undef
       moveActive()
     },
   },

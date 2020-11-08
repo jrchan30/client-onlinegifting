@@ -1,7 +1,20 @@
-<template></template>
+<template>
+  <div>
+    <p>{{ $auth.user }}</p>
+    <p>{{ $auth.user.name }}</p>
+  </div>
+</template>
 
 <script>
-export default {}
+import { mapGetters } from 'vuex'
+export default {
+  computed: {
+    ...mapGetters({
+      isAuthenticated: 'isAuthenticated',
+      loggedInUser: 'loggedInUser',
+    }),
+  },
+}
 </script>
 
 <style></style>

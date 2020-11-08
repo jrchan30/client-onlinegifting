@@ -16,8 +16,8 @@
         :class="{ 'is-invalid': errors.hasOwnProperty(`${name}`) }"
         :placeholder="placeholder"
         :value="keyValue"
-        v-on:input="$emit('new-input', $event.target.value)"
         required
+        @input="$emit('new-input', $event.target.value)"
       />
     </div>
     <span v-if="errors.hasOwnProperty(name)" class="m-0 text-danger">{{

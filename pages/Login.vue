@@ -2,8 +2,19 @@
   <div class="login-bg">
     <div class="container fill">
       <div class="row justify-content-center fill">
-        <div class="col-10 col-md-4 col-lg-3 my-3 p-0 my-auto">
-          <CardForm @formSubmitted="formSubmit" :loading="loading">
+        <div class="col-10 col-md-6 col-lg-4 my-3 p-0 my-auto">
+          <CardForm
+            :loading="loading"
+            :alert-class="alert.class"
+            :alert-show="alert.show"
+            @formSubmitted="formSubmit"
+          >
+            <template v-slot:alert>
+              <p v-html="alert.text"></p>
+              <nuxt-link to="verification/resend"
+                >Resend verification email</nuxt-link
+              >
+            </template>
             <template v-slot:title>Login</template>
 
             <template v-slot:fields>
@@ -18,20 +29,30 @@
                   >{{ key }}</label
                 >
                 <InputField
+                  :id="value.id"
                   class="pb-3"
                   :errors="errors"
                   :name="key"
-                  :keyValue="value.val"
-                  v-on:new-input="value.val = $event"
+                  :key-value="value.val"
                   :icon="value.icon"
                   :placeholder="value.placeholder"
-                  :inputType="value.type"
-                  :id="value.id"
+                  :input-type="value.type"
+                  @new-input="value.val = $event"
                 />
               </div>
             </template>
             <template v-slot:btnSubmit>Login</template>
+            <template v-slot:reset-password>
+              <nuxt-link
+                id="forgot-pass"
+                tag="p"
+                to="/password/email"
+                class="text-left my-0 px-2 text-secondary"
+                >Forgot password?</nuxt-link
+              >
+            </template>
             <template v-slot:footer>
+              <span>Dont have an account yet?</span>
               <nuxt-link to="register">Create Account</nuxt-link>
             </template>
           </CardForm>
@@ -43,7 +64,8 @@
 
 <script>
 export default {
-  layout: 'LoginRegister',
+  middleware: ['guest'],
+  layout: 'login-register',
   data() {
     return {
       loading: false,
@@ -64,24 +86,42 @@ export default {
         },
       },
       errors: {},
+      alert: {
+        class: '',
+        show: false,
+        text: '',
+      },
     }
   },
+  // beforeCreate() {
+  //   if (this.$auth.user) {
+  //     this.$router.push({ name: 'index' })
+  //   }
+  // },
   methods: {
     async formSubmit() {
       this.errors = {}
       this.loading = true
       try {
+        console.log(this.$auth)
         await this.$auth.loginWith('laravelSanctum', {
           data: {
             email: this.form.email.val,
             password: this.form.password.val,
           },
         })
-        this.$router.push({
-          path: '/home',
-        })
+        // this.$router.push('/home')
       } catch (e) {
-        this.errors = e.response.data.errors
+        if (
+          e.response.status === 403 &&
+          e.response.data.errors.includes('need to verify')
+        ) {
+          this.alert.class = 'alert-danger'
+          this.alert.show = true
+          this.alert.text = e.response.data.errors
+        } else {
+          this.errors = e.response.data.errors
+        }
       } finally {
         this.loading = false
       }
@@ -91,6 +131,10 @@ export default {
 </script>
 
 <style scoped>
+#forgot-pass {
+  cursor: pointer;
+}
+
 .login-bg {
   background-image: url('/image/Login-Background.svg');
   background-size: 100vh;
