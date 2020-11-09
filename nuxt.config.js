@@ -28,10 +28,15 @@ export default {
 
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      // {
+      //   rel: 'stylesheet',
+      //   href:
+      //     'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
+      // },
       {
         rel: 'stylesheet',
         href:
-          'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
+          'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700',
       },
       {
         rel: 'stylesheet',
@@ -42,36 +47,12 @@ export default {
         defer: true,
       },
     ],
-    script: [
-      {
-        src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js',
-        integrity:
-          'sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj',
-        crossorigin: 'anonymous',
-        body: true,
-      },
-      {
-        src:
-          'https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js',
-        integrity:
-          'sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN',
-        crossorigin: 'anonymous',
-        body: true,
-      },
-      {
-        src:
-          'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js',
-        integrity:
-          'sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV',
-        crossorigin: 'anonymous',
-        body: true,
-      },
-    ],
+    script: [],
   },
   /*
    ** Global CSS
    */
-  css: ['@/assets/style/bootstrap.min.css'],
+  // css: ['@/assets/style/bootstrap.min.css'],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins

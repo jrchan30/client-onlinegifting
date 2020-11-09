@@ -36,6 +36,7 @@
 <script>
 export default {
   layout: 'LoginRegister',
+  middleware: ['guest'],
   data() {
     return {
       alertClass: '',
@@ -48,6 +49,7 @@ export default {
     try {
       await this.$axios.$post(`${this.$route.fullPath}`).then((res) => {
         this.$swal({
+          position: 'top-end',
           toast: true,
           icon: 'success',
           title: 'Nice...',

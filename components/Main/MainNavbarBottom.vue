@@ -1,7 +1,7 @@
 <template>
   <div class="sticky-top shadow">
     <nav class="navbar navbar-expand-lg navbar-mainbg">
-      <nuxt-link to="/home" class="navbar-brand navbar-logo navDiv"
+      <nuxt-link to="/" class="navbar-brand navbar-logo navDiv"
         >Online Gifting</nuxt-link
       >
       <button
@@ -23,7 +23,7 @@
           </div>
           <nuxt-link
             tag="li"
-            to="/home"
+            to="/"
             exact-active-class="active"
             class="nav-item"
           >
