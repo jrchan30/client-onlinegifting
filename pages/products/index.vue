@@ -2,10 +2,13 @@
   <div>
     <div v-if="PRODUCTS">
       <ItemsPage
-        :items="products"
+        :items="PRODUCTS.data"
         :is-fetching="$fetchState.pending"
         :type="'products'"
       />
+      <div class="d-flex justify-content-center">
+        <Pagination :action="'products'" />
+      </div>
     </div>
   </div>
 </template>

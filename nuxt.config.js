@@ -60,6 +60,8 @@ export default {
   plugins: [
     { src: '~/plugins/vue-carousel-3d.js', mode: 'client' },
     '~plugins/vform',
+    { src: '~/plugins/vue-skeleton.js', mode: 'client' },
+    { src: '~plugins/vue-chartjs.js', mode: 'client' },
   ],
   /*
    ** Auto import components

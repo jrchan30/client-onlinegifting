@@ -2,7 +2,7 @@
   <div>
     <MainNavbarTop />
     <MainNavbarBottom />
-    <Nuxt />
+    <nuxt />
     <Search />
     <LoginRegisterFooter />
   </div>
@@ -20,10 +20,6 @@ export default {
         },
       ],
       script: [
-        {
-          src: '/js/navbar.js',
-          body: true,
-        },
         {
           src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js',
           integrity:
@@ -45,6 +41,10 @@ export default {
           integrity:
             'sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV',
           crossorigin: 'anonymous',
+          body: true,
+        },
+        {
+          src: '/js/navbar.js',
           body: true,
         },
       ],

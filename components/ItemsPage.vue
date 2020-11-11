@@ -1,11 +1,18 @@
 <template>
   <div>
-    <div v-if="isFetching">
-      <Spinner />
+    <div v-if="isFetching || !items" class="container">
+      <div class="row mt-5">
+        <div v-for="index in 12" :key="index" class="col-6 col-md-3 py-4">
+          <content-placeholders :rounded="true">
+            <content-placeholders-img />
+            <content-placeholders-heading />
+          </content-placeholders>
+        </div>
+      </div>
     </div>
-    <div v-if="items" class="container">
-      <div class="row">
-        <div v-for="item in items" :key="item.id" class="col-6 col-md-2">
+    <div v-else class="container">
+      <div class="row mt-5">
+        <div v-for="item in items" :key="item.id" class="col-6 col-md-3">
           <CardItem
             class="item"
             :route="`/${type}/${item.id}`"
@@ -33,7 +40,7 @@ export default {
     },
     isFetching: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     type: {
       type: String,

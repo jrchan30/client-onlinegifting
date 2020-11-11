@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 mb-1">
+  <div class="my-2">
     <nuxt-link :to="route">
       <div class="card card-blog">
         <div class="card-image">
@@ -15,16 +15,16 @@
           <!-- <div class="ripple-cont"></div> -->
         </div>
         <div class="table">
-          <h6 class="category text-secondary text-size text-truncate">
+          <h5 class="category text-secondary text-truncate">
             <slot name="title"></slot>
-          </h6>
+          </h5>
           <small class="card-description font-weight-bold">
             <div class="row px-3">
               <slot name="price"></slot>
               <slot name="rating"></slot>
             </div>
           </small>
-          <div v-if="stock > 0">
+          <div v-if="stock">
             <small>Stock: {{ stock }}</small>
             <div class="progress">
               <div
@@ -81,8 +81,8 @@ export default {
   position: relative;
   overflow: hidden;
   /* margin-top: -30px; */
-  box-shadow: 0 16px 10px -12px rgba(0, 0, 0, 0.56),
-    0 4px 25px 0px rgba(0, 0, 0, 0.2), 0 5px 0px -5px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 16px 10px -12px rgba(0, 0, 0, 0.56),
+    0 4px 25px 0px rgba(0, 0, 0, 0.2), 0 5px 0px -5px rgba(0, 0, 0, 0.1); */
 }
 
 .card .card-image img {

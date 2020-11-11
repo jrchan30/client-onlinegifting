@@ -1,8 +1,21 @@
 <template>
   <div>
-    <client-only>
-      <Nuxt />
-    </client-only>
+    <!-- Sidenav -->
+    <AdminSideNav />
+    <!-- Main content -->
+    <div id="panel" class="main-content">
+      <!-- Topnav -->
+      <AdminTopNav />
+
+      <!-- <template v-if="$route.path === '/admin'"> -->
+      <AdminHeader />
+      <!-- </template> -->
+      <!-- Page content -->
+      <div class="container-fluid mt--6">
+        <Nuxt />
+        <AdminFooter />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -40,6 +53,7 @@ export default {
           src: '/assets/vendor/jquery/dist/jquery.min.js',
           body: true,
         },
+
         {
           src: '/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js',
           body: true,
@@ -48,6 +62,7 @@ export default {
           src: '/assets/vendor/js-cookie/js.cookie.js',
           body: true,
         },
+
         {
           src: '/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js',
           body: true,
@@ -58,22 +73,17 @@ export default {
           body: true,
         },
 
-        {
-          src: '/assets/vendor/chart.js/dist/Chart.min.js',
-          body: true,
-        },
-        {
-          src: '/assets/vendor/chart.js/dist/Chart.extension.js',
-          body: true,
-        },
+        // Forms
+
+        // Argon Js
         {
           src: '/assets/js/argon.min.js',
           body: true,
         },
-        {
-          src: '/assets/js/demo.min.js',
-          body: true,
-        },
+        // {
+        //   src: '/assets/js/demo.min.js',
+        //   body: true,
+        // },
       ],
     }
   },

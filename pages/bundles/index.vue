@@ -1,7 +1,7 @@
 <template>
   <div v-if="BUNDLES">
     <ItemsPage
-      :items="bundles"
+      :items="BUNDLES.data"
       :is-fetching="$fetchState.pending"
       :type="'bundles'"
     />
@@ -20,17 +20,17 @@ export default {
       BUNDLES: 'bundles/BUNDLES',
     }),
 
-    bundles() {
-      if (this.BUNDLES.data) {
-        return this.BUNDLES.data.filter((bundle) => {
-          const bundleProducts = bundle.products.filter(
-            (product) => product.stock > 0
-          )
-          return bundleProducts
-        })
-      }
-      return []
-    },
+    // bundles() {
+    //   if (this.BUNDLES.data) {
+    //     return this.BUNDLES.data.filter((bundle) => {
+    //       const bundleProducts = bundle.products.filter(
+    //         (product) => product.stock > 0
+    //       )
+    //       return bundleProducts
+    //     })
+    //   }
+    //   return []
+    // },
   },
   methods: {
     ...mapActions({
