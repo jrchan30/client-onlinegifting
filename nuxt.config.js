@@ -62,6 +62,7 @@ export default {
     '~plugins/vform',
     { src: '~/plugins/vue-skeleton.js', mode: 'client' },
     { src: '~plugins/vue-chartjs.js', mode: 'client' },
+    { src: '~plugins/vue-select.js', mode: 'client' },
   ],
   /*
    ** Auto import components

@@ -171,74 +171,61 @@
                 @click="closeForm"
               ></button>
             </h3>
-            <div class="card-body">
-              <div class="row">
-                <!--Main Fields Loop -->
-                <div
-                  v-for="(field, index) in fields"
-                  :key="index"
-                  :class="field.class"
-                >
-                  <div class="form-group">
-                    <div class="input-group input-group-merge">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"
-                          ><i :class="field.icon"></i
-                        ></span>
-                      </div>
-                      <input
-                        v-model="field.value"
-                        class="form-control"
-                        :placeholder="field.placeholder"
-                        type="text"
-                      />
-                      <template v-if="field.appendable">
-                        <div class="input-group-append">
+            <form @submit.prevent="submitEdit" @keyup.enter.prevent>
+              <div class="card-body">
+                <div class="row">
+                  <!--Main Fields Loop -->
+                  <div
+                    v-for="(field, index) in fields"
+                    :key="index"
+                    :class="field.class"
+                  >
+                    <div class="form-group">
+                      <div class="input-group input-group-merge">
+                        <div class="input-group-prepend">
                           <span class="input-group-text"
-                            ><small class="font-weight-bold">{{
-                              field.appendable_value
-                            }}</small></span
-                          >
+                            ><i :class="field.icon"></i
+                          ></span>
                         </div>
-                      </template>
-                    </div>
-                  </div>
-                </div>
-                <!--End Main Fields Loop -->
-                <div class="col-md-12">
-                  <div class="form-group">
-                    <div class="input-group input-group-merge">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text">
-                          <i class="fas fa-list-alt"></i>
-                        </span>
+                        <input
+                          v-model="field.value"
+                          class="form-control"
+                          :placeholder="field.placeholder"
+                          type="text"
+                        />
+                        <template v-if="field.appendable">
+                          <div class="input-group-append">
+                            <span class="input-group-text"
+                              ><small class="font-weight-bold">{{
+                                field.appendable_value
+                              }}</small></span
+                            >
+                          </div>
+                        </template>
                       </div>
-                      <select
-                        id="validationDefault04"
-                        class="custom-select"
-                        required
-                        multiple
-                      >
-                        <option selected disabled value="">Choose...</option>
-                        <option
-                          v-for="category in CATEGORIES"
-                          :key="category.id"
-                        >
-                          {{ category.name }}
-                        </option>
-                      </select>
                     </div>
                   </div>
+                  <!--End Main Fields Loop -->
+                  <div class="col-md-12 mb-4">
+                    <v-select
+                      v-model="categories"
+                      multiple
+                      label="name"
+                      required
+                      :reduce="(name) => name.id"
+                      :options="CATEGORIES"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-lg btn-block"
+                    @click="submitEdit"
+                  >
+                    Edit
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  class="btn btn-info btn-lg btn-block"
-                  @click="submitEdit"
-                >
-                  Edit
-                </button>
               </div>
-            </div>
+            </form>
           </template>
           <template v-else>
             <div>
@@ -302,13 +289,7 @@ export default {
           value: '',
         },
       },
-      categories: {
-        class: 'col-md-12',
-        placeholder: 'Categories',
-        icon: 'fas fa-list-alt',
-        appendable: false,
-        value: '',
-      },
+      categories: [],
     }
   },
   computed: {
@@ -343,7 +324,7 @@ export default {
       this.fields.weight.value = product.weight
       this.fields.stock.value = product.stock
       this.fields.description.value = product.description
-      this.categories.value = product.categories
+      product.categories.map((x) => this.categories.push(x.id))
       this.currentProductName = product.name
       document.getElementById('edit').scrollIntoView()
     },
@@ -369,12 +350,16 @@ export default {
     submitEdit() {
       this.$swal({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text: 'Please recheck before submitting',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.$swal('Hid!', 'Product has been edited.', 'success')
+        }
       })
       this.closeForm()
       console.log('submit edit button clicked')
