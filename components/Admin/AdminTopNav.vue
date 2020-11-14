@@ -150,7 +150,7 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <i class="ni ni-ungroup"></i>
+              <i class="ni ni-air-baloon"></i>
             </a>
             <div
               class="dropdown-menu dropdown-menu-lg dropdown-menu-dark bg-default dropdown-menu-right"

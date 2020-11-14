@@ -108,7 +108,10 @@
                     >
                   </li>
                   <li class="nav-item">
-                    <nuxt-link tag="a" to="/admin/tables/users" class="nav-link"
+                    <nuxt-link
+                      tag="a"
+                      to="/admin/tables/bundles"
+                      class="nav-link"
                       >Bundles</nuxt-link
                     >
                   </li>
