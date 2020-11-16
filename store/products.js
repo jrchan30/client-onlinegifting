@@ -53,6 +53,10 @@ export const actions = {
     const data = await this.$axios.$get(`products?page=${page}`)
     commit('SET_PRODUCTS', data)
   },
+  async GET_HIDDEN({ commit }, page = 1) {
+    const data = await this.$axios.$get(`trashed-products?page=${page}`)
+    commit('SET_PRODUCTS', data)
+  },
   async GET_PRODUCT({ commit }, id) {
     const data = await this.$axios.$get(`products/${id}`)
     commit('SET_PRODUCT', data)

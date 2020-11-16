@@ -1,11 +1,11 @@
 <template>
   <div>
     <!-- <div class="container-fluid mt--6"> -->
-    <form @submit.prevent="formSubmit" @keyup.enter.prevent>
+    <form @submit.prevent="submit" @keyup.enter.prevent>
       <div class="row">
         <div class="col-lg-6">
           <div class="card-wrapper">
-            <div class="card">
+            <div class="card" style="height: 460px">
               <div class="card-header">
                 <h3 class="mb-0">Input product</h3>
               </div>
@@ -28,7 +28,7 @@
                           v-model="field.value"
                           class="form-control"
                           :placeholder="field.placeholder"
-                          type="text"
+                          :type="field.type"
                         />
                         <template v-if="field.appendable">
                           <div class="input-group-append">
@@ -50,58 +50,66 @@
         </div>
         <div class="col-lg-6">
           <div class="card-wrapper">
-            <div class="card">
+            <div class="card" style="min-height: 460px">
               <div class="card-header">
                 <h3 class="mb-0">Tags</h3>
               </div>
               <div class="card-body">
-                <input
-                  type="text"
-                  class="form-control"
-                  value="Bucharest, Cluj, Iasi, Timisoara, Piatra Neamt"
-                  data-toggle="tags"
+                <v-select
+                  v-model="categories"
+                  multiple
+                  label="name"
+                  required
+                  :reduce="(name) => name.id"
+                  :options="CATEGORIES"
+                  style="z-index = 1000"
                 />
               </div>
               <div class="card-header">
                 <h3 class="mb-0">Images</h3>
               </div>
               <div class="card-body">
-                <div
-                  class="dropzone dropzone-single"
-                  data-toggle="dropzone"
-                  data-dropzone-url="http://"
-                >
-                  <div class="fallback">
-                    <div class="custom-file">
-                      <input
-                        id="dropzoneBasicUpload"
-                        type="file"
-                        class="custom-file-input"
-                      />
-                      <label class="custom-file-label" for="dropzoneBasicUpload"
-                        >Choose file</label
-                      >
-                    </div>
+                <div class="row">
+                  <div
+                    v-for="(image, index) in images"
+                    :key="index"
+                    class="col-4 mt-2"
+                  >
+                    <picture-input
+                      ref="pictureInput"
+                      width="130"
+                      height="130"
+                      size="10"
+                      margin="16"
+                      button-class="btn mb-0 mt-1"
+                      remove-button-class="btn my-0"
+                      radius="5"
+                      :removable="true"
+                      :custom-strings="{
+                        upload: '<h1>Bummer!</h1>',
+                        drag: 'Drag an image',
+                        remove: 'Remove',
+                        change: 'Change',
+                      }"
+                      @change="onChange(index)"
+                    >
+                    </picture-input>
                   </div>
-
-                  <!-- <div class="dz-preview dz-preview-single">
-                    <div class="dz-preview-cover">
-                      <img
-                        class="dz-preview-img"
-                        src="..."
-                        alt="..."
-                        data-dz-thumbnail
-                      />
-                    </div>
-                  </div> -->
                 </div>
+                <button
+                  type="button"
+                  class="btn btn-primary btn-lg btn-block mt-3"
+                  @click="addImage"
+                >
+                  Add Image
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <button type="button" class="btn btn-info btn-lg btn-block">
-        Block level button
+      <button type="submit" class="btn btn-info btn-lg btn-block">
+        Submit
       </button>
     </form>
   </div>
@@ -109,17 +117,20 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
   data() {
     return {
       fields: {
-        product_name: {
+        name: {
           class: 'col-md-6',
           placeholder: 'Product name',
           icon: 'fas fa-signature',
           appendable: false,
+          type: 'text',
           value: '',
         },
         price: {
@@ -128,6 +139,7 @@ export default {
           icon: 'fas fa-credit-card',
           appendable: true,
           appendable_value: 'IDR',
+          type: 'number',
           value: 0,
         },
         weight: {
@@ -136,6 +148,7 @@ export default {
           icon: 'fas fa-weight-hanging',
           appendable: true,
           appendable_value: 'gr',
+          type: 'number',
           value: 100,
         },
         stock: {
@@ -143,6 +156,7 @@ export default {
           placeholder: 'Stock',
           icon: 'fas fa-cubes',
           appendable: false,
+          type: 'number',
           value: 0,
         },
         description: {
@@ -150,11 +164,69 @@ export default {
           placeholder: 'Description',
           icon: 'fas fa-align-left',
           appendable: false,
+          type: 'text',
           value: '',
         },
       },
-      tags: '',
+      images: [],
+      categories: [],
     }
+  },
+  computed: {
+    ...mapGetters({
+      CATEGORIES: 'categories/CATEGORIES',
+    }),
+  },
+  async mounted() {
+    await this.GET_CATEGORIES()
+  },
+  methods: {
+    ...mapActions({
+      GET_CATEGORIES: 'categories/GET_CATEGORIES',
+    }),
+    onChange(idx) {
+      const file = this.$refs.pictureInput[idx].file
+      if (file) {
+        this.images[idx] = file
+      } else {
+        console.log('Old browser. No support for Filereader API')
+      }
+    },
+    addImage() {
+      this.images.push({
+        id: null,
+        path: '',
+        url: '',
+      })
+    },
+    async submit() {
+      const form = {
+        name: this.fields.name.value,
+        description: this.fields.description.value,
+        price: this.fields.price.value,
+        stock: this.fields.stock.value,
+        weight: this.fields.weight.value,
+      }
+
+      const formData = new FormData()
+      for (const x in form) {
+        formData.append(x, form[x])
+      }
+
+      for (const y in this.categories) {
+        formData.append('categories[]', this.categories[y])
+      }
+
+      for (const z in this.images) {
+        formData.append('images[]', this.images[z])
+      }
+
+      try {
+        await this.$axios.$post('/products', formData)
+      } catch (e) {
+        console.log(e)
+      }
+    },
   },
 }
 </script>

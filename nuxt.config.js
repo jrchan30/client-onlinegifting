@@ -63,6 +63,7 @@ export default {
     { src: '~/plugins/vue-skeleton.js', mode: 'client' },
     { src: '~plugins/vue-chartjs.js', mode: 'client' },
     { src: '~plugins/vue-select.js', mode: 'client' },
+    { src: '~plugins/vue-picture-input.js', mode: 'client' },
   ],
   /*
    ** Auto import components

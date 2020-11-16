@@ -1,21 +1,23 @@
 <template>
   <div>
-    <!-- Sidenav -->
-    <AdminSideNav />
-    <!-- Main content -->
-    <div id="panel" class="main-content">
-      <!-- Topnav -->
-      <AdminTopNav />
+    <client-only>
+      <!-- Sidenav -->
+      <AdminSideNav />
+      <!-- Main content -->
+      <div id="panel" class="main-content">
+        <!-- Topnav -->
+        <AdminTopNav />
 
-      <!-- <template v-if="$route.path === '/admin'"> -->
-      <AdminHeader />
-      <!-- </template> -->
-      <!-- Page content -->
-      <div class="container-fluid mt--6">
-        <Nuxt />
-        <AdminFooter />
+        <!-- <template v-if="$route.path === '/admin'"> -->
+        <AdminHeader />
+        <!-- </template> -->
+        <!-- Page content -->
+        <div class="container-fluid mt--6">
+          <Nuxt />
+          <AdminFooter />
+        </div>
       </div>
-    </div>
+    </client-only>
   </div>
 </template>
 

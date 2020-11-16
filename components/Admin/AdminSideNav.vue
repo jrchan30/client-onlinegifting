@@ -6,7 +6,12 @@
     <div class="scrollbar-inner">
       <!-- Brand -->
       <div class="sidenav-header d-flex align-items-center">
-        <nuxt-link tag="a" to="/admin" class="navbar-brand">
+        <nuxt-link
+          tag="a"
+          to="/admin"
+          class="navbar-brand"
+          style="background-color: transparent"
+        >
           <img
             src="/image/OnlineGiftingTextEdited.png"
             class="navbar-brand-img"
@@ -34,7 +39,7 @@
           <!-- Nav items -->
           <ul class="navbar-nav">
             <li class="nav-item">
-              <nuxt-link tag="a" class="nav-link active" to="/admin">
+              <nuxt-link tag="a" class="nav-link" to="/admin">
                 <i class="ni ni-shop text-primary"></i>
                 <span class="nav-link-text">Dashboards</span>
               </nuxt-link>
@@ -73,7 +78,7 @@
               <nuxt-link
                 tag="a"
                 to="/admin/transactions"
-                class="nav-link active"
+                class="nav-link"
                 href=""
               >
                 <i class="ni ni-credit-card text-primary"></i>
@@ -149,4 +154,9 @@
 export default {}
 </script>
 
-<style></style>
+<style scoped>
+.nav-link.nuxt-link-exact-active {
+  background-color: #f6f9fc;
+  font-weight: 700;
+}
+</style>

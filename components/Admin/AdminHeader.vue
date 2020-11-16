@@ -116,6 +116,7 @@ export default {
         title: 'Home',
         crumbs: {},
       },
+      widgets: [],
     }
   },
   computed: {
@@ -123,6 +124,10 @@ export default {
       const fullname = this.$route.name
       return fullname.substr(fullname.lastIndexOf('-') + 1)
     },
+  },
+  async mounted() {
+    const res = await this.$axios.$get('get-widgets')
+    this.widgets = res
   },
 }
 </script>

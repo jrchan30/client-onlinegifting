@@ -21,6 +21,7 @@
                 role="tab"
                 aria-controls="tabs-icons-text-1"
                 aria-selected="true"
+                @click="GET_PRODUCTS"
                 ><i class="fas fa-boxes mr-2"></i>Products</a
               >
             </li>
@@ -33,6 +34,7 @@
                 role="tab"
                 aria-controls="tabs-icons-text-2"
                 aria-selected="false"
+                @click="GET_HIDDEN"
                 ><i class="fas fa-trash-alt mr-2"></i>Hidden Products</a
               >
             </li>
@@ -69,7 +71,7 @@
                 <td class="price">{{ product.price }} (IDR)</td>
                 <td>
                   <span class="badge badge-dot mr-4">
-                    <template v-if="product.stock > 0">
+                    <template v-if="product.stock > 0 && !product.deleted_at">
                       <i class="bg-success"></i>
                       <span class="status"
                         >Available ({{ product.stock }})</span
@@ -81,7 +83,9 @@
                     </template>
                     <template v-else>
                       <i class="bg-red"></i>
-                      <span class="status text-danger">Deleted</span>
+                      <span class="status text-danger"
+                        >Deleted ({{ product.stock }})</span
+                      >
                     </template>
                   </span>
                 </td>
@@ -174,6 +178,42 @@
             <form @submit.prevent="submitEdit" @keyup.enter.prevent>
               <div class="card-body">
                 <div class="row">
+                  <div
+                    v-for="(image, index) in images"
+                    :key="index"
+                    class="col-3"
+                  >
+                    <picture-input
+                      ref="pictureInput"
+                      width="130"
+                      height="130"
+                      size="10"
+                      margin="16"
+                      button-class="btn btn-sm"
+                      radius="5"
+                      :removable="true"
+                      :prefill="image.url"
+                      :custom-strings="{
+                        upload: '<h1>Bummer!</h1>',
+                        drag: 'Drag an image',
+                      }"
+                      @change="onChange(index, image.id)"
+                      @remove="onRemove(index, image.id)"
+                    >
+                    </picture-input>
+                  </div>
+                  <div class="col-3 text-center">
+                    <button
+                      type="button"
+                      class="btn my-auto bg-transparent"
+                      @click="addImage"
+                    >
+                      <i class="far fa-plus-square fa-4x"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="row">
                   <!--Main Fields Loop -->
                   <div
                     v-for="(field, index) in fields"
@@ -221,7 +261,7 @@
                     class="btn btn-info btn-lg btn-block"
                     @click="submitEdit"
                   >
-                    Edit
+                    Save
                   </button>
                 </div>
               </div>
@@ -250,8 +290,9 @@ export default {
     return {
       isEdit: false,
       currentProductName: '',
+      product_form_id: '',
       fields: {
-        product_name: {
+        name: {
           class: 'col-md-6',
           placeholder: 'Product name',
           icon: 'fas fa-signature',
@@ -290,6 +331,9 @@ export default {
         },
       },
       categories: [],
+      images: [],
+      new_images: {},
+      delete_image: [],
     }
   },
   computed: {
@@ -306,7 +350,41 @@ export default {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
+      GET_HIDDEN: 'products/GET_HIDDEN',
     }),
+    onChange(idx, deleteId) {
+      const file = this.$refs.pictureInput[idx].file
+      if (file) {
+        this.new_images[idx] = file
+
+        const checkRemove = this.delete_image.includes(deleteId)
+        if (!checkRemove && deleteId) {
+          this.delete_image.push(deleteId)
+        }
+      } else {
+        //
+      }
+    },
+    onRemove(idx, deleteId) {
+      const newImagesKey = Object.keys(this.new_images)
+      const checkRemove = newImagesKey.indexOf(`${idx}`)
+      if (checkRemove > -1) {
+        delete this.new_images[idx]
+      } else {
+        const checkRemove = this.delete_image.includes(deleteId)
+
+        if (!checkRemove && deleteId) {
+          this.delete_image.push(deleteId)
+        }
+      }
+    },
+    addImage() {
+      this.images.push({
+        id: null,
+        path: '',
+        url: '',
+      })
+    },
     expandImage(url) {
       this.$swal({
         showCloseButton: true,
@@ -318,14 +396,18 @@ export default {
       })
     },
     toggleEdit(product) {
+      this.closeForm()
+      const productCopy = JSON.parse(JSON.stringify(product))
       this.isEdit = true
-      this.fields.product_name.value = product.name
-      this.fields.price.value = product.price
-      this.fields.weight.value = product.weight
-      this.fields.stock.value = product.stock
-      this.fields.description.value = product.description
-      product.categories.map((x) => this.categories.push(x.id))
-      this.currentProductName = product.name
+      this.product_form_id = productCopy.id
+      this.fields.name.value = productCopy.name
+      this.fields.price.value = productCopy.price
+      this.fields.weight.value = productCopy.weight
+      this.fields.stock.value = productCopy.stock
+      this.fields.description.value = productCopy.description
+      this.images = productCopy.images
+      productCopy.categories.map((x) => this.categories.push(x.id))
+      this.currentProductName = productCopy.name
       document.getElementById('edit').scrollIntoView()
     },
     closeForm() {
@@ -343,25 +425,65 @@ export default {
         confirmButtonText: 'Yes, hide it!',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$swal('Hid!', 'Product is hidden.', 'success')
+          this.$swal('Hid!', 'Product is now hidden.', 'success')
         }
       })
     },
     submitEdit() {
       this.$swal({
         title: 'Are you sure?',
-        text: 'Please recheck before submitting',
+        text: 'Please recheck before saving',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
-      }).then((result) => {
+        confirmButtonText: 'Yes, save it!',
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          this.$swal('Hid!', 'Product has been edited.', 'success')
+          const form = {
+            name: this.fields.name.value,
+            description: this.fields.description.value,
+            price: this.fields.price.value,
+            stock: this.fields.stock.value,
+            weight: this.fields.weight.value,
+          }
+          const formData = new FormData()
+          for (const x in form) {
+            formData.append(x, form[x])
+          }
+
+          for (const y in this.categories) {
+            formData.append('categories[]', this.categories[y])
+          }
+
+          if (Object.keys(this.new_images).length > 0) {
+            for (const a in this.new_images) {
+              formData.append('new_images[]', this.new_images[a])
+            }
+          }
+          if (this.delete_image.length > 0) {
+            for (const b in this.delete_image) {
+              formData.append('delete_image[]', this.delete_image[b])
+            }
+          }
+
+          formData.append('_method', 'patch')
+          try {
+            await this.$axios.$post(
+              `/products/${this.product_form_id}`,
+              formData
+            )
+            this.$swal('Saved!', 'Product has been edited.', 'success')
+            this.closeForm()
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
+          }
         }
       })
-      this.closeForm()
       console.log('submit edit button clicked')
     },
   },
