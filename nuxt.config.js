@@ -64,6 +64,7 @@ export default {
     { src: '~plugins/vue-chartjs.js', mode: 'client' },
     { src: '~plugins/vue-select.js', mode: 'client' },
     { src: '~plugins/vue-picture-input.js', mode: 'client' },
+    { src: '~plugins/tiptap.js', mode: 'client' },
   ],
   /*
    ** Auto import components

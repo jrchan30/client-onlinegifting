@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-lg-6">
           <div class="card-wrapper">
-            <div class="card" style="height: 460px">
+            <div class="card">
               <div class="card-header">
                 <h3 class="mb-0">Input product</h3>
               </div>
@@ -42,29 +42,31 @@
                       </div>
                     </div>
                   </div>
-                  <!--End Main Fields Loop -->
+                  <div class="card-header col-12">
+                    <h3 class="mb-0">Categories</h3>
+                  </div>
+                  <div class="card-body">
+                    <v-select
+                      v-model="categories"
+                      multiple
+                      label="name"
+                      required
+                      :reduce="(name) => name.id"
+                      :options="CATEGORIES"
+                      style="z-index = 1000"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        <!--End Main Fields Loop -->
+
         <div class="col-lg-6">
           <div class="card-wrapper">
-            <div class="card" style="min-height: 460px">
-              <div class="card-header">
-                <h3 class="mb-0">Tags</h3>
-              </div>
-              <div class="card-body">
-                <v-select
-                  v-model="categories"
-                  multiple
-                  label="name"
-                  required
-                  :reduce="(name) => name.id"
-                  :options="CATEGORIES"
-                  style="z-index = 1000"
-                />
-              </div>
+            <div class="card">
               <div class="card-header">
                 <h3 class="mb-0">Images</h3>
               </div>
@@ -73,7 +75,7 @@
                   <div
                     v-for="(image, index) in images"
                     :key="index"
-                    class="col-4 mt-2"
+                    class="col-6 col-md-4 mt-2"
                   >
                     <picture-input
                       ref="pictureInput"
@@ -107,10 +109,109 @@
             </div>
           </div>
         </div>
+
+        <div class="col-lg-12">
+          <div class="card-wrapper">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="mb-0">Product Description</h3>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <editor-menu-bar
+                      v-slot="{ commands, isActive }"
+                      :editor="editor"
+                    >
+                      <div>
+                        <button
+                          class="btn px-1 py-0"
+                          :class="{ 'is-active': isActive.bold() }"
+                          type="button"
+                          @click="commands.bold"
+                        >
+                          <i class="fas fa-bold"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          :class="{ 'is-active': isActive.italic() }"
+                          type="button"
+                          @click="commands.italic"
+                        >
+                          <i class="fas fa-italic"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          :class="{ 'is-active': isActive.strike() }"
+                          type="button"
+                          @click="commands.strike"
+                        >
+                          <i class="fas fa-strikethrough"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          :class="{ 'is-active': isActive.underline() }"
+                          @click="commands.underline"
+                        >
+                          <i class="fas fa-underline"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          :class="{ 'is-active': isActive.bullet_list() }"
+                          type="button"
+                          @click="commands.bullet_list"
+                        >
+                          <i class="fas fa-list-ul"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          :class="{ 'is-active': isActive.ordered_list() }"
+                          type="button"
+                          @click="commands.ordered_list"
+                        >
+                          <i class="fas fa-list-ol"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          type="button"
+                          @click="commands.undo"
+                        >
+                          <i class="fas fa-undo-alt"></i>
+                        </button>
+
+                        <button
+                          class="btn px-1 py-0"
+                          type="button"
+                          @click="commands.redo"
+                        >
+                          <i class="fas fa-redo"></i>
+                        </button>
+                      </div>
+                    </editor-menu-bar>
+                    <div class="border-danger p-2">
+                      <editor-content
+                        class="editor__content border-1"
+                        :editor="editor"
+                      />
+                      <input type="hidden" name="content" :value="editor" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-info btn-lg btn-block">
+          Submit
+        </button>
       </div>
-      <button type="submit" class="btn btn-info btn-lg btn-block">
-        Submit
-      </button>
     </form>
   </div>
   <!-- </div> -->
@@ -118,6 +219,18 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { Editor } from 'tiptap'
+import {
+  OrderedList,
+  BulletList,
+  ListItem,
+  Bold,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions'
 
 export default {
   layout: 'admin',
@@ -159,27 +272,56 @@ export default {
           type: 'number',
           value: 0,
         },
-        description: {
-          class: 'col-md-12',
-          placeholder: 'Description',
-          icon: 'fas fa-align-left',
-          appendable: false,
-          type: 'text',
-          value: '',
-        },
+        // description: {
+        //   class: 'col-md-12',
+        //   placeholder: 'Description',
+        //   icon: 'fas fa-align-left',
+        //   appendable: false,
+        //   type: 'text',
+        //   value: '',
+        // },
       },
       images: [],
       categories: [],
+      editor: null,
+      description: '',
     }
   },
+
   computed: {
     ...mapGetters({
       CATEGORIES: 'categories/CATEGORIES',
     }),
   },
+
+  beforeDestroy() {
+    this.editor.destroy()
+  },
+
   async mounted() {
     await this.GET_CATEGORIES()
+
+    this.editor = new Editor({
+      content: '<p>Product description goes here!</p>',
+      extensions: [
+        new BulletList(),
+        new ListItem(),
+        new OrderedList(),
+        new Link(),
+        new Bold(),
+        new Italic(),
+        new Strike(),
+        new Underline(),
+        new History(),
+      ],
+      onUpdate: ({ getJSON, getHTML }) => {
+        this.json = getJSON()
+        this.html = getHTML()
+        this.description = this.html
+      },
+    })
   },
+
   methods: {
     ...mapActions({
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
@@ -202,7 +344,7 @@ export default {
     async submit() {
       const form = {
         name: this.fields.name.value,
-        description: this.fields.description.value,
+        description: this.description,
         price: this.fields.price.value,
         stock: this.fields.stock.value,
         weight: this.fields.weight.value,

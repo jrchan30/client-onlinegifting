@@ -336,6 +336,7 @@ export default {
       delete_image: [],
     }
   },
+
   computed: {
     ...mapGetters({
       PRODUCTS: 'products/PRODUCTS',
