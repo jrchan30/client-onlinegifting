@@ -8,6 +8,7 @@
         <form
           id="navbar-search-main"
           class="navbar-search navbar-search-light form-inline mr-sm-3"
+          @submit.prevent="submitSearch"
         >
           <div class="form-group mb-0">
             <div class="input-group input-group-alternative input-group-merge">
@@ -16,7 +17,12 @@
                   ><i class="fas fa-search"></i
                 ></span>
               </div>
-              <input class="form-control" placeholder="Search" type="text" />
+              <input
+                v-model="search"
+                class="form-control"
+                placeholder="Search"
+                type="text"
+              />
             </div>
           </div>
           <button
@@ -225,10 +231,10 @@
                 <span>My profile</span>
               </nuxt-link>
               <div class="dropdown-divider"></div>
-              <nuxt-link to="" href="#!" class="dropdown-item">
+              <span class="dropdown-item logout-cursor" @click="logout">
                 <i class="ni ni-user-run"></i>
                 <span>Logout</span>
-              </nuxt-link>
+              </span>
             </div>
           </li>
         </ul>
@@ -238,7 +244,40 @@
 </template>
 
 <script>
-export default {}
+import { mapMutations, mapActions } from 'vuex'
+export default {
+  data() {
+    return {
+      search: '',
+    }
+  },
+  methods: {
+    ...mapMutations({
+      SET_SEARCH_QUERY: 'search/SET_SEARCH_QUERY',
+    }),
+    ...mapActions({
+      GET_SEARCH_RESULTS: 'search/GET_SEARCH_RESULTS',
+    }),
+    submitSearch() {
+      if (this.$route.name === 'admin-search') {
+        this.SET_SEARCH_QUERY(this.search)
+        this.GET_SEARCH_RESULTS()
+      }
+      this.$router.push(`/admin/search?q=${this.search}`)
+    },
+    async logout() {
+      try {
+        await this.$auth.logout()
+      } catch (err) {
+        alert(err)
+      }
+    },
+  },
+}
 </script>
 
-<style></style>
+<style scoped>
+.logout-cursor {
+  cursor: pointer;
+}
+</style>

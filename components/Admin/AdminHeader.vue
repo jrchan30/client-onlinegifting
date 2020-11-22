@@ -61,10 +61,24 @@
                     </div>
                   </div>
                   <p class="mt-3 mb-0 text-sm">
-                    <span class="text-success mr-2"
-                      ><i class="fa fa-arrow-up"></i>
-                      {{ card.percentage }}%</span
-                    >
+                    <template v-if="card.percentage > 0">
+                      <span class="text-success mr-2"
+                        ><i class="fa fa-arrow-up"></i>
+                        {{ card.percentage }}%</span
+                      >
+                    </template>
+                    <template v-if="card.percentage < 0">
+                      <span class="text-danger mr-2"
+                        ><i class="fa fa-arrow-down"></i>
+                        {{ card.percentage }}%</span
+                      >
+                    </template>
+                    <template v-if="card.percentage == 0">
+                      <span class="text-grey mr-2"
+                        ><i class=""></i> {{ card.percentage }}%</span
+                      >
+                    </template>
+
                     <span class="text-nowrap">Since last month</span>
                   </p>
                 </div>
@@ -116,7 +130,6 @@ export default {
         title: 'Home',
         crumbs: {},
       },
-      widgets: [],
     }
   },
   computed: {
@@ -127,7 +140,16 @@ export default {
   },
   async mounted() {
     const res = await this.$axios.$get('get-widgets')
-    this.widgets = res
+    this.cards.total_transaction.amount = res.transaction.current_month_count
+    this.cards.new_users.amount = res.user.current_month_count
+    this.cards.new_products.amount = res.product.current_month_count
+    this.cards.transaction_amount.amount =
+      res.transaction_amount.current_month_sum
+
+    this.cards.total_transaction.percentage = res.transaction.percentage
+    this.cards.new_users.percentage = res.user.percentage
+    this.cards.new_products.percentage = res.product.percentage
+    this.cards.transaction_amount.percentage = res.transaction_amount.percentage
   },
 }
 </script>

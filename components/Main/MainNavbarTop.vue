@@ -42,8 +42,7 @@
           </li>
           <li class="nav-item">
             <a
-              id="logout-cursor"
-              class="nav-link text-primary navDiv"
+              class="nav-link text-primary navDiv logout-cursor"
               @click="logout"
             >
               Logout
@@ -71,7 +70,7 @@ export default {
 </script>
 
 <style scoped>
-#logout-cursor {
+.logout-cursor {
   cursor: pointer;
 }
 </style>

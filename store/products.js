@@ -5,6 +5,12 @@ export const state = () => ({
   latest: {},
   lowPrice: {},
   product: {},
+  allProducts: {},
+  filter: {
+    search: '',
+    orderBy: 'created_at',
+    orderDir: 'desc',
+  },
 })
 
 export const getters = {
@@ -19,6 +25,9 @@ export const getters = {
   },
   LOWPRICE(state) {
     return state.lowPrice.data
+  },
+  ALL_PRODUCTS(state) {
+    return state.allProducts
   },
 }
 
@@ -46,11 +55,20 @@ export const mutations = {
     })
     state.lowPrice = payload
   },
+  SET_FILTER(state, payload) {
+    state.filter = payload
+  },
+  SET_ALL_PRODUCTS(state, payload) {
+    state.allProducts = payload
+  },
 }
 
 export const actions = {
-  async GET_PRODUCTS({ commit }, page = 1) {
-    const data = await this.$axios.$get(`products?page=${page}`)
+  async GET_PRODUCTS({ state, commit }, page = 1) {
+    const filter = state.filter
+    const data = await this.$axios.$get(
+      `products?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}`
+    )
     commit('SET_PRODUCTS', data)
   },
   async GET_HIDDEN({ commit }, page = 1) {
@@ -68,5 +86,9 @@ export const actions = {
   async GET_LOWPRICE({ commit }) {
     const data = await this.$axios.$get('low-price')
     commit('SET_LOWPRICE', data)
+  },
+  async GET_ALL_PRODUCTS({ commit }) {
+    const data = await this.$axios.$get('all-products')
+    commit('SET_ALL_PRODUCTS', data)
   },
 }

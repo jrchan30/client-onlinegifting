@@ -208,7 +208,12 @@
           </div>
         </div>
 
-        <button type="submit" class="btn btn-info btn-lg btn-block">
+        <button
+          type="submit"
+          class="btn btn-info btn-lg btn-block"
+          :disabled="loading"
+        >
+          <i v-if="loading" class="fas fa-spinner fa-spin"></i>
           Submit
         </button>
       </div>
@@ -285,6 +290,7 @@ export default {
       categories: [],
       editor: null,
       description: '',
+      loading: false,
     }
   },
 
@@ -326,6 +332,9 @@ export default {
     ...mapActions({
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
     }),
+    closeForm() {
+      Object.assign(this.$data, this.$options.data())
+    },
     onChange(idx) {
       const file = this.$refs.pictureInput[idx].file
       if (file) {
@@ -341,33 +350,53 @@ export default {
         url: '',
       })
     },
-    async submit() {
-      const form = {
-        name: this.fields.name.value,
-        description: this.description,
-        price: this.fields.price.value,
-        stock: this.fields.stock.value,
-        weight: this.fields.weight.value,
-      }
+    submit() {
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'Please recheck before inserting',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, insert it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.loading = true
+          const form = {
+            name: this.fields.name.value,
+            description: this.description,
+            price: this.fields.price.value,
+            stock: this.fields.stock.value,
+            weight: this.fields.weight.value,
+          }
 
-      const formData = new FormData()
-      for (const x in form) {
-        formData.append(x, form[x])
-      }
+          const formData = new FormData()
+          for (const x in form) {
+            formData.append(x, form[x])
+          }
 
-      for (const y in this.categories) {
-        formData.append('categories[]', this.categories[y])
-      }
+          for (const y in this.categories) {
+            formData.append('categories[]', this.categories[y])
+          }
 
-      for (const z in this.images) {
-        formData.append('images[]', this.images[z])
-      }
+          for (const z in this.images) {
+            formData.append('images[]', this.images[z])
+          }
 
-      try {
-        await this.$axios.$post('/products', formData)
-      } catch (e) {
-        console.log(e)
-      }
+          try {
+            await this.$axios.$post('/products', formData)
+            this.$swal('Inserted!', 'Product has been inserted.', 'success')
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: e.response.data?.message,
+            })
+          } finally {
+            this.loading = false
+          }
+        }
+      })
     },
   },
 }

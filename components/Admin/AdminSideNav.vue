@@ -134,7 +134,7 @@
             <li class="nav-item">
               <nuxt-link to="/admin/dashboard-tutorial" class="nav-link">
                 <i class="ni ni-spaceship"></i>
-                <span class="nav-link-text">Dashboard Tutorial</span>
+                <span class="nav-link-text">Tutorial</span>
               </nuxt-link>
             </li>
             <li class="nav-item">

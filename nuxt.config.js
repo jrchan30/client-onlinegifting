@@ -1,11 +1,6 @@
 require('dotenv').config()
 export default {
   /*
-   ** Nuxt rendering mode
-   ** See https://nuxtjs.org/api/configuration-mode
-   */
-  mode: 'universal',
-  /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
    */
@@ -34,7 +29,8 @@ export default {
       //     'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap',
       // },
       {
-        rel: 'stylesheet',
+        as: 'style',
+        rel: 'stylesheet preload prefetch',
         href:
           'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700',
       },
@@ -47,7 +43,30 @@ export default {
         defer: true,
       },
     ],
-    script: [],
+    script: [
+      {
+        src: 'https://code.jquery.com/jquery-3.5.1.slim.min.js',
+        integrity:
+          'sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj',
+        crossorigin: 'anonymous',
+        body: true,
+      },
+      {
+        src:
+          'https://cdnjs.cloudflare.com/ajax/libs/jquery.scrollbar/0.2.11/jquery.scrollbar.min.js',
+        integrity:
+          'sha512-5AcaBUUUU/lxSEeEcruOIghqABnXF8TWqdIDXBZ2SNEtrTGvD408W/ShtKZf0JNjQUfOiRBJP+yHk6Ab2eFw3Q==',
+        crossorigin: 'anonymous',
+        body: true,
+      },
+      {
+        src:
+          'https://cdn.jsdelivr.net/npm/jquery-scroll-lock@3.1.3/jquery-scrollLock.min.js',
+        integrity: 'sha256-OGBqkSG4kYQ0UbrT7juDZpE/VqIjMPuu6CVKQ1KaTEA=',
+        crossorigin: 'anonymous',
+        body: true,
+      },
+    ],
   },
   /*
    ** Global CSS
@@ -61,7 +80,7 @@ export default {
     { src: '~/plugins/vue-carousel-3d.js', mode: 'client' },
     '~plugins/vform',
     { src: '~/plugins/vue-skeleton.js', mode: 'client' },
-    { src: '~plugins/vue-chartjs.js', mode: 'client' },
+    // { src: '~plugins/vue-chartjs.js', mode: 'client' },
     { src: '~plugins/vue-select.js', mode: 'client' },
     { src: '~plugins/vue-picture-input.js', mode: 'client' },
     { src: '~plugins/tiptap.js', mode: 'client' },
@@ -123,4 +142,6 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {},
+
+  serverMiddleware: ['~/serverMiddleware/selectiveSSR.js'],
 }

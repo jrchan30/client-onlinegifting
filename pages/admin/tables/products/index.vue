@@ -53,7 +53,12 @@
                 <th scope="col" class="sort" data-sort="id">Id</th>
                 <th scope="col" class="sort" data-sort="name">Product Name</th>
                 <th scope="col" class="sort" data-sort="price">Price</th>
-                <th scope="col" class="sort" data-sort="status">
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="status"
+                  @click="settingFilter('stock')"
+                >
                   Status (Stock)
                 </th>
                 <th scope="col">Image</th>
@@ -137,31 +142,10 @@
           </table>
         </div>
         <div class="card-footer py-4">
-          <nav aria-label="...">
-            <ul class="pagination justify-content-end mb-0">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">
-                  <i class="fas fa-angle-left"></i>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#"
-                  >2 <span class="sr-only">(current)</span></a
-                >
-              </li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  <i class="fas fa-angle-right"></i>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <AdminPagination
+            :store-action="'products/GET_PRODUCTS'"
+            :store-getter="'products/PRODUCTS'"
+          />
         </div>
       </div>
 
@@ -192,7 +176,8 @@
                       button-class="btn btn-sm"
                       radius="5"
                       :removable="true"
-                      :prefill="image.url"
+                      :prefill="imageUrl()"
+                      :prefill-options="{ mediaType: 'image/jpeg,image/png' }"
                       :custom-strings="{
                         upload: '<h1>Bummer!</h1>',
                         drag: 'Drag an image',
@@ -282,7 +267,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
@@ -334,6 +319,11 @@ export default {
       images: [],
       new_images: {},
       delete_image: [],
+      filter: {
+        search: '',
+        orderBy: 'created_at',
+        orderDir: 'desc',
+      },
     }
   },
 
@@ -353,6 +343,30 @@ export default {
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
       GET_HIDDEN: 'products/GET_HIDDEN',
     }),
+    ...mapMutations({
+      SET_FILTER: 'products/SET_FILTER',
+    }),
+    settingFilter(value) {
+      switch (value) {
+        case 'stock':
+          if (this.filter.orderBy !== 'stock') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'stock'
+          break
+        default:
+          break
+      }
+
+      this.SET_FILTER(this.filter)
+      this.GET_PRODUCTS()
+    },
+    // searchProducts(){
+    //   this.GET_PRODUCTS(null, this.search)
+    // },
     onChange(idx, deleteId) {
       const file = this.$refs.pictureInput[idx].file
       if (file) {
@@ -365,6 +379,9 @@ export default {
       } else {
         //
       }
+    },
+    imageUrl() {
+      return this.uploadedFile
     },
     onRemove(idx, deleteId) {
       const newImagesKey = Object.keys(this.new_images)

@@ -134,7 +134,7 @@
                       label="name"
                       required
                       :reduce="(name) => name.id"
-                      :options="PRODUCTS.data"
+                      :options="ALL_PRODUCTS"
                       style="z-index = 1000"
                     />
                   </div>
@@ -245,7 +245,12 @@
         </div>
         <!-- End Bundle Description Section -->
       </div>
-      <button type="submit" class="btn btn-info btn-lg btn-block">
+      <button
+        type="submit"
+        class="btn btn-info btn-lg btn-block"
+        :disabled="loading"
+      >
+        <i v-if="loading" class="fas fa-spinner fa-spin"></i>
         Submit
       </button>
     </form>
@@ -281,12 +286,13 @@ export default {
         categories: [],
       },
       editor: null,
+      loading: false,
     }
   },
   computed: {
     ...mapGetters({
       CATEGORIES: 'categories/CATEGORIES',
-      PRODUCTS: 'products/PRODUCTS',
+      ALL_PRODUCTS: 'products/ALL_PRODUCTS',
     }),
   },
   beforeDestroy() {
@@ -295,7 +301,7 @@ export default {
 
   async mounted() {
     await this.GET_CATEGORIES()
-    await this.GET_PRODUCTS()
+    await this.GET_ALL_PRODUCTS()
 
     this.editor = new Editor({
       content: '<p>Product description goes here!</p>',
@@ -321,47 +327,70 @@ export default {
   methods: {
     ...mapActions({
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
-      GET_PRODUCTS: 'products/GET_PRODUCTS',
+      GET_ALL_PRODUCTS: 'products/GET_ALL_PRODUCTS',
     }),
     onChange() {
       const file = this.$refs.pictureInput.file
       if (file) {
-        console.log(file)
         this.form.image = file
       } else {
-        console.log('Old browser. No support for Filereader API')
+        alert(
+          'Old browser (not supported). Chrome latest updated browser is suggested'
+        )
       }
     },
     onRemoved() {
       this.image = ''
     },
-    async submit() {
-      const form = {
-        name: this.form.bundle_name,
-        description: this.form.description,
-        colour: this.form.colour,
-      }
+    submit() {
+      this.errors = {}
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'Please recheck before inserting',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, insert it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          this.loading = true
 
-      const formData = new FormData()
-      for (const x in form) {
-        formData.append(x, form[x])
-      }
+          const form = {
+            name: this.form.bundle_name,
+            description: this.form.description,
+            colour: this.form.colour,
+          }
 
-      for (const y in this.form.categories) {
-        formData.append('categories[]', this.form.categories[y])
-      }
+          const formData = new FormData()
+          for (const x in form) {
+            formData.append(x, form[x])
+          }
 
-      for (const z in this.form.products) {
-        formData.append('products[]', this.form.products[z])
-      }
+          for (const y in this.form.categories) {
+            formData.append('categories[]', this.form.categories[y])
+          }
 
-      formData.append('image', this.form.image)
+          for (const z in this.form.products) {
+            formData.append('products[]', this.form.products[z])
+          }
 
-      try {
-        await this.$axios.$post('/bundles', formData)
-      } catch (e) {
-        console.log(e)
-      }
+          formData.append('image', this.form.image)
+
+          try {
+            await this.$axios.$post('/bundles', formData)
+            this.$swal('Inserted!', 'Bundle has been inserted.', 'success')
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: e.response.data?.message,
+            })
+          } finally {
+            this.loading = false
+          }
+        }
+      })
     },
   },
 }

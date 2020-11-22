@@ -93,87 +93,99 @@
           </table>
         </div>
         <div class="card-footer py-4">
-          <nav aria-label="...">
-            <ul class="pagination justify-content-end mb-0">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">
-                  <i class="fas fa-angle-left"></i>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item active">
-                <a class="page-link" href="#">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="#"
-                  >2 <span class="sr-only">(current)</span></a
-                >
-              </li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#">
-                  <i class="fas fa-angle-right"></i>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
+          <AdminPagination
+            :store-action="'bundles/GET_BUNDLES'"
+            :store-getter="'bundles/BUNDLES'"
+          />
         </div>
       </div>
-
       <div id="edit" class="card">
         <div class="card-header border-0">
           <template v-if="isEdit">
             <h3 class="mb-0 text-capitalize">
-              Edit bundle ({{ currentbundleName }})
+              Edit Bundle ({{ currentBundleName }})
               <button
                 class="btn p-0 float-right fas fa-times"
                 @click="closeForm"
               ></button>
             </h3>
-            <div class="card-body">
-              <div class="row">
-                <!--Main Fields Loop -->
-                <div
-                  v-for="(field, index) in fields"
-                  :key="index"
-                  :class="field.class"
-                >
-                  <div class="form-group">
-                    <div class="input-group input-group-merge">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"
-                          ><i :class="field.icon"></i
-                        ></span>
-                      </div>
+            <form @submit.prevent="submitEdit" @keyup.enter.prevent>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-3">
+                    <picture-input
+                      ref="pictureInput"
+                      width="130"
+                      height="130"
+                      size="10"
+                      margin="16"
+                      button-class="btn btn-sm"
+                      radius="5"
+                      :prefill="form.image.url"
+                      :custom-strings="{
+                        upload: '<h1>Bummer!</h1>',
+                        drag: 'Drag an image',
+                      }"
+                      @change="onChange(form.image.id)"
+                      @remove="onRemove(form.image.id)"
+                    >
+                    </picture-input>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Name</label>
                       <input
-                        v-model="field.value"
+                        v-model="form.bundle_name"
                         class="form-control"
-                        :placeholder="field.placeholder"
                         type="text"
                       />
-                      <template v-if="field.appendable">
-                        <div class="input-group-append">
-                          <span class="input-group-text"
-                            ><small class="font-weight-bold">{{
-                              field.appendable_value
-                            }}</small></span
-                          >
-                        </div>
-                      </template>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Colour</label>
+                      <input
+                        v-model="form.colour"
+                        class="form-control"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Categories</label>
+                      <v-select
+                        v-model="form.categories"
+                        multiple
+                        label="name"
+                        required
+                        :reduce="(name) => name.id"
+                        :options="CATEGORIES"
+                        style="z-index = 1000"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label class="form-control-label"
+                        >Products included</label
+                      >
+                      <v-select
+                        v-model="form.products"
+                        multiple
+                        label="name"
+                        required
+                        :reduce="(name) => name.id"
+                        :options="ALL_PRODUCTS"
+                        style="z-index = 1000"
+                      />
                     </div>
                   </div>
                 </div>
-                <!--End Main Fields Loop -->
-                <button
-                  type="button"
-                  class="btn btn-info btn-lg btn-block"
-                  @click="submitEdit"
-                >
-                  Edit
-                </button>
               </div>
-            </div>
+            </form>
           </template>
           <template v-else>
             <div>
@@ -191,11 +203,27 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { Editor } from 'tiptap'
+import {
+  OrderedList,
+  BulletList,
+  ListItem,
+  Bold,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions'
+
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
   async fetch() {
     await this.GET_BUNDLES()
+    await this.GET_CATEGORIES()
+    await this.GET_PRODUCTS()
+    await this.GET_ALL_PRODUCTS()
   },
   data() {
     return {
@@ -210,16 +238,52 @@ export default {
           value: '',
         },
       },
+      form: {
+        bundle_name: '',
+        description: '',
+        image: null,
+        colour: '',
+        products: [],
+        categories: [],
+      },
+      editor: null,
     }
   },
   computed: {
     ...mapGetters({
       BUNDLES: 'bundles/BUNDLES',
+      CATEGORIES: 'categories/CATEGORIES',
+      PRODUCTS: 'products/PRODUCTS',
+      ALL_PRODUCTS: 'products/ALL_PRODUCTS',
     }),
+  },
+  mounted() {
+    this.editor = new Editor({
+      content: '<p>Product description goes here!</p>',
+      extensions: [
+        new BulletList(),
+        new ListItem(),
+        new OrderedList(),
+        new Link(),
+        new Bold(),
+        new Italic(),
+        new Strike(),
+        new Underline(),
+        new History(),
+      ],
+      onUpdate: ({ getJSON, getHTML }) => {
+        this.json = getJSON()
+        this.html = getHTML()
+        this.form.description = this.html
+      },
+    })
   },
   methods: {
     ...mapActions({
       GET_BUNDLES: 'bundles/GET_BUNDLES',
+      GET_CATEGORIES: 'categories/GET_CATEGORIES',
+      GET_PRODUCTS: 'products/GET_PRODUCTS',
+      GET_ALL_PRODUCTS: 'products/GET_ALL_PRODUCTS',
     }),
     expandImage(url) {
       this.$swal({
@@ -232,9 +296,16 @@ export default {
       })
     },
     toggleEdit(bundle) {
+      this.closeForm()
+      const bundleCopy = JSON.parse(JSON.stringify(bundle))
       this.isEdit = true
-      this.fields.bundle_name.value = bundle.name
-      this.currentbundleName = bundle.name
+      this.form.bundle_name = bundleCopy.name
+      this.form.image = bundleCopy.detail.image
+      this.currentBundleName = bundleCopy.name
+      this.form.colour = bundleCopy.detail.colour
+      bundleCopy.detail.categories.map((x) => this.form.categories.push(x.id))
+      // this.form.products = bundleCopy.products.colour
+      bundleCopy.products.map((x) => this.form.products.push(x.id))
       document.getElementById('edit').scrollIntoView()
     },
     closeForm() {

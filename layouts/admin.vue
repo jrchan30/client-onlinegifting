@@ -1,30 +1,39 @@
 <template>
   <div>
-    <client-only>
-      <!-- Sidenav -->
-      <AdminSideNav />
-      <!-- Main content -->
-      <div id="panel" class="main-content">
-        <!-- Topnav -->
-        <AdminTopNav />
+    <!-- <client-only placeholder="loading..."> -->
+    <!-- Sidenav -->
+    <AdminSideNav />
+    <!-- Main content -->
+    <div id="panel" class="main-content">
+      <!-- Topnav -->
+      <AdminTopNav />
 
-        <!-- <template v-if="$route.path === '/admin'"> -->
-        <AdminHeader />
-        <!-- </template> -->
-        <!-- Page content -->
-        <div class="container-fluid mt--6">
-          <Nuxt />
-          <AdminFooter />
-        </div>
+      <!-- <template v-if="$route.path === '/admin'"> -->
+      <AdminHeader />
+      <!-- </template> -->
+      <!-- Page content -->
+      <div class="container-fluid mt--6">
+        <Nuxt />
+        <AdminFooter />
       </div>
-    </client-only>
+    </div>
+    <!-- </client-only> -->
   </div>
 </template>
 
 <script>
 export default {
+  name: 'Admin',
+  data() {
+    return { isJQueryLoaded: false }
+  },
   head() {
     return {
+      meta: [
+        {
+          title: 'testing',
+        },
+      ],
       link: [
         {
           rel: 'icon',
@@ -51,41 +60,32 @@ export default {
         },
       ],
       script: [
-        {
-          src: '/assets/vendor/jquery/dist/jquery.min.js',
-          body: true,
-        },
-
-        {
-          src: '/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js',
-          body: true,
-        },
+        // {
+        //   src:
+        //     'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js',
+        //   integrity:
+        //     'sha512-bnIvzh6FU75ZKxp0GXLH9bewza/OIw6dLVh9ICg0gogclmYGguQJWl8U30WpbsGTqbIiAwxTsbe76DErLq5EDQ==',
+        //   crossorigin: 'anonymous',
+        //   body: true,
+        // },
         {
           src: '/assets/vendor/js-cookie/js.cookie.js',
           body: true,
         },
 
         {
-          src: '/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js',
-          body: true,
-        },
-        {
           src:
-            '/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js',
+          integrity:
+            'sha512-TqmAh0/sSbwSuVBODEagAoiUIeGRo8u95a41zykGfq5iPkO9oie8IKCgx7yAr1bfiBjZeuapjLgMdp9UMpCVYQ==',
+          crossorigin: 'anonymous',
           body: true,
         },
-
-        // Forms
-
         // Argon Js
         {
-          src: '/assets/js/argon.min.js',
+          src: '/assets/js/argon.js',
           body: true,
         },
-        // {
-        //   src: '/assets/js/demo.min.js',
-        //   body: true,
-        // },
       ],
     }
   },

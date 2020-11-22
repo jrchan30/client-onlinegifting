@@ -1,4 +1,4 @@
 import Vue from 'vue'
-import VueChart from 'vue-chartjs'
+import { Line } from 'vue-chartjs'
 
-Vue.use(VueChart)
+Vue.component('line-chart', Line)

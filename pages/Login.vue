@@ -103,14 +103,12 @@ export default {
       this.errors = {}
       this.loading = true
       try {
-        console.log(this.$auth)
         await this.$auth.loginWith('laravelSanctum', {
           data: {
             email: this.form.email.val,
             password: this.form.password.val,
           },
         })
-        // this.$router.push('/home')
       } catch (e) {
         if (
           e.response.status === 403 &&
