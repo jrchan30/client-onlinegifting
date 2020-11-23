@@ -3,6 +3,11 @@ import { formatPrice } from '@/plugins/customUtil'
 export const state = () => ({
   bundles: {},
   bundle: {},
+  filter: {
+    search: '',
+    orderBy: 'created_at',
+    orderDir: 'desc',
+  },
 })
 
 export const getters = {
@@ -40,11 +45,26 @@ export const mutations = {
       },
     }
   },
+  SET_FILTER(state, payload) {
+    state.filter.search = payload.search
+    state.filter.orderBy = payload.orderBy
+    state.filter.orderDir = payload.orderDir
+  },
 }
 
 export const actions = {
-  async GET_BUNDLES({ commit }, page = 1) {
-    const data = await this.$axios.$get(`bundles?page=${page}`)
+  async GET_BUNDLES({ state, commit }, page = 1) {
+    const filter = state.filter
+    const data = await this.$axios.$get(
+      `bundles?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}`
+    )
+    commit('SET_BUNDLES', data)
+  },
+  async GET_HIDDEN_BUNDLES({ state, commit }, page = 1) {
+    const filter = state.filter
+    const data = await this.$axios.$get(
+      `trashed-bundles?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}`
+    )
     commit('SET_BUNDLES', data)
   },
   async GET_BUNDLE({ commit }, id) {

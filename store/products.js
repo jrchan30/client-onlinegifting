@@ -56,7 +56,9 @@ export const mutations = {
     state.lowPrice = payload
   },
   SET_FILTER(state, payload) {
-    state.filter = payload
+    state.filter.search = payload.search
+    state.filter.orderBy = payload.orderBy
+    state.filter.orderDir = payload.orderDir
   },
   SET_ALL_PRODUCTS(state, payload) {
     state.allProducts = payload
@@ -71,8 +73,11 @@ export const actions = {
     )
     commit('SET_PRODUCTS', data)
   },
-  async GET_HIDDEN({ commit }, page = 1) {
-    const data = await this.$axios.$get(`trashed-products?page=${page}`)
+  async GET_HIDDEN_PRODUCTS({ state, commit }, page = 1) {
+    const filter = state.filter
+    const data = await this.$axios.$get(
+      `trashed-products?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}`
+    )
     commit('SET_PRODUCTS', data)
   },
   async GET_PRODUCT({ commit }, id) {

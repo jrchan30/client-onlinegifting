@@ -14,10 +14,31 @@
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="sort">Transaction Number</th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="transaction_number"
+                  @click="settingFilter('transaction_number')"
+                >
+                  Transaction Number
+                </th>
                 <th scope="col" class="sort">User Name</th>
-                <th scope="col" class="sort">Total Price (IDR)</th>
-                <th scope="col" class="sort">Datetime</th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="total_price"
+                  @click="settingFilter('total_price')"
+                >
+                  Total Price (IDR)
+                </th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="created_at"
+                  @click="settingFilter('created_at')"
+                >
+                  Datetime
+                </th>
                 <th scope="col">Navigate</th>
               </tr>
             </thead>
@@ -59,11 +80,20 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
+  data() {
+    return {
+      filter: {
+        search: '',
+        orderBy: 'created_at',
+        orderDir: 'desc',
+      },
+    }
+  },
   computed: {
     ...mapGetters({
       TRANSACTIONS: 'transactions/TRANSACTIONS',
@@ -76,6 +106,45 @@ export default {
     ...mapActions({
       GET_TRANSACTIONS: 'transactions/GET_TRANSACTIONS',
     }),
+    ...mapMutations({
+      SET_FILTER: 'transactions/SET_FILTER',
+    }),
+    settingFilter(value) {
+      switch (value) {
+        case 'transaction_number':
+          if (this.filter.orderBy !== 'transaction_number') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'transaction_number'
+          break
+        case 'total_price':
+          if (this.filter.orderBy !== 'total_price') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'total_price'
+          break
+        case 'created_at':
+          if (this.filter.orderBy !== 'created_at') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'created_at'
+          break
+        default:
+          break
+      }
+
+      this.SET_FILTER(this.filter)
+      this.GET_TRANSACTIONS()
+    },
   },
 }
 </script>

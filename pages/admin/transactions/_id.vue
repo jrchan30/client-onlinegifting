@@ -49,8 +49,8 @@
             <div v-if="TRANSACTION.paid_boxes" class="col-12">
               Box Quantity: {{ TRANSACTION.paid_boxes.length }}
             </div>
-            <div v-if="TRANSACTION.paid_bundle" class="col-12">
-              Bundle Quantity: {{ TRANSACTION.paid_bundle.length }}
+            <div v-if="TRANSACTION.paid_bundles" class="col-12">
+              Bundle Quantity: {{ TRANSACTION.paid_bundles.length }}
             </div>
           </div>
         </div>
@@ -102,7 +102,7 @@
       </div>
     </div>
     <div class="col-xl-12 order-xl-3">
-      <div v-if="TRANSACTION.paid_boxes" class="card">
+      <div v-if="TRANSACTION.paid_boxes.length > 0" class="card">
         <div class="card-header">
           <h3>Box Details</h3>
         </div>
@@ -112,33 +112,76 @@
           class="card-body"
         >
           <h6 class="heading-small text-muted mb-4">{{ box.name }}</h6>
-          <div class="pl-lg-4">
-            <div class="row">
-              <div
-                v-for="product in box.paid_products"
-                :key="product.id"
-                class="col-md-4 border-right"
-              >
-                <div class="form-group">
-                  <label class="form-control-label">Product Name</label>
-                  <span class="form-control">
-                    {{ product.name }}
-                  </span>
-                </div>
-                <div class="form-group">
-                  <label class="form-control-label">Product Price</label>
-                  <span class="form-control">
-                    {{ product.price }}
-                  </span>
-                </div>
-                <div class="form-group">
-                  <label class="form-control-label">Product Quantity</label>
-                  <span class="form-control">
-                    {{ product.quantity }}
-                  </span>
-                </div>
-              </div>
-            </div>
+          <div
+            class="table-responsive"
+            data-toggle="list"
+            data-list-values='["id", "name", "price", "stock", "weight"]'
+          >
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort">Product Name</th>
+                  <th scope="col" class="sort">Product Price</th>
+                  <th scope="col" class="sort">Product Quantity</th>
+                </tr>
+              </thead>
+              <tbody class="list">
+                <tr v-for="product in box.paid_products" :key="product.id">
+                  <th class="name">
+                    <span class="text-capitalize">{{ product.name }}</span>
+                  </th>
+                  <td>
+                    <span>{{ product.price }}</span>
+                  </td>
+                  <td>
+                    <span>{{ product.quantity }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-12 order-xl-3">
+      <div v-if="TRANSACTION.paid_bundles.length > 0" class="card">
+        <div class="card-header">
+          <h3>Bundle Details</h3>
+        </div>
+        <div
+          v-for="bundle in TRANSACTION.paid_bundles"
+          :key="bundle.id"
+          class="card-body"
+        >
+          <h6 class="heading-small text-muted mb-4">{{ bundle.name }}</h6>
+
+          <div
+            class="table-responsive"
+            data-toggle="list"
+            data-list-values='["id", "name", "price", "stock", "weight"]'
+          >
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col" class="sort">Product Name</th>
+                  <th scope="col" class="sort">Product Price</th>
+                  <th scope="col" class="sort">Product Quantity</th>
+                </tr>
+              </thead>
+              <tbody class="list">
+                <tr v-for="product in bundle.paid_products" :key="product.id">
+                  <th class="name">
+                    <span class="text-capitalize">{{ product.name }}</span>
+                  </th>
+                  <td>
+                    <span>{{ product.price }}</span>
+                  </td>
+                  <td>
+                    <span>{{ product.quantity }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -234,9 +277,6 @@ export default {
     this.fillData()
   },
   methods: {
-    // ...mapActions({
-    //   GET_TRANSACTION: 'transactions/GET_TRANSACTION',
-    // }),
     fillData() {
       // Transaction Info
       this.transaction_info.invoice.value = this.TRANSACTION.transaction_number

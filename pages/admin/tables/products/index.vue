@@ -21,7 +21,7 @@
                 role="tab"
                 aria-controls="tabs-icons-text-1"
                 aria-selected="true"
-                @click="GET_PRODUCTS"
+                @click="getProducts()"
                 ><i class="fas fa-boxes mr-2"></i>Products</a
               >
             </li>
@@ -34,7 +34,7 @@
                 role="tab"
                 aria-controls="tabs-icons-text-2"
                 aria-selected="false"
-                @click="GET_HIDDEN"
+                @click="getHiddenProducts()"
                 ><i class="fas fa-trash-alt mr-2"></i>Hidden Products</a
               >
             </li>
@@ -50,9 +50,30 @@
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="sort" data-sort="id">Id</th>
-                <th scope="col" class="sort" data-sort="name">Product Name</th>
-                <th scope="col" class="sort" data-sort="price">Price</th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="id"
+                  @click="settingFilter('id')"
+                >
+                  Id
+                </th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="name"
+                  @click="settingFilter('name')"
+                >
+                  Product Name
+                </th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="price"
+                  @click="settingFilter('price')"
+                >
+                  Price
+                </th>
                 <th
                   scope="col"
                   class="sort"
@@ -62,8 +83,8 @@
                   Status (Stock)
                 </th>
                 <th scope="col">Image</th>
-                <th scope="col" class="sort" data-sort="rating">Rating</th>
-                <th scope="col" class="sort" data-sort="likes">Likes</th>
+                <th scope="col" class="sort">Rating</th>
+                <th scope="col" class="sort">Likes</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -125,15 +146,28 @@
                     <div
                       class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <button
-                        class="dropdown-item"
-                        @click="toggleEdit(product)"
-                      >
-                        Edit
-                      </button>
-                      <button class="dropdown-item" @click="hideProduct">
-                        Hide
-                      </button>
+                      <template v-if="!isHiddenProducts">
+                        <button
+                          class="dropdown-item"
+                          @click="toggleEdit(product)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          class="dropdown-item"
+                          @click="hideProduct(product.id)"
+                        >
+                          Hide
+                        </button>
+                      </template>
+                      <template v-else>
+                        <button
+                          class="dropdown-item"
+                          @click="restoreProduct(product.id)"
+                        >
+                          Restore
+                        </button>
+                      </template>
                     </div>
                   </div>
                 </td>
@@ -324,6 +358,8 @@ export default {
         orderBy: 'created_at',
         orderDir: 'desc',
       },
+      isHiddenProducts: false,
+      loading: false,
     }
   },
 
@@ -341,13 +377,48 @@ export default {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
-      GET_HIDDEN: 'products/GET_HIDDEN',
+      GET_HIDDEN_PRODUCTS: 'products/GET_HIDDEN_PRODUCTS',
     }),
     ...mapMutations({
       SET_FILTER: 'products/SET_FILTER',
     }),
+    getProducts() {
+      this.isHiddenProducts = false
+      this.GET_PRODUCTS()
+    },
+    getHiddenProducts() {
+      this.isHiddenProducts = true
+      this.GET_HIDDEN_PRODUCTS()
+    },
     settingFilter(value) {
       switch (value) {
+        case 'id':
+          if (this.filter.orderBy !== 'id') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'id'
+          break
+        case 'name':
+          if (this.filter.orderBy !== 'name') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'name'
+          break
+        case 'price':
+          if (this.filter.orderBy !== 'price') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'price'
+          break
         case 'stock':
           if (this.filter.orderBy !== 'stock') {
             this.filter.orderDir = 'desc'
@@ -362,7 +433,11 @@ export default {
       }
 
       this.SET_FILTER(this.filter)
-      this.GET_PRODUCTS()
+      if (!this.isHiddenProducts) {
+        this.GET_PRODUCTS()
+      } else {
+        this.GET_HIDDEN_PRODUCTS()
+      }
     },
     // searchProducts(){
     //   this.GET_PRODUCTS(null, this.search)
@@ -432,7 +507,8 @@ export default {
       this.isEdit = false
       Object.assign(this.$data, this.$options.data())
     },
-    hideProduct() {
+    hideProduct(id) {
+      this.loading = false
       this.$swal({
         title: 'Are you sure?',
         text: 'Product will be hidden from customers',
@@ -441,9 +517,39 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, hide it!',
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
+          await this.$axios.$delete(`/products/${id}`)
           this.$swal('Hid!', 'Product is now hidden.', 'success')
+          this.GET_PRODUCTS()
+        }
+      })
+    },
+    restoreProduct(id) {
+      this.loading = true
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'Product will be visible to customers',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, restore it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await this.$axios.$post(`/restore-product/${id}`)
+            this.$swal('Restored!', 'Product is restored.', 'success')
+            this.GET_HIDDEN_PRODUCTS()
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: e.response.data?.message,
+            })
+          } finally {
+            this.loading = false
+          }
         }
       })
     },

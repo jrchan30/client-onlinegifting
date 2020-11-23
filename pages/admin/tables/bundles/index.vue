@@ -5,6 +5,42 @@
         <div class="card-header border-0">
           <h3 class="mb-0">Bundles table</h3>
         </div>
+        <!-- Tabs -->
+        <div class="nav-wrapper px-2 ml-3">
+          <ul
+            id="tabs-icons-text"
+            class="nav nav-pills flex-column flex-md-row"
+            role="tablist"
+          >
+            <li class="nav-item">
+              <a
+                id="tabs-icons-text-1-tab"
+                class="nav-link mb-sm-3 mb-md-0 active"
+                data-toggle="tab"
+                href="#tabs-icons-text-1"
+                role="tab"
+                aria-controls="tabs-icons-text-1"
+                aria-selected="true"
+                @click="getBundles()"
+                ><i class="fas fa-boxes mr-2"></i>Bundles</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="tabs-icons-text-2-tab"
+                class="nav-link mb-sm-3 mb-md-0"
+                data-toggle="tab"
+                href="#tabs-icons-text-2"
+                role="tab"
+                aria-controls="tabs-icons-text-2"
+                aria-selected="false"
+                @click="getHiddenBundles()"
+                ><i class="fas fa-trash-alt mr-2"></i>Hidden Bundles</a
+              >
+            </li>
+          </ul>
+        </div>
+        <!-- End Tabs -->
         <div
           class="table-responsive"
           data-toggle="list"
@@ -13,15 +49,26 @@
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
               <tr>
-                <th scope="col" class="sort" data-sort="id">Id</th>
-                <th scope="col" class="sort" data-sort="name">Bundle Name</th>
-                <th scope="col" class="sort" data-sort="price">Price</th>
-                <th scope="col" class="sort" data-sort="status">
-                  Status (Stock)
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="id"
+                  @click="settingFilter('id')"
+                >
+                  Id
                 </th>
+                <th
+                  scope="col"
+                  class="sort"
+                  data-sort="name"
+                  @click="settingFilter('name')"
+                >
+                  Bundle Name
+                </th>
+                <th scope="col" class="sort">Price</th>
                 <th scope="col">Image</th>
-                <th scope="col" class="sort" data-sort="rating">Rating</th>
-                <th scope="col" class="sort" data-sort="likes">Likes</th>
+                <th scope="col" class="sort">Rating</th>
+                <th scope="col" class="sort">Likes</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -32,22 +79,6 @@
                   <span class="text-capitalize">{{ bundle.name }}</span>
                 </th>
                 <td class="price">{{ bundle.price }} (IDR)</td>
-                <td>
-                  <span class="badge badge-dot mr-4">
-                    <template v-if="bundle.stock > 0">
-                      <i class="bg-success"></i>
-                      <span class="status">Available ({{ bundle.stock }})</span>
-                    </template>
-                    <template v-else-if="bundle.stock == 0">
-                      <i class="bg-gray"></i>
-                      <span class="status text-gray">Out of Stock</span>
-                    </template>
-                    <template v-else>
-                      <i class="bg-red"></i>
-                      <span class="status text-danger">Deleted</span>
-                    </template>
-                  </span>
-                </td>
                 <td>
                   <img
                     alt="Image placeholder"
@@ -79,12 +110,28 @@
                     <div
                       class="dropdown-menu dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <button class="dropdown-item" @click="toggleEdit(bundle)">
-                        Edit
-                      </button>
-                      <button class="dropdown-item" @click="hideBundle">
-                        Hide
-                      </button>
+                      <template v-if="!isHiddenBundles">
+                        <button
+                          class="dropdown-item"
+                          @click="toggleEdit(bundle)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          class="dropdown-item"
+                          @click="hideBundle(bundle.id)"
+                        >
+                          Hide
+                        </button>
+                      </template>
+                      <template v-else>
+                        <button
+                          class="dropdown-item"
+                          @click="restoreBundle(bundle.id)"
+                        >
+                          Restore
+                        </button>
+                      </template>
                     </div>
                   </div>
                 </td>
@@ -202,7 +249,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import { Editor } from 'tiptap'
 import {
   OrderedList,
@@ -222,7 +269,6 @@ export default {
   async fetch() {
     await this.GET_BUNDLES()
     await this.GET_CATEGORIES()
-    await this.GET_PRODUCTS()
     await this.GET_ALL_PRODUCTS()
   },
   data() {
@@ -247,13 +293,19 @@ export default {
         categories: [],
       },
       editor: null,
+      filter: {
+        search: '',
+        orderBy: 'created_at',
+        orderDir: 'desc',
+      },
+      isHiddenBundles: false,
+      loading: false,
     }
   },
   computed: {
     ...mapGetters({
       BUNDLES: 'bundles/BUNDLES',
       CATEGORIES: 'categories/CATEGORIES',
-      PRODUCTS: 'products/PRODUCTS',
       ALL_PRODUCTS: 'products/ALL_PRODUCTS',
     }),
   },
@@ -282,9 +334,43 @@ export default {
     ...mapActions({
       GET_BUNDLES: 'bundles/GET_BUNDLES',
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
-      GET_PRODUCTS: 'products/GET_PRODUCTS',
       GET_ALL_PRODUCTS: 'products/GET_ALL_PRODUCTS',
+      GET_HIDDEN_BUNDLES: 'bundles/GET_HIDDEN_BUNDLES',
     }),
+    ...mapMutations({
+      SET_FILTER: 'bundles/SET_FILTER',
+    }),
+    settingFilter(value) {
+      switch (value) {
+        case 'id':
+          if (this.filter.orderBy !== 'id') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'id'
+          break
+        case 'name':
+          if (this.filter.orderBy !== 'name') {
+            this.filter.orderDir = 'desc'
+          } else {
+            const dir = this.filter.orderDir === 'desc' ? 'asc' : 'desc'
+            this.filter.orderDir = dir
+          }
+          this.filter.orderBy = 'name'
+          break
+        default:
+          break
+      }
+
+      this.SET_FILTER(this.filter)
+      if (!this.isHiddenBundles) {
+        this.GET_BUNDLES()
+      } else {
+        this.GET_HIDDEN_BUNDLES()
+      }
+    },
     expandImage(url) {
       this.$swal({
         showCloseButton: true,
@@ -312,7 +398,16 @@ export default {
       this.isEdit = false
       Object.assign(this.$data, this.$options.data())
     },
-    hideBundle() {
+    getBundles() {
+      this.isHiddenBundles = false
+      this.GET_BUNDLES()
+    },
+    getHiddenBundles() {
+      this.isHiddenBundles = true
+      this.GET_HIDDEN_BUNDLES()
+    },
+    hideBundle(id) {
+      this.loading = true
       this.$swal({
         title: 'Are you sure?',
         text: 'Bundle will be hidden from customers',
@@ -321,9 +416,49 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, hide it!',
-      }).then((result) => {
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          this.$swal('Hid!', 'Bundle is hidden.', 'success')
+          try {
+            await this.$axios.$delete(`/bundles/${id}`)
+            this.$swal('Hid!', 'Bundle is now hidden.', 'success')
+            this.GET_BUNDLES()
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: e.response.data?.message,
+            })
+          } finally {
+            this.loading = false
+          }
+        }
+      })
+    },
+    restoreBundle(id) {
+      this.loading = true
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'Bundle will be visible to customers',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, restore it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await this.$axios.$post(`/restore-bundle/${id}`)
+            this.$swal('Restored!', 'Bundle is restored.', 'success')
+            this.GET_HIDDEN_BUNDLES()
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: e.response.data?.message,
+            })
+          } finally {
+            this.loading = false
+          }
         }
       })
     },
