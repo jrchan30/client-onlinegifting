@@ -1,7 +1,7 @@
 <template>
   <div>
-    <MainNavbarTop />
-    <MainNavbarBottom />
+    <!-- <MainNavbarTop /> -->
+    <!-- <MainNavbarBottom /> -->
     <nuxt />
     <Search />
     <LoginRegisterFooter />

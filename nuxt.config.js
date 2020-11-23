@@ -36,6 +36,14 @@ export default {
       },
       {
         rel: 'stylesheet',
+        href:
+          'https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css',
+        integrity: 'sha256-imWjOiEEAcjWdL1+inhBu1dWYFyXuiO9vpJVEQd3y/c=',
+        crossorigin: 'anonymous',
+        defer: true,
+      },
+      {
+        rel: 'stylesheet',
         href: 'https://use.fontawesome.com/releases/v5.7.1/css/all.css',
         integrity:
           'sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr',
@@ -84,6 +92,7 @@ export default {
     { src: '~plugins/vue-select.js', mode: 'client' },
     { src: '~plugins/vue-picture-input.js', mode: 'client' },
     { src: '~plugins/tiptap.js', mode: 'client' },
+    { src: '~plugins/vuesax.js' },
   ],
   /*
    ** Auto import components
