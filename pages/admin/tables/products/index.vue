@@ -210,8 +210,7 @@
                       button-class="btn btn-sm"
                       radius="5"
                       :removable="true"
-                      :prefill="imageUrl()"
-                      :prefill-options="{ mediaType: 'image/jpeg,image/png' }"
+                      :prefill="image.url"
                       :custom-strings="{
                         upload: '<h1>Bummer!</h1>',
                         drag: 'Drag an image',
@@ -599,6 +598,7 @@ export default {
             )
             this.$swal('Saved!', 'Product has been edited.', 'success')
             this.closeForm()
+            this.GET_PRODUCTS()
           } catch (e) {
             this.$swal({
               icon: 'error',
@@ -608,7 +608,6 @@ export default {
           }
         }
       })
-      console.log('submit edit button clicked')
     },
   },
 }
