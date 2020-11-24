@@ -1,8 +1,11 @@
 <template>
   <div>
-    <!-- <MainNavbarTop /> -->
-    <!-- <MainNavbarBottom /> -->
-    <nuxt />
+    <MainNavbarTop />
+    <MainNavbarBottom />
+    <!-- <div class="col-2 col-md-1 col-lg-none">
+      <CustomerSidebar />
+    </div> -->
+    <Nuxt />
     <Search />
     <LoginRegisterFooter />
   </div>
@@ -49,6 +52,9 @@ export default {
 
 <style>
 /* @import '~/static/style/bootstrap.min.css'; */
+.custom-color {
+  color: #2c3e50;
+}
 
 html {
   overflow-y: scroll;
@@ -56,25 +62,36 @@ html {
 }
 body {
   font-family: 'Raleway', sans-serif;
+  background-color: #f4f7f8;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 5px;
-}
+} */
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: none;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
+/* ::-webkit-scrollbar-thumb {
   background: #888;
+} */
+
+::-webkit-scrollbar-thumb {
+  background: var(--vs-theme-color);
+  border-radius: 5px;
+  background: #2c3e50;
 }
 
-/* Handle on hover */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  display: block;
+  background: var(--vs-theme-layout);
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: black;
 }
 
 .navDiv {

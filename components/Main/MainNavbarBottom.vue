@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky-top shadow">
+  <div class="sticky-top border-bottom">
     <nav class="navbar navbar-expand-lg navbar-mainbg">
       <nuxt-link to="/" class="navbar-brand navbar-logo navDiv"
         >Online Gifting</nuxt-link
