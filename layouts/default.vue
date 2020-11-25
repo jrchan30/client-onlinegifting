@@ -1,12 +1,9 @@
 <template>
   <div>
-    <MainNavbarTop />
-    <MainNavbarBottom />
-    <!-- <div class="col-2 col-md-1 col-lg-none">
-      <CustomerSidebar />
-    </div> -->
+    <!-- <MainNavbarTop /> -->
+    <!-- <MainNavbarBottom /> -->
+    <Navbar />
     <Nuxt />
-    <Search />
     <LoginRegisterFooter />
   </div>
 </template>

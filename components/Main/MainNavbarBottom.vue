@@ -1,9 +1,21 @@
 <template>
   <div class="sticky-top border-bottom">
     <nav class="navbar navbar-expand-lg navbar-mainbg">
-      <nuxt-link to="/" class="navbar-brand navbar-logo navDiv"
+      <nuxt-link
+        to="/"
+        class="navbar-brand navbar-logo navDiv mx-auto mx-sm-0 px-5"
         >Online Gifting</nuxt-link
       >
+      <div class="navbar-brand mx-auto py-2 py-md-0">
+        <vs-input type="search">
+          <template #icon>
+            <button class="btn">
+              <i class="bx bx-search-alt mx-auto"></i>
+            </button>
+          </template>
+        </vs-input>
+      </div>
+
       <button
         class="navbar-toggler"
         type="button"
@@ -21,6 +33,7 @@
             <div class="left"></div>
             <div class="right"></div>
           </div>
+
           <nuxt-link
             tag="li"
             to="/"
@@ -124,6 +137,10 @@ export default {
 }
 i {
   margin-right: 10px;
+}
+
+.searchbar {
+  z-index: 9999;
 }
 
 .logo-white {

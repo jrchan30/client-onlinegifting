@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div v-if="PRODUCTS">
+  <div>
+    <div class="container">
       <!-- <ItemsPage
         :items="PRODUCTS.data"
         :is-fetching="$fetchState.pending"
@@ -17,23 +17,35 @@
           <a class="nav-link" href="#">Top Rated</a>
         </li>
       </ul>
-      <div class="pt-5">
+      <div v-if="$fetchState.pending" class="row pt-5">
+        <div
+          v-for="index in 12"
+          :key="index"
+          class="col-6 col-sm-4 col-lg-3 pb-4"
+        >
+          <content-placeholders :rounded="true">
+            <content-placeholders-img />
+            <content-placeholders-heading />
+          </content-placeholders>
+        </div>
+      </div>
+      <div v-else class="pt-5">
         <div class="row">
           <div
             v-for="product in PRODUCTS.data"
             :key="product.id"
-            class="col-sm-3 col-md-4 col-lg-3 pb-4"
+            class="col-6 col-sm-4 col-lg-3 pb-4"
           >
             <!-- <nuxt-link :to="`/products/${product.id}`"> -->
-            <vs-card @click="goTo()">
+            <vs-card>
               <template #title>
-                <h3>{{ product.name }}</h3>
+                <h3 @click="goTo()">{{ product.name }}</h3>
               </template>
               <template #img>
-                <img :src="product.images[0].url" alt="" />
+                <img :src="product.images[0].url" alt="" @click="goTo()" />
               </template>
               <template #text>
-                <p>{{ product.price }} IDR</p>
+                <p @click="goTo()">{{ product.price }} IDR</p>
               </template>
               <template #interactions>
                 <vs-button
@@ -71,17 +83,23 @@ export default {
     ...mapGetters({
       PRODUCTS: 'products/PRODUCTS',
     }),
-    products() {
-      if (this.PRODUCTS.data) {
-        return this.PRODUCTS.data.filter((i) => i.stock > 0)
-      }
-      return []
-    },
+    // products() {
+    //   if (this.PRODUCTS.data) {
+    //     return this.PRODUCTS.data.filter((i) => i.stock > 0)
+    //   }
+    //   return []
+    // },
   },
   methods: {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
     }),
+    goTo() {
+      console.log('pressed goto')
+    },
+    like(id) {
+      console.log(id + ' liked')
+    },
   },
 }
 </script>

@@ -144,7 +144,18 @@ export default {
     },
   },
   pwa: {
-    icon: false, // disables the icon module
+    icon: {
+      source: '/image/icon.png',
+    },
+    meta: {
+      theme_color: '#336699',
+    },
+    manifest: {
+      name: 'Online Gifting',
+      short_name: 'OG',
+      description: 'Choose your gifts, we handle the rest',
+      author: 'Jonathan Russell Chan',
+    },
   },
   /*
    ** Build configuration
