@@ -17,7 +17,7 @@
             <h3>{{ product.name }}</h3>
           </template>
           <template #img>
-            <img :src="product.images[0].url" alt="" />
+            <img :src="product.images[0].url" class="img-ratio" alt="" />
           </template>
           <template #text>
             <p>{{ product.price }} IDR</p>

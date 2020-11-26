@@ -19,7 +19,7 @@
             <h3 class="text-primary text-capitalize">{{ product.name }}</h3>
           </template>
           <template #img>
-            <img :src="product.images[0].url" alt="" />
+            <img :src="product.images[0].url" class="img-ratio" alt="" />
           </template>
           <template #text>
             <span>{{ product.price }} IDR</span>

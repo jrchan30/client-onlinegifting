@@ -39,13 +39,18 @@
             <!-- <nuxt-link :to="`/products/${product.id}`"> -->
             <vs-card>
               <template #title>
-                <h3 @click="goTo()">{{ product.name }}</h3>
+                <h3 @click="goTo(product.id)">{{ product.name }}</h3>
               </template>
               <template #img>
-                <img :src="product.images[0].url" alt="" @click="goTo()" />
+                <img
+                  :src="product.images[0].url"
+                  alt=""
+                  class="img-ratio"
+                  @click="goTo(product.id)"
+                />
               </template>
               <template #text>
-                <p @click="goTo()">{{ product.price }} IDR</p>
+                <p @click="goTo(product.id)">{{ product.price }} IDR</p>
               </template>
               <template #interactions>
                 <vs-button
@@ -94,11 +99,11 @@ export default {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
     }),
-    goTo() {
-      console.log('pressed goto')
-    },
     like(id) {
       console.log(id + ' liked')
+    },
+    goTo(id) {
+      this.$router.push(`/products/${id}`)
     },
   },
 }

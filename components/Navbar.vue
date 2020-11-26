@@ -32,6 +32,12 @@
               {{ $auth.user.name }}
             </template>
           </vs-avatar>
+          <vs-button color="rgb(51, 102, 153)" relief @click="logout()">
+            Logout
+            <template #animate>
+              <i class="bx bx-run"></i>
+            </template>
+          </vs-button>
         </template>
       </template>
     </vs-navbar>
@@ -60,9 +66,19 @@
         </vs-sidebar-item>
         <vs-sidebar-item id="donate" to="/categories">
           <template #icon>
-            <i class="bx bxs-donate-heart"></i>
+            <i class="bx bx-book-content"></i>
           </template>
           Categories
+        </vs-sidebar-item>
+        <vs-sidebar-item id="likes" to="/liked">
+          <template #icon>
+            <i class="bx bx-happy-heart-eyes"></i>
+          </template>
+          Liked Items
+        </vs-sidebar-item>
+        <vs-sidebar-item id="profile" to="/profile">
+          <template #icon> <i class="bx bxs-user-detail"></i> </template>
+          Profile
         </vs-sidebar-item>
         <vs-sidebar-group>
           <template #header>
@@ -150,6 +166,13 @@ export default {
     },
     goToProfile() {
       this.$router.push('/profile')
+    },
+    async logout() {
+      try {
+        await this.$auth.logout()
+      } catch (err) {
+        alert(err)
+      }
     },
   },
 }

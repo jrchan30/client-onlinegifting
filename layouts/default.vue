@@ -103,4 +103,10 @@ body {
 .text-size {
   font-size: 12px;
 }
+
+.img-ratio {
+  object-fit: cover;
+  height: 150px;
+  width: 300px;
+}
 </style>
