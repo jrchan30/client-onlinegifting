@@ -22,14 +22,26 @@
         <form @submit.prevent="formSubmit" @keyup.enter.prevent>
           <slot name="fields"></slot>
           <slot name="reset-password"></slot>
-          <button
+          <!-- <button
             type="submit"
             :disabled="loading"
             class="btn btn-primary mt-2"
           >
             <i v-if="loading" class="fas fa-spinner fa-spin"></i>
             <slot name="btnSubmit"></slot>
-          </button>
+          </button> -->
+          <div class="grid">
+            <vs-row align="center" justify="space-around">
+              <vs-col w="3" justify="center">
+                <vs-button :loading="loading" color="rgb(51, 102, 153)" relief>
+                  <slot name="btnSubmit"></slot>
+                  <template #animate>
+                    <i class="bx bx-send"></i>
+                  </template>
+                </vs-button>
+              </vs-col>
+            </vs-row>
+          </div>
         </form>
       </div>
     </div>

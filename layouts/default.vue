@@ -3,7 +3,9 @@
     <!-- <MainNavbarTop /> -->
     <!-- <MainNavbarBottom /> -->
     <Navbar />
-    <Nuxt />
+    <div class="pt-5">
+      <Nuxt />
+    </div>
     <LoginRegisterFooter />
   </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="hidden pb-5">
-    <vs-navbar v-model="active" fixed shadow square center-collapsed>
+    <vs-navbar v-model="active" fixed center-collapsed>
       <template #left>
         <vs-button flat icon @click="activeSidebar = !activeSidebar">
           <i class="bx bx-menu"></i>
@@ -14,10 +14,25 @@
         </vs-input>
       </vs-navbar-item>
       <template #right>
-        <vs-button flat>
-          <nuxt-link to="/login">Login</nuxt-link>
-        </vs-button>
-        <vs-button>Get Started</vs-button>
+        <template v-if="!$auth.loggedIn">
+          <vs-button flat>
+            <nuxt-link to="/login">Login</nuxt-link>
+          </vs-button>
+          <vs-button>Get Started</vs-button>
+        </template>
+        <template v-else>
+          <vs-avatar
+            circle
+            pointer
+            :writing="$auth.user.detail === null"
+            :badge="$auth.user.detail === null"
+            @click="goToProfile()"
+          >
+            <template #text>
+              {{ $auth.user.name }}
+            </template>
+          </vs-avatar>
+        </template>
       </template>
     </vs-navbar>
     <div class="position-sticky" style="z-index: 9999">
@@ -25,128 +40,94 @@
         <template #logo>
           <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
         </template>
-        <vs-sidebar-item id="home">
+        <vs-sidebar-item id="home" to="/">
           <template #icon>
             <i class="bx bx-home"></i>
           </template>
           Home
         </vs-sidebar-item>
-        <vs-sidebar-item id="market">
+        <vs-sidebar-item id="market" to="/products">
           <template #icon>
             <i class="bx bx-grid-alt"></i>
           </template>
-          Market Overview
+          Products
         </vs-sidebar-item>
-        <vs-sidebar-item id="Music">
+        <vs-sidebar-item id="Music" to="/bundles">
           <template #icon>
-            <i class="bx bxs-music"></i>
+            <i class="bx bx-box"></i>
           </template>
-          Music
+          Bundles
+        </vs-sidebar-item>
+        <vs-sidebar-item id="donate" to="/categories">
+          <template #icon>
+            <i class="bx bxs-donate-heart"></i>
+          </template>
+          Categories
         </vs-sidebar-item>
         <vs-sidebar-group>
           <template #header>
             <vs-sidebar-item arrow>
               <template #icon>
-                <i class="bx bx-group"></i>
+                <i class="bx bx-help-circle"></i>
               </template>
-              Social media
+              Need Help?
             </vs-sidebar-item>
           </template>
 
-          <vs-sidebar-item id="Instagram">
+          <vs-sidebar-item
+            id="Instagram"
+            href="https://www.instagram.com/jrussellchan/"
+          >
             <template #icon>
               <i class="bx bxl-instagram"></i>
             </template>
             Instagram
           </vs-sidebar-item>
-          <vs-sidebar-item id="twitter">
-            <template #icon>
-              <i class="bx bxl-twitter"></i>
-            </template>
-            Twitter
-          </vs-sidebar-item>
-          <vs-sidebar-item id="Facebook">
+          <vs-sidebar-item
+            id="Facebook"
+            href="https://www.facebook.com/russell.chan.338/"
+          >
             <template #icon>
               <i class="bx bxl-facebook"></i>
             </template>
             Facebook
           </vs-sidebar-item>
-        </vs-sidebar-group>
-        <vs-sidebar-group>
-          <template #header>
-            <vs-sidebar-item arrow>
-              <template #icon>
-                <i class="bx bx-code-alt"></i>
-              </template>
-              Coding
-            </vs-sidebar-item>
-          </template>
-
-          <vs-sidebar-item id="github">
+          <vs-sidebar-item id="Line">
             <template #icon>
-              <i class="bx bxl-github"></i>
+              <i class="fab fa-line"></i>
             </template>
-            Github
+            Line
           </vs-sidebar-item>
-          <vs-sidebar-item id="codepen">
+          <vs-sidebar-item id="tutorial">
             <template #icon>
-              <i class="bx bxl-codepen"></i>
+              <i class="fas fa-info"></i>
             </template>
-            Codepen
+            Tutorial
           </vs-sidebar-item>
-          <vs-sidebar-item id="discord">
+          <vs-sidebar-item id="chat">
             <template #icon>
-              <i class="bx bxl-discord"></i>
+              <i class="bx bx-chat"></i>
             </template>
-            Discord
-          </vs-sidebar-item>
-          <vs-sidebar-item id="Javascript">
-            <template #icon>
-              <i class="bx bxl-javascript"></i>
-            </template>
-            Javascript
-          </vs-sidebar-item>
-          <vs-sidebar-item id="git">
-            <template #icon>
-              <i class="bx bxl-git"></i>
-            </template>
-            Git
+            Chat
           </vs-sidebar-item>
         </vs-sidebar-group>
-        <vs-sidebar-item id="donate">
-          <template #icon>
-            <i class="bx bxs-donate-heart"></i>
-          </template>
-          Donate
-        </vs-sidebar-item>
-        <vs-sidebar-item id="drink">
-          <template #icon>
-            <i class="bx bx-drink"></i>
-          </template>
-          Drink
-        </vs-sidebar-item>
-        <vs-sidebar-item id="shopping">
-          <template #icon>
-            <i class="bx bxs-shopping-bags"></i>
-          </template>
-          Shopping
-        </vs-sidebar-item>
-        <vs-sidebar-item id="chat">
-          <template #icon>
-            <i class="bx bx-chat"></i>
-          </template>
-          Chat
-        </vs-sidebar-item>
         <template #footer>
           <vs-row justify="space-between">
-            <vs-avatar>
+            <vs-avatar
+              :writing="$auth.user.detail.phone_num == null"
+              :badge="$auth.user.detail.phone_num == null"
+            >
               <img src="/image/profile-pic.jfif" alt="" />
             </vs-avatar>
 
-            <vs-avatar badge-color="danger" badge-position="top-right">
-              <i class="bx bx-bell"></i>
-
-              <template #badge> 28 </template>
+            <vs-avatar
+              to="/cart"
+              badge-color="primary"
+              badge-position="top-right"
+              @click="goToCart()"
+            >
+              <i class="bx bx-cart"></i>
+              <template #badge> {{ $auth.user.cart }} </template>
             </vs-avatar>
           </vs-row>
         </template>
@@ -161,6 +142,15 @@ export default {
     active: 'home',
     activeSidebar: false,
     search: '',
+    cart_qty: 0,
   }),
+  methods: {
+    goToCart() {
+      this.$router.push('/carts')
+    },
+    goToProfile() {
+      this.$router.push('/profile')
+    },
+  },
 }
 </script>

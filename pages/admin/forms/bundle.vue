@@ -68,8 +68,10 @@
                       ref="pictureInput"
                       width="130"
                       height="130"
-                      size="10"
+                      size="1"
                       margin="16"
+                      :z-index="10"
+                      :toggle-aspect-ratio="true"
                       button-class="btn mb-0 mt-1"
                       remove-button-class="btn my-0"
                       radius="5"
@@ -92,7 +94,7 @@
         <!-- End Image Section -->
 
         <!-- Categories Section -->
-        <div class="col-lg-6">
+        <div v-if="!$fetchState.pending" class="col-lg-6">
           <div class="card-wrapper">
             <div class="card">
               <div class="card-header col-12">
@@ -119,7 +121,7 @@
         <!-- End Categories Section -->
 
         <!-- Products to include Section -->
-        <div class="col-lg-6">
+        <div v-if="!$fetchState.pending" class="col-lg-6">
           <div class="card-wrapper">
             <div class="card">
               <div class="card-header">
@@ -275,6 +277,10 @@ import {
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
+  async fetch() {
+    await this.GET_CATEGORIES()
+    await this.GET_ALL_PRODUCTS()
+  },
   data() {
     return {
       form: {
@@ -299,10 +305,7 @@ export default {
     this.editor.destroy()
   },
 
-  async mounted() {
-    await this.GET_CATEGORIES()
-    await this.GET_ALL_PRODUCTS()
-
+  beforeMount() {
     this.editor = new Editor({
       content: '<p>Product description goes here!</p>',
       extensions: [

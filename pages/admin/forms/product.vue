@@ -240,6 +240,9 @@ import {
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
+  async fetch() {
+    await this.GET_CATEGORIES()
+  },
   data() {
     return {
       fields: {
@@ -304,9 +307,7 @@ export default {
     this.editor.destroy()
   },
 
-  async mounted() {
-    await this.GET_CATEGORIES()
-
+  beforeMount() {
     this.editor = new Editor({
       content: '<p>Product description goes here!</p>',
       extensions: [
