@@ -46,12 +46,14 @@ export const mutations = {
   SET_LATEST(state, payload) {
     payload.data.forEach((x) => {
       x.price = formatPrice(x.price)
+      x.main_image = x.images[0].url
     })
     state.latest = payload
   },
   SET_LOWPRICE(state, payload) {
     payload.data.forEach((x) => {
       x.price = formatPrice(x.price)
+      x.main_image = x.images[0].url
     })
     state.lowPrice = payload
   },

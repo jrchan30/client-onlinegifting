@@ -30,45 +30,7 @@
         </div>
       </div>
       <div v-else class="pt-5">
-        <div class="row">
-          <div
-            v-for="bundle in BUNDLES.data"
-            :key="bundle.id"
-            class="col-6 col-sm-4 col-lg-3 pb-4"
-          >
-            <!-- <nuxt-link :to="`/products/${product.id}`"> -->
-            <vs-card>
-              <template #title>
-                <h3 @click="goTo(bundle.id)">{{ bundle.name }}</h3>
-              </template>
-              <template #img>
-                <img
-                  :src="bundle.main_image"
-                  alt=""
-                  class="img-ratio"
-                  @click="goTo(bundle.id)"
-                />
-              </template>
-              <template #text>
-                <p @click="goTo(bundle.id)">{{ bundle.price }} IDR</p>
-              </template>
-              <template #interactions>
-                <vs-button
-                  danger
-                  icon
-                  :disabled="$auth.user == null"
-                  @click="like(bundle.id)"
-                >
-                  <i class="bx bx-heart"></i>
-                </vs-button>
-                <vs-button class="btn-chat" shadow primary>
-                  <i class="bx bx-chat"></i>
-                  <span class="span"> 54 </span>
-                </vs-button>
-              </template>
-            </vs-card>
-          </div>
-        </div>
+        <CardMain :items="BUNDLES.data" :item-type="'bundles'" />
       </div>
       <div class="d-flex justify-content-center">
         <Pagination :action="'products'" />

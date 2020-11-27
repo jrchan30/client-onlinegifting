@@ -32,7 +32,7 @@
               {{ $auth.user.name }}
             </template>
           </vs-avatar>
-          <vs-button color="rgb(51, 102, 153)" relief @click="logout()">
+          <vs-button color="#336699" transparent @click="logout()">
             Logout
             <template #animate>
               <i class="bx bx-run"></i>

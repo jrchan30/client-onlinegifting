@@ -1,5 +1,5 @@
 <template>
-  <CardMain>
+  <CardSkeleton>
     <template v-slot:title>
       <h4 class="font-weight-bold custom-color">Our Latest Products Added</h4>
       <p class="custom-color">
@@ -19,7 +19,7 @@
             <h3 class="text-primary text-capitalize">{{ product.name }}</h3>
           </template>
           <template #img>
-            <img :src="product.images[0].url" class="img-ratio" alt="" />
+            <img :src="product.main_image" class="img-ratio" alt="" />
           </template>
           <template #text>
             <span>{{ product.price }} IDR</span>
@@ -28,15 +28,14 @@
             <vs-button danger icon>
               <i class="bx bx-heart"></i>
             </vs-button>
-            <vs-button class="btn-chat" shadow primary>
-              <i class="bx bx-chat"></i>
-              <span class="span"> 54 </span>
+            <vs-button class="btn-chat" shadow icon primary>
+              <i class="fas fa-cart-plus text-primary"></i>
             </vs-button>
           </template>
         </vs-card>
       </vs-card-group>
     </template>
-  </CardMain>
+  </CardSkeleton>
 </template>
 
 <script>
