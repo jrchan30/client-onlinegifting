@@ -2,10 +2,7 @@
   <div>
     <HomeSlider />
     <div class="container">
-      <!-- <button @click="goToAdmin">click to get to admin home</button> -->
-      <!-- <LatestProducts /> -->
       <LatestProductTest2 />
-      <!-- <ProductLowPrice /> -->
       <ProductLowPriceTest2 />
     </div>
   </div>

@@ -41,7 +41,7 @@
         </template>
       </template>
     </vs-navbar>
-    <div class="position-sticky" style="z-index: 1000">
+    <div class="position-sticky" style="z-index: 9999">
       <vs-sidebar v-model="active" :open.sync="activeSidebar">
         <template #logo>
           <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
@@ -70,7 +70,7 @@
           </template>
           Categories
         </vs-sidebar-item>
-        <vs-sidebar-item id="likes" to="/liked">
+        <vs-sidebar-item id="likes" to="/liked-items">
           <template #icon>
             <i class="bx bx-happy-heart-eyes"></i>
           </template>
@@ -127,6 +127,20 @@
             Chat
           </vs-sidebar-item>
         </vs-sidebar-group>
+        <vs-row justify="center">
+          <vs-col w="11">
+            <vs-input
+              v-model="search"
+              class="w-100"
+              color="primary"
+              type="search"
+            >
+              <template #icon>
+                <i class="bx bx-search-alt"></i>
+              </template>
+            </vs-input>
+          </vs-col>
+        </vs-row>
         <template #footer>
           <vs-row v-if="$auth.user" justify="space-between">
             <vs-avatar
