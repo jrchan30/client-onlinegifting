@@ -302,7 +302,9 @@ export default {
     }),
   },
   beforeDestroy() {
-    this.editor.destroy()
+    if (this.editor) {
+      this.editor.destroy()
+    }
   },
 
   beforeMount() {
@@ -332,6 +334,9 @@ export default {
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
       GET_ALL_PRODUCTS: 'products/GET_ALL_PRODUCTS',
     }),
+    closeForm() {
+      Object.assign(this.$data, this.$options.data())
+    },
     onChange() {
       const file = this.$refs.pictureInput.file
       if (file) {
@@ -383,6 +388,7 @@ export default {
           try {
             await this.$axios.$post('/bundles', formData)
             this.$swal('Inserted!', 'Bundle has been inserted.', 'success')
+            this.closeForm()
           } catch (e) {
             this.$swal({
               icon: 'error',

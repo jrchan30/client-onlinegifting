@@ -166,6 +166,7 @@
                       height="130"
                       size="10"
                       margin="16"
+                      :z-index="10"
                       button-class="btn btn-sm"
                       radius="5"
                       :prefill="form.image.url"
@@ -174,7 +175,6 @@
                         drag: 'Drag an image',
                       }"
                       @change="onChange(form.image.id)"
-                      @remove="onRemove(form.image.id)"
                     >
                     </picture-input>
                   </div>
@@ -214,7 +214,7 @@
                       />
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-12">
                     <div class="form-group">
                       <label class="form-control-label"
                         >Products included</label
@@ -228,6 +228,113 @@
                         :options="ALL_PRODUCTS"
                         style="z-index = 1000"
                       />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="card-wrapper">
+                      <div class="card">
+                        <div class="card-header">
+                          <h3 class="mb-0">Bundle description</h3>
+                        </div>
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <editor-menu-bar
+                                v-slot="{ commands, isActive }"
+                                :editor="editor"
+                              >
+                                <div>
+                                  <button
+                                    class="btn px-1 py-0"
+                                    :class="{ 'is-active': isActive.bold() }"
+                                    type="button"
+                                    @click="commands.bold"
+                                  >
+                                    <i class="fas fa-bold"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    :class="{ 'is-active': isActive.italic() }"
+                                    type="button"
+                                    @click="commands.italic"
+                                  >
+                                    <i class="fas fa-italic"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    :class="{ 'is-active': isActive.strike() }"
+                                    type="button"
+                                    @click="commands.strike"
+                                  >
+                                    <i class="fas fa-strikethrough"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    :class="{
+                                      'is-active': isActive.underline(),
+                                    }"
+                                    @click="commands.underline"
+                                  >
+                                    <i class="fas fa-underline"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    :class="{
+                                      'is-active': isActive.bullet_list(),
+                                    }"
+                                    type="button"
+                                    @click="commands.bullet_list"
+                                  >
+                                    <i class="fas fa-list-ul"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    :class="{
+                                      'is-active': isActive.ordered_list(),
+                                    }"
+                                    type="button"
+                                    @click="commands.ordered_list"
+                                  >
+                                    <i class="fas fa-list-ol"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    type="button"
+                                    @click="commands.undo"
+                                  >
+                                    <i class="fas fa-undo-alt"></i>
+                                  </button>
+
+                                  <button
+                                    class="btn px-1 py-0"
+                                    type="button"
+                                    @click="commands.redo"
+                                  >
+                                    <i class="fas fa-redo"></i>
+                                  </button>
+                                </div>
+                              </editor-menu-bar>
+                              <div class="border-danger p-2">
+                                <editor-content
+                                  class="editor__content border-1"
+                                  :editor="editor"
+                                />
+                                <input
+                                  type="hidden"
+                                  name="content"
+                                  :value="editor"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -275,15 +382,15 @@ export default {
     return {
       isEdit: false,
       currentBundleName: '',
-      fields: {
-        bundle_name: {
-          class: 'col-md-6',
-          placeholder: 'Bundle name',
-          icon: 'fas fa-signature',
-          appendable: false,
-          value: '',
-        },
-      },
+      // fields: {
+      //   bundle_name: {
+      //     class: 'col-md-6',
+      //     placeholder: 'Bundle name',
+      //     icon: 'fas fa-signature',
+      //     appendable: false,
+      //     value: '',
+      //   },
+      // },
       form: {
         bundle_name: '',
         description: '',
@@ -300,6 +407,7 @@ export default {
       },
       isHiddenBundles: false,
       loading: false,
+      errors: {},
     }
   },
   computed: {
@@ -309,26 +417,10 @@ export default {
       ALL_PRODUCTS: 'products/ALL_PRODUCTS',
     }),
   },
-  mounted() {
-    this.editor = new Editor({
-      content: '<p>Product description goes here!</p>',
-      extensions: [
-        new BulletList(),
-        new ListItem(),
-        new OrderedList(),
-        new Link(),
-        new Bold(),
-        new Italic(),
-        new Strike(),
-        new Underline(),
-        new History(),
-      ],
-      onUpdate: ({ getJSON, getHTML }) => {
-        this.json = getJSON()
-        this.html = getHTML()
-        this.form.description = this.html
-      },
-    })
+  beforeDestroy() {
+    if (this.editor) {
+      this.editor.destroy()
+    }
   },
   methods: {
     ...mapActions({
@@ -340,6 +432,16 @@ export default {
     ...mapMutations({
       SET_FILTER: 'bundles/SET_FILTER',
     }),
+    onChange() {
+      const file = this.$refs.pictureInput.file
+      if (file) {
+        this.form.image = file
+      } else {
+        alert(
+          'Old browser (not supported). Chrome latest updated browser is suggested'
+        )
+      }
+    },
     settingFilter(value) {
       switch (value) {
         case 'id':
@@ -382,6 +484,9 @@ export default {
       })
     },
     toggleEdit(bundle) {
+      if (this.editor) {
+        this.editor.destroy()
+      }
       this.closeForm()
       const bundleCopy = JSON.parse(JSON.stringify(bundle))
       this.isEdit = true
@@ -389,6 +494,26 @@ export default {
       this.form.image = bundleCopy.detail.image
       this.currentBundleName = bundleCopy.name
       this.form.colour = bundleCopy.detail.colour
+      this.form.description = bundleCopy.description
+      this.editor = new Editor({
+        content: this.form.description,
+        extensions: [
+          new BulletList(),
+          new ListItem(),
+          new OrderedList(),
+          new Link(),
+          new Bold(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        onUpdate: ({ getJSON, getHTML }) => {
+          this.json = getJSON()
+          this.html = getHTML()
+          this.form.description = this.html
+        },
+      })
       bundleCopy.detail.categories.map((x) => this.form.categories.push(x.id))
       // this.form.products = bundleCopy.products.colour
       bundleCopy.products.map((x) => this.form.products.push(x.id))

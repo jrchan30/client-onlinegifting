@@ -83,6 +83,7 @@
                       height="130"
                       size="10"
                       margin="16"
+                      :z-index="10"
                       button-class="btn mb-0 mt-1"
                       remove-button-class="btn my-0"
                       radius="5"
@@ -304,7 +305,9 @@ export default {
   },
 
   beforeDestroy() {
-    this.editor.destroy()
+    if (this.editor) {
+      this.editor.destroy()
+    }
   },
 
   beforeMount() {
@@ -387,6 +390,7 @@ export default {
           try {
             await this.$axios.$post('/products', formData)
             this.$swal('Inserted!', 'Product has been inserted.', 'success')
+            this.closeForm()
           } catch (e) {
             this.$swal({
               icon: 'error',

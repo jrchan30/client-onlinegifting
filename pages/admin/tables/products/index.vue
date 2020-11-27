@@ -209,6 +209,7 @@
                       margin="16"
                       button-class="btn btn-sm"
                       radius="5"
+                      :z-index="10"
                       :removable="true"
                       :prefill="image.url"
                       :custom-strings="{
