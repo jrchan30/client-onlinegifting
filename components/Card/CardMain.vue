@@ -31,7 +31,7 @@
           >
             <i class="bx bx-heart"></i>
           </vs-button>
-          <vs-button class="btn-chat" shadow icon primary>
+          <vs-button shadow icon :disabled="$auth.user == null">
             <i class="fas fa-cart-plus text-primary"></i>
           </vs-button>
         </template>
@@ -58,8 +58,33 @@ export default {
     },
   },
   methods: {
-    like(id) {
-      console.log(id + ' liked')
+    async like(id) {
+      let type = ''
+      type = this.itemType.includes('product') ? 'product' : 'bundle'
+      const likeForm = {
+        type,
+        id,
+      }
+      try {
+        await this.$axios.$post('/likes', likeForm).then((res) => {
+          this.$swal({
+            position: 'center',
+            icon: 'success',
+            title: 'Liked',
+            showConfirmButton: false,
+            timer: 1000,
+          })
+        })
+      } catch (e) {
+        this.$swal({
+          position: 'center',
+          icon: 'error',
+          title: 'Oops...',
+          text: e,
+          timerProgressBar: true,
+          timer: 4000,
+        })
+      }
     },
     goTo(id) {
       this.$router.push(`/${this.itemType}/${id}`)

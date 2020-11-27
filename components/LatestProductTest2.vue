@@ -9,12 +9,7 @@
     </template>
     <template v-slot:body>
       <vs-card-group>
-        <vs-card
-          v-for="product in LATEST"
-          :key="product.id"
-          class="px-1"
-          @click="handleClick"
-        >
+        <vs-card v-for="product in LATEST" :key="product.id" class="px-1">
           <template #title>
             <h3 class="text-primary text-capitalize">{{ product.name }}</h3>
           </template>
@@ -25,10 +20,10 @@
             <span>{{ product.price }} IDR</span>
           </template>
           <template #interactions>
-            <vs-button danger icon>
+            <vs-button danger icon :disabled="$auth.user == null">
               <i class="bx bx-heart"></i>
             </vs-button>
-            <vs-button class="btn-chat" shadow icon primary>
+            <vs-button shadow icon :disabled="$auth.user == null">
               <i class="fas fa-cart-plus text-primary"></i>
             </vs-button>
           </template>
@@ -66,9 +61,6 @@ export default {
     }),
     changeDescription(index) {
       this.current = this.LATEST[index]
-    },
-    handleClick() {
-      console.log('clicked')
     },
   },
 }

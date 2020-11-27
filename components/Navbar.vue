@@ -41,7 +41,7 @@
         </template>
       </template>
     </vs-navbar>
-    <div class="position-sticky" style="z-index: 9999">
+    <div class="position-sticky" style="z-index: 1000">
       <vs-sidebar v-model="active" :open.sync="activeSidebar">
         <template #logo>
           <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
@@ -128,7 +128,7 @@
           </vs-sidebar-item>
         </vs-sidebar-group>
         <template #footer>
-          <vs-row justify="space-between">
+          <vs-row v-if="$auth.user" justify="space-between">
             <vs-avatar
               :writing="$auth.user.detail.phone_num == null"
               :badge="$auth.user.detail.phone_num == null"

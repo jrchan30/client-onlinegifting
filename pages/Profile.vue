@@ -15,6 +15,7 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
+  layout: 'default',
   middleware: ['auth'],
   data() {
     return {
