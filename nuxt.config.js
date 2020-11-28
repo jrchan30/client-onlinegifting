@@ -117,6 +117,7 @@ export default {
     'vue-sweetalert2/nuxt',
     '@nuxtjs/pwa',
     'cookie-universal-nuxt',
+    'vue-swatches/nuxt',
   ],
   axios: {
     credentials: true,

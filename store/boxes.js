@@ -1,8 +1,8 @@
 import { formatPrice } from '@/plugins/customUtil'
 
 export const state = () => ({
-  bundles: {},
-  bundle: {},
+  boxes: {},
+  box: {},
 })
 
 export const getters = {
@@ -16,14 +16,14 @@ export const getters = {
 
 export const mutations = {
   SET_BOXES(state, payload) {
-    payload.data.forEach((x) => {
-      x.price = formatPrice(x.price)
-      x.main_image = x.detail.image.url
-    })
-    state.bundles = payload
+    // payload.data.forEach((x) => {
+    //   x.price = formatPrice(x.price)
+    //   x.main_image = x.detail.image.url
+    // })
+    state.boxes = payload
   },
-  SET_BUNDLE(state, payload) {
-    state.bundle = {
+  SET_BOX(state, payload) {
+    state.box = {
       data: {
         id: payload.data.id,
         user: payload.data.user,

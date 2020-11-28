@@ -25,6 +25,7 @@
     "vue-content-placeholders": "^0.2.1",
     "vue-picture-input": "^2.1.6",
     "vue-select": "^3.10.8",
+    "vue-swatches": "^2.1.0",
     "vue-sweetalert2": "^4.0.0",
     "vuesax": "^4.0.1-alpha.25"
   },

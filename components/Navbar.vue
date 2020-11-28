@@ -20,7 +20,6 @@
         </template>
         <template v-else>
           <vs-avatar
-            circle
             pointer
             :writing="$auth.user.detail === null"
             :badge="$auth.user.detail === null"
