@@ -51,8 +51,9 @@ export const mutations = {
     state.filter.orderDir = payload.orderDir
   },
   SET_LIKE(state, payload) {
-    state.bundles[payload.index].data.isLiked = !state.bundles[payload.index]
-      .data.isLiked
+    state.bundles.data[payload.index].isLiked = !state.bundles.data[
+      payload.index
+    ].isLiked
   },
 }
 

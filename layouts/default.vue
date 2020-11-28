@@ -1,8 +1,7 @@
 <template>
   <div>
-    <!-- <MainNavbarTop /> -->
-    <!-- <MainNavbarBottom /> -->
     <Navbar />
+    <HomeSlider />
     <div class="pt-5">
       <Nuxt />
     </div>

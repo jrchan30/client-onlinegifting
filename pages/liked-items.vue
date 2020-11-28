@@ -88,6 +88,8 @@
 
 <script>
 export default {
+  layout: 'default',
+  middleware: 'auth',
   asyncData({ store }) {
     const items = store.loggedInUser.liked_products
     return items

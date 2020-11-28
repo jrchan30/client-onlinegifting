@@ -73,8 +73,9 @@ export const mutations = {
         ].isLiked
         break
       case 'lowprice':
-        state.lowPrice[payload.index].isLiked = !state.lowPrice[payload.index]
-          .isLiked
+        state.lowPrice.data[payload.index].isLiked = !state.lowPrice.data[
+          payload.index
+        ].isLiked
         break
       case 'latest':
         state.latest[payload.index].isLiked = !state.latest[payload.index]

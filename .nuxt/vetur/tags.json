@@ -95,12 +95,6 @@
   "LazySpinner": {
     "description": "Auto imported from components/Spinner.vue"
   },
-  "Test": {
-    "description": "Auto imported from components/test.vue"
-  },
-  "LazyTest": {
-    "description": "Auto imported from components/test.vue"
-  },
   "TestingPage": {
     "description": "Auto imported from components/TestingPage.vue"
   },

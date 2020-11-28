@@ -14,7 +14,6 @@ export { default as ProductLowPriceTest } from '../..\\components\\ProductLowPri
 export { default as ProductLowPriceTest2 } from '../..\\components\\ProductLowPriceTest2.vue'
 export { default as Search } from '../..\\components\\Search.vue'
 export { default as Spinner } from '../..\\components\\Spinner.vue'
-export { default as Test } from '../..\\components\\test.vue'
 export { default as TestingPage } from '../..\\components\\TestingPage.vue'
 export { default as AdminBarChart } from '../..\\components\\Admin\\AdminBarChart.vue'
 export { default as AdminBreadcrumb } from '../..\\components\\Admin\\AdminBreadcrumb.vue'
@@ -53,7 +52,6 @@ export const LazyProductLowPriceTest = import('../..\\components\\ProductLowPric
 export const LazyProductLowPriceTest2 = import('../..\\components\\ProductLowPriceTest2.vue' /* webpackChunkName: "components_ProductLowPriceTest2" */).then(c => c.default || c)
 export const LazySearch = import('../..\\components\\Search.vue' /* webpackChunkName: "components_Search" */).then(c => c.default || c)
 export const LazySpinner = import('../..\\components\\Spinner.vue' /* webpackChunkName: "components_Spinner" */).then(c => c.default || c)
-export const LazyTest = import('../..\\components\\test.vue' /* webpackChunkName: "components_test" */).then(c => c.default || c)
 export const LazyTestingPage = import('../..\\components\\TestingPage.vue' /* webpackChunkName: "components_TestingPage" */).then(c => c.default || c)
 export const LazyAdminBarChart = import('../..\\components\\Admin\\AdminBarChart.vue' /* webpackChunkName: "components_Admin/AdminBarChart" */).then(c => c.default || c)
 export const LazyAdminBreadcrumb = import('../..\\components\\Admin\\AdminBreadcrumb.vue' /* webpackChunkName: "components_Admin/AdminBreadcrumb" */).then(c => c.default || c)

@@ -65,12 +65,6 @@ export default {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
     }),
-    like(id) {
-      console.log(id + ' liked')
-    },
-    goTo(id) {
-      this.$router.push(`/products/${id}`)
-    },
   },
 }
 </script>

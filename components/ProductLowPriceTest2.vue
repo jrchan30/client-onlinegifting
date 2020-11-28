@@ -9,7 +9,7 @@
     <CardMain
       :items="LOWPRICE"
       :item-type="'products'"
-      :product-type="'lowprice'"
+      :store-state="'lowprice'"
     />
   </div>
 </template>
