@@ -50,31 +50,37 @@
           </template>
           Home
         </vs-sidebar-item>
-        <vs-sidebar-item id="market" to="/products">
+        <vs-sidebar-item id="product" to="/products">
           <template #icon>
             <i class="bx bx-grid-alt"></i>
           </template>
           Products
         </vs-sidebar-item>
-        <vs-sidebar-item id="Music" to="/bundles">
+        <vs-sidebar-item v-if="$auth.user" id="boxes" to="/boxes">
+          <template #icon>
+            <i class="bx bxs-box"></i>
+          </template>
+          Your Boxes
+        </vs-sidebar-item>
+        <vs-sidebar-item id="bundles" to="/bundles">
           <template #icon>
             <i class="bx bx-box"></i>
           </template>
           Bundles
         </vs-sidebar-item>
-        <vs-sidebar-item id="donate" to="/categories">
+        <vs-sidebar-item id="categories" to="/categories">
           <template #icon>
             <i class="bx bx-book-content"></i>
           </template>
           Categories
         </vs-sidebar-item>
-        <vs-sidebar-item id="likes" to="/liked-items">
+        <vs-sidebar-item v-if="$auth.user" id="likes" to="/liked-items">
           <template #icon>
             <i class="bx bx-happy-heart-eyes"></i>
           </template>
           Liked Items
         </vs-sidebar-item>
-        <vs-sidebar-item id="profile" to="/profile">
+        <vs-sidebar-item v-if="$auth.user" id="profile" to="/profile">
           <template #icon> <i class="bx bxs-user-detail"></i> </template>
           Profile
         </vs-sidebar-item>

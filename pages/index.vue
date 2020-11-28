@@ -1,5 +1,6 @@
 <template>
   <div>
+    <HomeSlider />
     <div class="container">
       <LatestProductTest2 />
       <ProductLowPriceTest2 />

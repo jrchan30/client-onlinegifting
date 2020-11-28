@@ -1,8 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <HomeSlider />
-    <div class="pt-5">
+    <div class="mt-5">
       <Nuxt />
     </div>
     <LoginRegisterFooter />

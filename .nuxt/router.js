@@ -5,6 +5,7 @@ import scrollBehavior from './router.scrollBehavior.js'
 
 const _879eb46a = () => interopDefault(import('..\\pages\\about-us.vue' /* webpackChunkName: "pages/about-us" */))
 const _a37781e0 = () => interopDefault(import('..\\pages\\admin\\index.vue' /* webpackChunkName: "pages/admin/index" */))
+const _e5910f34 = () => interopDefault(import('..\\pages\\boxes\\index.vue' /* webpackChunkName: "pages/boxes/index" */))
 const _6d0700a4 = () => interopDefault(import('..\\pages\\bundles\\index.vue' /* webpackChunkName: "pages/bundles/index" */))
 const _02991d16 = () => interopDefault(import('..\\pages\\Carts.vue' /* webpackChunkName: "pages/Carts" */))
 const _1122fcce = () => interopDefault(import('..\\pages\\categories\\index.vue' /* webpackChunkName: "pages/categories/index" */))
@@ -58,6 +59,10 @@ export const routerOptions = {
     path: "/admin",
     component: _a37781e0,
     name: "admin"
+  }, {
+    path: "/boxes",
+    component: _e5910f34,
+    name: "boxes"
   }, {
     path: "/bundles",
     component: _6d0700a4,
