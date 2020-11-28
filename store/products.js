@@ -65,6 +65,25 @@ export const mutations = {
   SET_ALL_PRODUCTS(state, payload) {
     state.allProducts = payload
   },
+  SET_LIKE(state, payload) {
+    switch (payload.storeState) {
+      case 'products':
+        state.products.data[payload.index].isLiked = !state.products.data[
+          payload.index
+        ].isLiked
+        break
+      case 'lowprice':
+        state.lowPrice[payload.index].isLiked = !state.lowPrice[payload.index]
+          .isLiked
+        break
+      case 'latest':
+        state.latest[payload.index].isLiked = !state.latest[payload.index]
+          .isLiked
+        break
+      default:
+        break
+    }
+  },
 }
 
 export const actions = {

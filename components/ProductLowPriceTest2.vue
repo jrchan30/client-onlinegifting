@@ -6,7 +6,11 @@
     <p class="custom-color">
       Here is a list of products to accomodate anyones budget and needs
     </p>
-    <CardMain :items="LOWPRICE" :item-type="'products'" />
+    <CardMain
+      :items="LOWPRICE"
+      :item-type="'products'"
+      :product-type="'lowprice'"
+    />
   </div>
 </template>
 

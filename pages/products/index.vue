@@ -30,7 +30,11 @@
         </div>
       </div>
       <div v-else class="pt-5">
-        <CardMain :items="PRODUCTS.data" :item-type="'products'" />
+        <CardMain
+          :items="PRODUCTS.data"
+          :item-type="'products'"
+          :store-state="'products'"
+        />
       </div>
       <div class="d-flex justify-content-center pt-4">
         <Pagination :action="'products'" />

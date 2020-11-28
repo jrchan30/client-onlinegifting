@@ -1,11 +1,11 @@
 <template>
-  <div class="container bg-white rounded p-3">
+  <div v-if="items" class="container bg-white rounded p-3">
     <h4 class="font-weight-bold custom-color">Liked Products</h4>
     <p class="custom-color">
       This is our latest products, click on product's card to see more details
       about the product
     </p>
-    <vs-table v-if="$auth.user.liked_products">
+    <vs-table v-if="items">
       <template #header>
         <vs-input
           v-model="search"
@@ -88,6 +88,10 @@
 
 <script>
 export default {
+  asyncData({ store }) {
+    const items = store.loggedInUser.liked_products
+    return items
+  },
   data() {
     return {
       edit: null,
@@ -95,7 +99,6 @@ export default {
       allCheck: false,
       page: 1,
       max: 100,
-      items: this.$auth.user.liked_products,
       isLoading: false,
     }
   },

@@ -15,10 +15,8 @@
       </vs-navbar-item>
       <template #right>
         <template v-if="!$auth.loggedIn">
-          <vs-button flat>
-            <nuxt-link to="/login">Login</nuxt-link>
-          </vs-button>
-          <vs-button>Get Started</vs-button>
+          <vs-button flat color="#336699" to="/login"> Login </vs-button>
+          <vs-button color="#336699" to="/register">Get Started</vs-button>
         </template>
         <template v-else>
           <vs-avatar
