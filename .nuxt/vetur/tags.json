@@ -203,18 +203,6 @@
   "LazyCustomerSideBarTest": {
     "description": "Auto imported from components/Customer/CustomerSideBarTest.vue"
   },
-  "MainNavbarBottom": {
-    "description": "Auto imported from components/Main/MainNavbarBottom.vue"
-  },
-  "LazyMainNavbarBottom": {
-    "description": "Auto imported from components/Main/MainNavbarBottom.vue"
-  },
-  "MainNavbarTop": {
-    "description": "Auto imported from components/Main/MainNavbarTop.vue"
-  },
-  "LazyMainNavbarTop": {
-    "description": "Auto imported from components/Main/MainNavbarTop.vue"
-  },
   "LoginRegisterFooter": {
     "description": "Auto imported from components/LoginRegister/LoginRegisterFooter.vue"
   },
@@ -226,5 +214,17 @@
   },
   "LazyLoginRegisterHeader": {
     "description": "Auto imported from components/LoginRegister/LoginRegisterHeader.vue"
+  },
+  "MainNavbarBottom": {
+    "description": "Auto imported from components/Main/MainNavbarBottom.vue"
+  },
+  "LazyMainNavbarBottom": {
+    "description": "Auto imported from components/Main/MainNavbarBottom.vue"
+  },
+  "MainNavbarTop": {
+    "description": "Auto imported from components/Main/MainNavbarTop.vue"
+  },
+  "LazyMainNavbarTop": {
+    "description": "Auto imported from components/Main/MainNavbarTop.vue"
   }
 }

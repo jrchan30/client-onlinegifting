@@ -150,7 +150,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: '/',
-      env: {"SANCTUM_URL":"http://localhost:8000","HTTPS_BOOL":"false","LARAVEL_URL":"http://localhost:8000/api/"}
+      env: {"SANCTUM_URL":"http://api.onlinegifting.shop","HTTPS_BOOL":"false","LARAVEL_URL":"http://api.onlinegifting.shop/api/"}
     }
     // Only set once
     if (!process.static && context.req) {
