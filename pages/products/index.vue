@@ -6,17 +6,24 @@
         :is-fetching="$fetchState.pending"
         :type="'products'"
       /> -->
-      <ul class="nav nav-pills pt-5">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Most Recent</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Most Likes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Top Rated</a>
-        </li>
-      </ul>
+      <div class="d-flex justify-content-between">
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Most Recent</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Most Likes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Top Rated</a>
+          </li>
+        </ul>
+        <div>
+          <vs-button flat icon @click="activeFilter = !activeFilter">
+            <i class="bx bx-menu"></i>
+          </vs-button>
+        </div>
+      </div>
       <div v-if="$fetchState.pending" class="row pt-5">
         <div
           v-for="index in 12"
@@ -40,6 +47,25 @@
         <Pagination :action="'products'" />
       </div>
     </div>
+    <div class="position-sticky" style="z-index: 100">
+      <vs-sidebar v-model="active" right :open.sync="activeFilter">
+        <template #logo>
+          <div class="pt-5"></div>
+        </template>
+        <vs-sidebar-item id="home">
+          <template #icon>
+            <i class="bx bx-home"></i>
+          </template>
+          Home
+        </vs-sidebar-item>
+        <vs-sidebar-item id="market">
+          <template #icon>
+            <i class="bx bx-grid-alt"></i>
+          </template>
+          Market Overview
+        </vs-sidebar-item>
+      </vs-sidebar>
+    </div>
   </div>
 </template>
 
@@ -49,6 +75,12 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   async fetch() {
     await this.GET_PRODUCTS()
+  },
+  data() {
+    return {
+      active: 'home',
+      activeFilter: false,
+    }
   },
   computed: {
     ...mapGetters({

@@ -52,7 +52,7 @@
                       label="name"
                       required
                       :reduce="(name) => name.id"
-                      :options="CATEGORIES"
+                      :options="SUB_CATEGORIES"
                       style="z-index = 1000"
                     />
                   </div>
@@ -301,6 +301,7 @@ export default {
   computed: {
     ...mapGetters({
       CATEGORIES: 'categories/CATEGORIES',
+      SUB_CATEGORIES: 'categories/SUB_CATEGORIES',
     }),
   },
 

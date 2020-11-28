@@ -1,6 +1,6 @@
 <template>
   <div class="hidden pb-5">
-    <vs-navbar v-model="active" fixed center-collapsed>
+    <vs-navbar v-model="active" style="9999" fixed center-collapsed>
       <template #left>
         <vs-button flat icon @click="activeSidebar = !activeSidebar">
           <i class="bx bx-menu"></i>
@@ -150,7 +150,7 @@
               :writing="$auth.user.detail.phone_num == null"
               :badge="$auth.user.detail.phone_num == null"
             >
-              <img src="/image/profile-pic.jfif" alt="" />
+              <img class="text-muted" :src="getProfilePic()" alt="" />
             </vs-avatar>
 
             <vs-avatar
@@ -189,6 +189,13 @@ export default {
         await this.$auth.logout()
       } catch (err) {
         alert(err)
+      }
+    },
+    getProfilePic() {
+      if (!this.$auth.user.detail.image) {
+        return '/image/bx-user.svg'
+      } else {
+        return `${this.$auth.user.detail.image}`
       }
     },
   },

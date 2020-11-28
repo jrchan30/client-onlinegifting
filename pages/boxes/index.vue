@@ -1,9 +1,15 @@
 <template>
   <div class="box-content">
-    <div class="bg-container bg-img-empty">
-      <template v-if="!$fetchState.pending">
+    <template v-if="!$fetchState.pending">
+      <div
+        class="bg-container"
+        :class="{
+          'bg-img-empty': items.length < 1,
+          'bg-img-main': items.length > 0,
+        }"
+      >
         <div class="container h-100">
-          <template v-if="BOXES.data.length < 1">
+          <template v-if="items.length < 1">
             <div
               class="d-flex row justify-content-center align-items-center h-100"
             >
@@ -11,7 +17,7 @@
                 class="d-none d-sm-none d-md-flex col-6 col-md-6 col-lg-7"
               ></div>
               <div class="col-8 col-md-6 col-lg-5">
-                <div class="text-secondary mb-3 bg-white rounded p-2">
+                <div class="text-secondary mb-3 bg-white rounded p-4">
                   <small>You have no box yet. Create one now!</small>
                 </div>
                 <div class="card rounded py-3">
@@ -142,8 +148,8 @@
             </div>
           </template>
         </div>
-      </template>
-    </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -153,9 +159,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: 'auth',
-  async fetch() {
-    await this.GET_BOXES()
-    this.items = this.BOXES.data
+  fetch() {
+    this.getBoxes()
   },
   data() {
     return {
@@ -178,6 +183,10 @@ export default {
     ...mapActions({
       GET_BOXES: 'boxes/GET_BOXES',
     }),
+    async getBoxes() {
+      await this.GET_BOXES()
+      this.items = this.BOXES.data
+    },
     async createBox() {
       const formattedForm = {
         name: this.form.boxName,
@@ -185,9 +194,8 @@ export default {
       }
       try {
         await this.$axios.$post('/boxes', formattedForm)
-        this.GET_BOXES()
+        this.getBoxes()
         this.clear()
-        this.items = this.BOXES.data
       } catch (e) {
         console.log('error')
       }
@@ -202,6 +210,10 @@ export default {
 <style scoped>
 .bg-img-empty {
   background-image: url('/image/undraw_empty_xct9.svg');
+}
+
+.bg-img-main {
+  background-image: url('/image/undraw_deliveries_131a.svg');
 }
 
 .bg-container {

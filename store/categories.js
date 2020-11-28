@@ -1,10 +1,19 @@
 export const state = () => ({
-  categories: {},
+  categories: [],
 })
 
 export const getters = {
   CATEGORIES(state) {
     return state.categories.data
+  },
+  SUB_CATEGORIES(state) {
+    const subCategories = []
+    const categories = state.categories.data
+    categories.map((x) => {
+      x.subCategory.map((y) => subCategories.push(y))
+    })
+
+    return subCategories
   },
 }
 
