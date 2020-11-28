@@ -1,0 +1,230 @@
+{
+  "BreadCrumb": {
+    "description": "Auto imported from components/BreadCrumb.vue"
+  },
+  "LazyBreadCrumb": {
+    "description": "Auto imported from components/BreadCrumb.vue"
+  },
+  "CategoriesDropdown": {
+    "description": "Auto imported from components/CategoriesDropdown.vue"
+  },
+  "LazyCategoriesDropdown": {
+    "description": "Auto imported from components/CategoriesDropdown.vue"
+  },
+  "HomeSlider": {
+    "description": "Auto imported from components/HomeSlider.vue"
+  },
+  "LazyHomeSlider": {
+    "description": "Auto imported from components/HomeSlider.vue"
+  },
+  "InputField": {
+    "description": "Auto imported from components/InputField.vue"
+  },
+  "LazyInputField": {
+    "description": "Auto imported from components/InputField.vue"
+  },
+  "ItemPage": {
+    "description": "Auto imported from components/ItemPage.vue"
+  },
+  "LazyItemPage": {
+    "description": "Auto imported from components/ItemPage.vue"
+  },
+  "ItemsPage": {
+    "description": "Auto imported from components/ItemsPage.vue"
+  },
+  "LazyItemsPage": {
+    "description": "Auto imported from components/ItemsPage.vue"
+  },
+  "LatestProducts": {
+    "description": "Auto imported from components/LatestProducts.vue"
+  },
+  "LazyLatestProducts": {
+    "description": "Auto imported from components/LatestProducts.vue"
+  },
+  "LatestProductTest": {
+    "description": "Auto imported from components/LatestProductTest.vue"
+  },
+  "LazyLatestProductTest": {
+    "description": "Auto imported from components/LatestProductTest.vue"
+  },
+  "LatestProductTest2": {
+    "description": "Auto imported from components/LatestProductTest2.vue"
+  },
+  "LazyLatestProductTest2": {
+    "description": "Auto imported from components/LatestProductTest2.vue"
+  },
+  "Navbar": {
+    "description": "Auto imported from components/Navbar.vue"
+  },
+  "LazyNavbar": {
+    "description": "Auto imported from components/Navbar.vue"
+  },
+  "Pagination": {
+    "description": "Auto imported from components/Pagination.vue"
+  },
+  "LazyPagination": {
+    "description": "Auto imported from components/Pagination.vue"
+  },
+  "ProductLowPrice": {
+    "description": "Auto imported from components/ProductLowPrice.vue"
+  },
+  "LazyProductLowPrice": {
+    "description": "Auto imported from components/ProductLowPrice.vue"
+  },
+  "ProductLowPriceTest": {
+    "description": "Auto imported from components/ProductLowPriceTest.vue"
+  },
+  "LazyProductLowPriceTest": {
+    "description": "Auto imported from components/ProductLowPriceTest.vue"
+  },
+  "ProductLowPriceTest2": {
+    "description": "Auto imported from components/ProductLowPriceTest2.vue"
+  },
+  "LazyProductLowPriceTest2": {
+    "description": "Auto imported from components/ProductLowPriceTest2.vue"
+  },
+  "Search": {
+    "description": "Auto imported from components/Search.vue"
+  },
+  "LazySearch": {
+    "description": "Auto imported from components/Search.vue"
+  },
+  "Spinner": {
+    "description": "Auto imported from components/Spinner.vue"
+  },
+  "LazySpinner": {
+    "description": "Auto imported from components/Spinner.vue"
+  },
+  "Test": {
+    "description": "Auto imported from components/test.vue"
+  },
+  "LazyTest": {
+    "description": "Auto imported from components/test.vue"
+  },
+  "TestingPage": {
+    "description": "Auto imported from components/TestingPage.vue"
+  },
+  "LazyTestingPage": {
+    "description": "Auto imported from components/TestingPage.vue"
+  },
+  "AdminBarChart": {
+    "description": "Auto imported from components/Admin/AdminBarChart.vue"
+  },
+  "LazyAdminBarChart": {
+    "description": "Auto imported from components/Admin/AdminBarChart.vue"
+  },
+  "AdminBreadcrumb": {
+    "description": "Auto imported from components/Admin/AdminBreadcrumb.vue"
+  },
+  "LazyAdminBreadcrumb": {
+    "description": "Auto imported from components/Admin/AdminBreadcrumb.vue"
+  },
+  "AdminFooter": {
+    "description": "Auto imported from components/Admin/AdminFooter.vue"
+  },
+  "LazyAdminFooter": {
+    "description": "Auto imported from components/Admin/AdminFooter.vue"
+  },
+  "AdminHeader": {
+    "description": "Auto imported from components/Admin/AdminHeader.vue"
+  },
+  "LazyAdminHeader": {
+    "description": "Auto imported from components/Admin/AdminHeader.vue"
+  },
+  "AdminLineChart": {
+    "description": "Auto imported from components/Admin/AdminLineChart.vue"
+  },
+  "LazyAdminLineChart": {
+    "description": "Auto imported from components/Admin/AdminLineChart.vue"
+  },
+  "AdminNav": {
+    "description": "Auto imported from components/Admin/AdminNav.vue"
+  },
+  "LazyAdminNav": {
+    "description": "Auto imported from components/Admin/AdminNav.vue"
+  },
+  "AdminPagination": {
+    "description": "Auto imported from components/Admin/AdminPagination.vue"
+  },
+  "LazyAdminPagination": {
+    "description": "Auto imported from components/Admin/AdminPagination.vue"
+  },
+  "AdminSideNav": {
+    "description": "Auto imported from components/Admin/AdminSideNav.vue"
+  },
+  "LazyAdminSideNav": {
+    "description": "Auto imported from components/Admin/AdminSideNav.vue"
+  },
+  "AdminTopNav": {
+    "description": "Auto imported from components/Admin/AdminTopNav.vue"
+  },
+  "LazyAdminTopNav": {
+    "description": "Auto imported from components/Admin/AdminTopNav.vue"
+  },
+  "Form": {
+    "description": "Auto imported from components/Admin/Form.vue"
+  },
+  "LazyForm": {
+    "description": "Auto imported from components/Admin/Form.vue"
+  },
+  "CardForm": {
+    "description": "Auto imported from components/Card/CardForm.vue"
+  },
+  "LazyCardForm": {
+    "description": "Auto imported from components/Card/CardForm.vue"
+  },
+  "CardItem": {
+    "description": "Auto imported from components/Card/CardItem.vue"
+  },
+  "LazyCardItem": {
+    "description": "Auto imported from components/Card/CardItem.vue"
+  },
+  "CardMain": {
+    "description": "Auto imported from components/Card/CardMain.vue"
+  },
+  "LazyCardMain": {
+    "description": "Auto imported from components/Card/CardMain.vue"
+  },
+  "CardSkeleton": {
+    "description": "Auto imported from components/Card/CardSkeleton.vue"
+  },
+  "LazyCardSkeleton": {
+    "description": "Auto imported from components/Card/CardSkeleton.vue"
+  },
+  "CustomerSidebar": {
+    "description": "Auto imported from components/Customer/CustomerSidebar.vue"
+  },
+  "LazyCustomerSidebar": {
+    "description": "Auto imported from components/Customer/CustomerSidebar.vue"
+  },
+  "CustomerSideBarTest": {
+    "description": "Auto imported from components/Customer/CustomerSideBarTest.vue"
+  },
+  "LazyCustomerSideBarTest": {
+    "description": "Auto imported from components/Customer/CustomerSideBarTest.vue"
+  },
+  "MainNavbarBottom": {
+    "description": "Auto imported from components/Main/MainNavbarBottom.vue"
+  },
+  "LazyMainNavbarBottom": {
+    "description": "Auto imported from components/Main/MainNavbarBottom.vue"
+  },
+  "MainNavbarTop": {
+    "description": "Auto imported from components/Main/MainNavbarTop.vue"
+  },
+  "LazyMainNavbarTop": {
+    "description": "Auto imported from components/Main/MainNavbarTop.vue"
+  },
+  "LoginRegisterFooter": {
+    "description": "Auto imported from components/LoginRegister/LoginRegisterFooter.vue"
+  },
+  "LazyLoginRegisterFooter": {
+    "description": "Auto imported from components/LoginRegister/LoginRegisterFooter.vue"
+  },
+  "LoginRegisterHeader": {
+    "description": "Auto imported from components/LoginRegister/LoginRegisterHeader.vue"
+  },
+  "LazyLoginRegisterHeader": {
+    "description": "Auto imported from components/LoginRegister/LoginRegisterHeader.vue"
+  }
+}
