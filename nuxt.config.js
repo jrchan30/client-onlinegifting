@@ -156,24 +156,23 @@ export default {
       short_name: 'OG',
       description: 'Choose your gifts, we handle the rest',
       author: 'Jonathan Russell Chan',
-      // start_url: '/',
     },
 
-    workbox: {
-      // swScope: 'http://onlinegifting.shop/sw.js',
-      //   swUrl: 'http://192.168.15.1:3000',
-      //   swScope: '/static/sw.js',
-      autoRegister: true,
-      urlPattern: `http://onlinegifting.shop/.*`,
-      // runtimeCaching: [
-      //   {
-      //     handler: 'CacheFirst',
-      //     strategyOptions: {
-      //       cacheableResponse: { statuses: [0, 200] },
-      //     },
-      //   },
-      // ],
-    },
+    // workbox: {
+    //   swScope: 'http://onlinegifting.shop/sw.js',
+    //     swUrl: 'http://192.168.15.1:3000',
+    //     swScope: '/static/sw.js',
+    //   autoRegister: true,
+    //   urlPattern: `http://onlinegifting.shop/.*`,
+    //   runtimeCaching: [
+    //     {
+    //       handler: 'CacheFirst',
+    //       strategyOptions: {
+    //         cacheableResponse: { statuses: [0, 200] },
+    //       },
+    //     },
+    //   ],
+    // },
   },
   /*
    ** Build configuration
