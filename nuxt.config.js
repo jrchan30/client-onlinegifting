@@ -160,6 +160,7 @@ export default {
     },
 
     workbox: {
+      swScope: '/static/sw.js',
       runtimeCaching: [
         {
           urlPattern: `http://onlinegifting.shop/.*`,
