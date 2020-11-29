@@ -165,4 +165,8 @@ export default {
   build: {},
 
   serverMiddleware: ['~/serverMiddleware/selectiveSSR.js'],
+
+  server: {
+    port: 3000,
+  },
 }
