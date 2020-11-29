@@ -105,6 +105,7 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
+    '@nuxtjs/pwa',
   ],
   /*
    ** Nuxt.js modules
@@ -115,7 +116,6 @@ export default {
     '@nuxtjs/auth-next',
     '@nuxtjs/dotenv',
     'vue-sweetalert2/nuxt',
-    '@nuxtjs/pwa',
     'cookie-universal-nuxt',
     'vue-swatches/nuxt',
   ],
