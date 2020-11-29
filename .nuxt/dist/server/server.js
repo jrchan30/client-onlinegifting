@@ -798,24 +798,12 @@ module.exports = require("vue-meta");
 
 /***/ }),
 /* 26 */
-/***/ (function(module, exports) {
-
-module.exports = require("vue-swatches");
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports) {
-
-module.exports = require("cookie-universal");
-
-/***/ }),
-/* 28 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"title\":\"Online Gifting\",\"meta\":[{\"hid\":\"charset\",\"charset\":\"utf-8\"},{\"hid\":\"viewport\",\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"},{\"hid\":\"mobile-web-app-capable\",\"name\":\"mobile-web-app-capable\",\"content\":\"yes\"},{\"hid\":\"apple-mobile-web-app-title\",\"name\":\"apple-mobile-web-app-title\",\"content\":\"Online Gifting\"},{\"hid\":\"author\",\"name\":\"author\",\"content\":\"Jonathan Russell Chan\"},{\"hid\":\"description\",\"name\":\"description\",\"content\":\"Choose your gifts, we handle the rest\"},{\"hid\":\"theme-color\",\"name\":\"theme-color\",\"content\":\"#336699\"},{\"hid\":\"og:type\",\"name\":\"og:type\",\"property\":\"og:type\",\"content\":\"website\"},{\"hid\":\"og:title\",\"name\":\"og:title\",\"property\":\"og:title\",\"content\":\"Online Gifting\"},{\"hid\":\"og:site_name\",\"name\":\"og:site_name\",\"property\":\"og:site_name\",\"content\":\"Online Gifting\"},{\"hid\":\"og:description\",\"name\":\"og:description\",\"property\":\"og:description\",\"content\":\"Choose your gifts, we handle the rest\"}],\"link\":[{\"rel\":\"shortcut icon\",\"href\":\"/_nuxt/icons/icon_64x64.81e192.png\"},{\"rel\":\"apple-touch-icon\",\"href\":\"/_nuxt/icons/icon_512x512.81e192.png\",\"sizes\":\"512x512\"},{\"rel\":\"manifest\",\"href\":\"/_nuxt/manifest.5f5bb560.json\",\"hid\":\"manifest\"}],\"htmlAttrs\":{\"lang\":\"en\"}}");
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ (function(module, exports) {
 
 module.exports = function mergeMeta(to, from) {
@@ -855,6 +843,18 @@ module.exports = function mergeMeta(to, from) {
 function hasMeta(arr, key, val) {
   return arr.find(obj => val ? obj[key] === val : obj[key]);
 }
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("vue-swatches");
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("cookie-universal");
 
 /***/ }),
 /* 30 */
@@ -3859,8 +3859,52 @@ const globalComponents = {};
 for (const name in globalComponents) {
   external_vue_default.a.component(name, globalComponents[name]);
 }
+// EXTERNAL MODULE: ./.nuxt/empty.js
+var _nuxt_empty = __webpack_require__(7);
+
+// EXTERNAL MODULE: ./.nuxt/pwa/meta.json
+var meta = __webpack_require__(26);
+
+// EXTERNAL MODULE: ./.nuxt/pwa/meta.merge.js
+var meta_merge = __webpack_require__(27);
+var meta_merge_default = /*#__PURE__*/__webpack_require__.n(meta_merge);
+
+// CONCATENATED MODULE: ./.nuxt/pwa/meta.js
+
+
+/* harmony default export */ var pwa_meta = (function ({
+  app
+}) {
+  meta_merge_default()(app.head, meta);
+});
+// CONCATENATED MODULE: ./.nuxt/pwa/icons.js
+/* harmony default export */ var icons = (async function (ctx, inject) {
+  const icons = {
+    "64x64": "/_nuxt/icons/icon_64x64.81e192.png",
+    "120x120": "/_nuxt/icons/icon_120x120.81e192.png",
+    "144x144": "/_nuxt/icons/icon_144x144.81e192.png",
+    "152x152": "/_nuxt/icons/icon_152x152.81e192.png",
+    "192x192": "/_nuxt/icons/icon_192x192.81e192.png",
+    "384x384": "/_nuxt/icons/icon_384x384.81e192.png",
+    "512x512": "/_nuxt/icons/icon_512x512.81e192.png",
+    "ipad_1536x2048": "/_nuxt/icons/splash_ipad_1536x2048.81e192.png",
+    "ipadpro9_1536x2048": "/_nuxt/icons/splash_ipadpro9_1536x2048.81e192.png",
+    "ipadpro10_1668x2224": "/_nuxt/icons/splash_ipadpro10_1668x2224.81e192.png",
+    "ipadpro12_2048x2732": "/_nuxt/icons/splash_ipadpro12_2048x2732.81e192.png",
+    "iphonese_640x1136": "/_nuxt/icons/splash_iphonese_640x1136.81e192.png",
+    "iphone6_50x1334": "/_nuxt/icons/splash_iphone6_50x1334.81e192.png",
+    "iphoneplus_1080x1920": "/_nuxt/icons/splash_iphoneplus_1080x1920.81e192.png",
+    "iphonex_1125x2436": "/_nuxt/icons/splash_iphonex_1125x2436.81e192.png",
+    "iphonexr_828x1792": "/_nuxt/icons/splash_iphonexr_828x1792.81e192.png",
+    "iphonexsmax_1242x2688": "/_nuxt/icons/splash_iphonexsmax_1242x2688.81e192.png"
+  };
+
+  const getIcon = size => icons[size + 'x' + size] || '';
+
+  inject('icon', getIcon);
+});
 // EXTERNAL MODULE: external "vue-swatches"
-var external_vue_swatches_ = __webpack_require__(26);
+var external_vue_swatches_ = __webpack_require__(28);
 var external_vue_swatches_default = /*#__PURE__*/__webpack_require__.n(external_vue_swatches_);
 
 // CONCATENATED MODULE: ./.nuxt/vue-swatches.js
@@ -3868,7 +3912,7 @@ var external_vue_swatches_default = /*#__PURE__*/__webpack_require__.n(external_
 
 external_vue_default.a.component("v-swatches", external_vue_swatches_default.a);
 // EXTERNAL MODULE: external "cookie-universal"
-var external_cookie_universal_ = __webpack_require__(27);
+var external_cookie_universal_ = __webpack_require__(29);
 var external_cookie_universal_default = /*#__PURE__*/__webpack_require__.n(external_cookie_universal_);
 
 // CONCATENATED MODULE: ./.nuxt/cookie-universal-nuxt.js
@@ -3883,9 +3927,6 @@ var external_cookie_universal_default = /*#__PURE__*/__webpack_require__.n(exter
   };
   inject(options.alias, external_cookie_universal_default()(req, res, options.parseJSON));
 });
-// EXTERNAL MODULE: ./.nuxt/empty.js
-var _nuxt_empty = __webpack_require__(7);
-
 // EXTERNAL MODULE: external "axios"
 var external_axios_ = __webpack_require__(9);
 var external_axios_default = /*#__PURE__*/__webpack_require__.n(external_axios_);
@@ -4099,47 +4140,6 @@ const setupProgress = axios => {
 
   ctx.$axios = axios;
   inject('axios', axios);
-});
-// EXTERNAL MODULE: ./.nuxt/pwa/meta.json
-var meta = __webpack_require__(28);
-
-// EXTERNAL MODULE: ./.nuxt/pwa/meta.merge.js
-var meta_merge = __webpack_require__(29);
-var meta_merge_default = /*#__PURE__*/__webpack_require__.n(meta_merge);
-
-// CONCATENATED MODULE: ./.nuxt/pwa/meta.js
-
-
-/* harmony default export */ var pwa_meta = (function ({
-  app
-}) {
-  meta_merge_default()(app.head, meta);
-});
-// CONCATENATED MODULE: ./.nuxt/pwa/icons.js
-/* harmony default export */ var icons = (async function (ctx, inject) {
-  const icons = {
-    "64x64": "/_nuxt/icons/icon_64x64.81e192.png",
-    "120x120": "/_nuxt/icons/icon_120x120.81e192.png",
-    "144x144": "/_nuxt/icons/icon_144x144.81e192.png",
-    "152x152": "/_nuxt/icons/icon_152x152.81e192.png",
-    "192x192": "/_nuxt/icons/icon_192x192.81e192.png",
-    "384x384": "/_nuxt/icons/icon_384x384.81e192.png",
-    "512x512": "/_nuxt/icons/icon_512x512.81e192.png",
-    "ipad_1536x2048": "/_nuxt/icons/splash_ipad_1536x2048.81e192.png",
-    "ipadpro9_1536x2048": "/_nuxt/icons/splash_ipadpro9_1536x2048.81e192.png",
-    "ipadpro10_1668x2224": "/_nuxt/icons/splash_ipadpro10_1668x2224.81e192.png",
-    "ipadpro12_2048x2732": "/_nuxt/icons/splash_ipadpro12_2048x2732.81e192.png",
-    "iphonese_640x1136": "/_nuxt/icons/splash_iphonese_640x1136.81e192.png",
-    "iphone6_50x1334": "/_nuxt/icons/splash_iphone6_50x1334.81e192.png",
-    "iphoneplus_1080x1920": "/_nuxt/icons/splash_iphoneplus_1080x1920.81e192.png",
-    "iphonex_1125x2436": "/_nuxt/icons/splash_iphonex_1125x2436.81e192.png",
-    "iphonexr_828x1792": "/_nuxt/icons/splash_iphonexr_828x1792.81e192.png",
-    "iphonexsmax_1242x2688": "/_nuxt/icons/splash_iphonexsmax_1242x2688.81e192.png"
-  };
-
-  const getIcon = size => icons[size + 'x' + size] || '';
-
-  inject('icon', getIcon);
 });
 // EXTERNAL MODULE: external "vform"
 var external_vform_ = __webpack_require__(3);
@@ -5450,6 +5450,12 @@ _nuxt_middleware.auth = authMiddleware;
 
  // Source: .\\components\\plugin.js (mode: 'all')
 
+ // Source: .\\workbox.js (mode: 'client')
+
+ // Source: .\\pwa\\meta.js (mode: 'all')
+
+ // Source: .\\pwa\\icons.js (mode: 'all')
+
  // Source: .\\vue-swatches.js (mode: 'all')
 
  // Source: .\\cookie-universal-nuxt.js (mode: 'all')
@@ -5457,12 +5463,6 @@ _nuxt_middleware.auth = authMiddleware;
  // Source: .\\vue-sweetalert2.js (mode: 'client')
 
  // Source: .\\axios.js (mode: 'all')
-
- // Source: .\\workbox.js (mode: 'client')
-
- // Source: .\\pwa\\meta.js (mode: 'all')
-
- // Source: .\\pwa\\icons.js (mode: 'all')
 
  // Source: ..\\plugins\\vue-carousel-3d.js (mode: 'client')
 
@@ -5725,6 +5725,16 @@ async function createApp(ssrContext, config = {}) {
     await /* Cannot get final name for export "default" in "./.nuxt/components/plugin.js" (known exports: , known reexports: ) */ undefined(app.context, inject);
   }
 
+  if (false) {}
+
+  if (typeof pwa_meta === 'function') {
+    await pwa_meta(app.context, inject);
+  }
+
+  if (typeof icons === 'function') {
+    await icons(app.context, inject);
+  }
+
   if (typeof /* Cannot get final name for export "default" in "./.nuxt/vue-swatches.js" (known exports: , known reexports: ) */ undefined === 'function') {
     await /* Cannot get final name for export "default" in "./.nuxt/vue-swatches.js" (known exports: , known reexports: ) */ undefined(app.context, inject);
   }
@@ -5737,16 +5747,6 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof _nuxt_axios === 'function') {
     await _nuxt_axios(app.context, inject);
-  }
-
-  if (false) {}
-
-  if (typeof pwa_meta === 'function') {
-    await pwa_meta(app.context, inject);
-  }
-
-  if (typeof icons === 'function') {
-    await icons(app.context, inject);
   }
 
   if (false) {}

@@ -105,19 +105,19 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
-    '@nuxtjs/pwa',
   ],
   /*
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
+    // Doc: https://axios.nuxtjs.npmorg/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
     '@nuxtjs/dotenv',
     'vue-sweetalert2/nuxt',
     'cookie-universal-nuxt',
     'vue-swatches/nuxt',
+    '@nuxtjs/pwa',
   ],
   axios: {
     credentials: true,
