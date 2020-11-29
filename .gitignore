@@ -58,7 +58,7 @@ typings/
 
 # dotenv environment variables file
 .env
-.env.production
+#.env.production
 .env.local
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -68,10 +68,10 @@ typings/
 .next
 
 # nuxt.js build output
-# .nuxt
+.nuxt
 
 # Nuxt generate
-# dist
+dist
 
 # vuepress build output
 .vuepress/dist
@@ -83,7 +83,7 @@ typings/
 .idea
 
 # Service worker
-# sw.*
+sw.*
 
 # macOS
 .DS_Store
