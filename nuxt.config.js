@@ -144,9 +144,13 @@ export default {
       },
     },
   },
+
+  icon: {
+    source: './static/icon.png',
+  },
   pwa: {
     icon: {
-      source: '/image/icon.png',
+      source: './static/icon.png',
     },
     meta: {
       theme_color: '#336699',
@@ -156,6 +160,7 @@ export default {
       short_name: 'OG',
       description: 'Choose your gifts, we handle the rest',
       author: 'Jonathan Russell Chan',
+      start_url: '/',
     },
 
     // workbox: {
