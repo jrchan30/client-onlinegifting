@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{482:function(n,e,t){"use strict";t.r(e);var l={layout:"admin",middleware:["auth","admin-only"]},o=t(8),component=Object(o.a)(l,(function(){var n=this.$createElement;return(this._self._c||n)("div",[this._v("ini page profile admin")])}),[],!1,null,null,null);e.default=component.exports}}]);
