@@ -156,7 +156,19 @@ export default {
       short_name: 'OG',
       description: 'Choose your gifts, we handle the rest',
       author: 'Jonathan Russell Chan',
-      start_url: '/',
+      start_url: 'http://onlinegifting.shop',
+    },
+
+    workbox: {
+      runtimeCaching: [
+        {
+          urlPattern: `http://onlinegifting.shop/.*`,
+          handler: 'CacheFirst',
+          strategyOptions: {
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        },
+      ],
     },
   },
   /*
