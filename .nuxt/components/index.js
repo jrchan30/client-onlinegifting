@@ -31,10 +31,10 @@ export { default as CardMain } from '../..\\components\\Card\\CardMain.vue'
 export { default as CardSkeleton } from '../..\\components\\Card\\CardSkeleton.vue'
 export { default as CustomerSidebar } from '../..\\components\\Customer\\CustomerSidebar.vue'
 export { default as CustomerSideBarTest } from '../..\\components\\Customer\\CustomerSideBarTest.vue'
-export { default as LoginRegisterFooter } from '../..\\components\\LoginRegister\\LoginRegisterFooter.vue'
-export { default as LoginRegisterHeader } from '../..\\components\\LoginRegister\\LoginRegisterHeader.vue'
 export { default as MainNavbarBottom } from '../..\\components\\Main\\MainNavbarBottom.vue'
 export { default as MainNavbarTop } from '../..\\components\\Main\\MainNavbarTop.vue'
+export { default as LoginRegisterFooter } from '../..\\components\\LoginRegister\\LoginRegisterFooter.vue'
+export { default as LoginRegisterHeader } from '../..\\components\\LoginRegister\\LoginRegisterHeader.vue'
 
 export const LazyBreadCrumb = import('../..\\components\\BreadCrumb.vue' /* webpackChunkName: "components_BreadCrumb" */).then(c => c.default || c)
 export const LazyCategoriesDropdown = import('../..\\components\\CategoriesDropdown.vue' /* webpackChunkName: "components_CategoriesDropdown" */).then(c => c.default || c)
@@ -69,7 +69,7 @@ export const LazyCardMain = import('../..\\components\\Card\\CardMain.vue' /* we
 export const LazyCardSkeleton = import('../..\\components\\Card\\CardSkeleton.vue' /* webpackChunkName: "components_Card/CardSkeleton" */).then(c => c.default || c)
 export const LazyCustomerSidebar = import('../..\\components\\Customer\\CustomerSidebar.vue' /* webpackChunkName: "components_Customer/CustomerSidebar" */).then(c => c.default || c)
 export const LazyCustomerSideBarTest = import('../..\\components\\Customer\\CustomerSideBarTest.vue' /* webpackChunkName: "components_Customer/CustomerSideBarTest" */).then(c => c.default || c)
-export const LazyLoginRegisterFooter = import('../..\\components\\LoginRegister\\LoginRegisterFooter.vue' /* webpackChunkName: "components_LoginRegister/LoginRegisterFooter" */).then(c => c.default || c)
-export const LazyLoginRegisterHeader = import('../..\\components\\LoginRegister\\LoginRegisterHeader.vue' /* webpackChunkName: "components_LoginRegister/LoginRegisterHeader" */).then(c => c.default || c)
 export const LazyMainNavbarBottom = import('../..\\components\\Main\\MainNavbarBottom.vue' /* webpackChunkName: "components_Main/MainNavbarBottom" */).then(c => c.default || c)
 export const LazyMainNavbarTop = import('../..\\components\\Main\\MainNavbarTop.vue' /* webpackChunkName: "components_Main/MainNavbarTop" */).then(c => c.default || c)
+export const LazyLoginRegisterFooter = import('../..\\components\\LoginRegister\\LoginRegisterFooter.vue' /* webpackChunkName: "components_LoginRegister/LoginRegisterFooter" */).then(c => c.default || c)
+export const LazyLoginRegisterHeader = import('../..\\components\\LoginRegister\\LoginRegisterHeader.vue' /* webpackChunkName: "components_LoginRegister/LoginRegisterHeader" */).then(c => c.default || c)

@@ -3,217 +3,186 @@
     "name": "about-us",
     "path": "/about-us",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\about-us.vue",
-    "chunkName": "pages/about-us",
-    "_name": "_879eb46a"
+    "chunkName": "pages/about-us"
   },
   {
     "name": "admin",
     "path": "/admin",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\index.vue",
-    "chunkName": "pages/admin/index",
-    "_name": "_a37781e0"
+    "chunkName": "pages/admin/index"
   },
   {
     "name": "boxes",
     "path": "/boxes",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\boxes\\\\index.vue",
-    "chunkName": "pages/boxes/index",
-    "_name": "_e5910f34"
+    "chunkName": "pages/boxes/index"
   },
   {
     "name": "bundles",
     "path": "/bundles",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\bundles\\\\index.vue",
-    "chunkName": "pages/bundles/index",
-    "_name": "_6d0700a4"
+    "chunkName": "pages/bundles/index"
   },
   {
     "name": "Carts",
     "path": "/Carts",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\Carts.vue",
-    "chunkName": "pages/Carts",
-    "_name": "_02991d16"
+    "chunkName": "pages/Carts"
   },
   {
     "name": "categories",
     "path": "/categories",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\categories\\\\index.vue",
-    "chunkName": "pages/categories/index",
-    "_name": "_1122fcce"
+    "chunkName": "pages/categories/index"
   },
   {
     "name": "liked-items",
     "path": "/liked-items",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\liked-items.vue",
-    "chunkName": "pages/liked-items",
-    "_name": "_29cdaac3"
+    "chunkName": "pages/liked-items"
   },
   {
     "name": "login",
     "path": "/login",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\login.vue",
-    "chunkName": "pages/login",
-    "_name": "_16ef084c"
+    "chunkName": "pages/login"
   },
   {
     "name": "products",
     "path": "/products",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\products\\\\index.vue",
-    "chunkName": "pages/products/index",
-    "_name": "_1d27b011"
+    "chunkName": "pages/products/index"
   },
   {
     "name": "Profile",
     "path": "/Profile",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\Profile.vue",
-    "chunkName": "pages/Profile",
-    "_name": "_75e4a3ac"
+    "chunkName": "pages/Profile"
   },
   {
     "name": "register",
     "path": "/register",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\register.vue",
-    "chunkName": "pages/register",
-    "_name": "_de70c5e0"
+    "chunkName": "pages/register"
   },
   {
     "name": "test",
     "path": "/test",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\test.vue",
-    "chunkName": "pages/test",
-    "_name": "_01b115ff"
+    "chunkName": "pages/test"
   },
   {
     "name": "admin-admin-list",
     "path": "/admin/admin-list",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\admin-list.vue",
-    "chunkName": "pages/admin/admin-list",
-    "_name": "_317cefe4"
+    "chunkName": "pages/admin/admin-list"
   },
   {
     "name": "admin-dashboard-tutorial",
     "path": "/admin/dashboard-tutorial",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\dashboard-tutorial.vue",
-    "chunkName": "pages/admin/dashboard-tutorial",
-    "_name": "_41442aa9"
+    "chunkName": "pages/admin/dashboard-tutorial"
   },
   {
     "name": "admin-profile",
     "path": "/admin/profile",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\profile.vue",
-    "chunkName": "pages/admin/profile",
-    "_name": "_27a8cae7"
+    "chunkName": "pages/admin/profile"
   },
   {
     "name": "admin-search",
     "path": "/admin/search",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\search\\\\index.vue",
-    "chunkName": "pages/admin/search/index",
-    "_name": "_6cf61ee8"
+    "chunkName": "pages/admin/search/index"
   },
   {
     "name": "admin-transactions",
     "path": "/admin/transactions",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\transactions\\\\index.vue",
-    "chunkName": "pages/admin/transactions/index",
-    "_name": "_103c6eca"
+    "chunkName": "pages/admin/transactions/index"
   },
   {
     "name": "password-email",
     "path": "/password/email",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\password\\\\email.vue",
-    "chunkName": "pages/password/email",
-    "_name": "_31dd5c44"
+    "chunkName": "pages/password/email"
   },
   {
     "name": "verification-resend",
     "path": "/verification/resend",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\verification\\\\resend.vue",
-    "chunkName": "pages/verification/resend",
-    "_name": "_28704843"
+    "chunkName": "pages/verification/resend"
   },
   {
     "name": "admin-forms-bundle",
     "path": "/admin/forms/bundle",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\forms\\\\bundle.vue",
-    "chunkName": "pages/admin/forms/bundle",
-    "_name": "_14135c22"
+    "chunkName": "pages/admin/forms/bundle"
   },
   {
     "name": "admin-forms-product",
     "path": "/admin/forms/product",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\forms\\\\product.vue",
-    "chunkName": "pages/admin/forms/product",
-    "_name": "_fdb42a5c"
+    "chunkName": "pages/admin/forms/product"
   },
   {
     "name": "admin-tables-bundles",
     "path": "/admin/tables/bundles",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\tables\\\\bundles\\\\index.vue",
-    "chunkName": "pages/admin/tables/bundles/index",
-    "_name": "_17361798"
+    "chunkName": "pages/admin/tables/bundles/index"
   },
   {
     "name": "admin-tables-products",
     "path": "/admin/tables/products",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\tables\\\\products\\\\index.vue",
-    "chunkName": "pages/admin/tables/products/index",
-    "_name": "_f2bdd532"
+    "chunkName": "pages/admin/tables/products/index"
   },
   {
     "name": "admin-tables-users",
     "path": "/admin/tables/users",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\tables\\\\users\\\\index.vue",
-    "chunkName": "pages/admin/tables/users/index",
-    "_name": "_c846fdbe"
+    "chunkName": "pages/admin/tables/users/index"
   },
   {
     "name": "admin-transactions-id",
     "path": "/admin/transactions/:id",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\admin\\\\transactions\\\\_id.vue",
-    "chunkName": "pages/admin/transactions/_id",
-    "_name": "_7221947a"
+    "chunkName": "pages/admin/transactions/_id"
   },
   {
     "name": "password-reset-token",
     "path": "/password/reset/:token?",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\password\\\\reset\\\\_token.vue",
-    "chunkName": "pages/password/reset/_token",
-    "_name": "_16ce88f1"
+    "chunkName": "pages/password/reset/_token"
   },
   {
     "name": "verification-verify-id",
     "path": "/verification/verify/:id?",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\verification\\\\verify\\\\_id.vue",
-    "chunkName": "pages/verification/verify/_id",
-    "_name": "_7f72e289"
+    "chunkName": "pages/verification/verify/_id"
   },
   {
     "name": "bundles-id",
     "path": "/bundles/:id",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\bundles\\\\_id.vue",
-    "chunkName": "pages/bundles/_id",
-    "_name": "_07e29596"
+    "chunkName": "pages/bundles/_id"
   },
   {
     "name": "categories-id",
     "path": "/categories/:id",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\categories\\\\_id.vue",
-    "chunkName": "pages/categories/_id",
-    "_name": "_289bd37e"
+    "chunkName": "pages/categories/_id"
   },
   {
     "name": "products-id",
     "path": "/products/:id",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\products\\\\_id.vue",
-    "chunkName": "pages/products/_id",
-    "_name": "_9f56fa8e"
+    "chunkName": "pages/products/_id"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\Users\\\\Russell Chan\\\\Desktop\\\\online-gifting-client\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_4d476535"
+    "chunkName": "pages/index"
   }
 ]
