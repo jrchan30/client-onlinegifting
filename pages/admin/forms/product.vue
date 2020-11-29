@@ -81,7 +81,7 @@
                       ref="pictureInput"
                       width="130"
                       height="130"
-                      size="10"
+                      size="3"
                       margin="16"
                       :z-index="10"
                       button-class="btn mb-0 mt-1"
@@ -391,7 +391,27 @@ export default {
           try {
             await this.$axios.$post('/products', formData)
             this.$swal('Inserted!', 'Product has been inserted.', 'success')
+            this.editor.destroy()
             this.closeForm()
+            this.editor = new Editor({
+              content: '<p>Product description goes here!</p>',
+              extensions: [
+                new BulletList(),
+                new ListItem(),
+                new OrderedList(),
+                new Link(),
+                new Bold(),
+                new Italic(),
+                new Strike(),
+                new Underline(),
+                new History(),
+              ],
+              onUpdate: ({ getJSON, getHTML }) => {
+                this.json = getJSON()
+                this.html = getHTML()
+                this.description = this.html
+              },
+            })
           } catch (e) {
             this.$swal({
               icon: 'error',

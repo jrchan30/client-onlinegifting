@@ -68,10 +68,9 @@
                       ref="pictureInput"
                       width="130"
                       height="130"
-                      size="1"
+                      size="3"
                       margin="16"
                       :z-index="10"
-                      :toggle-aspect-ratio="true"
                       button-class="btn mb-0 mt-1"
                       remove-button-class="btn my-0"
                       radius="5"
@@ -109,7 +108,7 @@
                       label="name"
                       required
                       :reduce="(name) => name.id"
-                      :options="CATEGORIES"
+                      :options="SUB_CATEGORIES"
                       style="z-index = 1000"
                     />
                   </div>
@@ -286,7 +285,7 @@ export default {
       form: {
         bundle_name: '',
         description: '',
-        image: '',
+        image: null,
         colour: '',
         products: [],
         categories: [],
@@ -298,6 +297,7 @@ export default {
   computed: {
     ...mapGetters({
       CATEGORIES: 'categories/CATEGORIES',
+      SUB_CATEGORIES: 'categories/SUB_CATEGORIES',
       ALL_PRODUCTS: 'products/ALL_PRODUCTS',
     }),
   },
@@ -388,7 +388,27 @@ export default {
           try {
             await this.$axios.$post('/bundles', formData)
             this.$swal('Inserted!', 'Bundle has been inserted.', 'success')
+            this.editor.destroy()
             this.closeForm()
+            this.editor = new Editor({
+              content: '<p>Product description goes here!</p>',
+              extensions: [
+                new BulletList(),
+                new ListItem(),
+                new OrderedList(),
+                new Link(),
+                new Bold(),
+                new Italic(),
+                new Strike(),
+                new Underline(),
+                new History(),
+              ],
+              onUpdate: ({ getJSON, getHTML }) => {
+                this.json = getJSON()
+                this.html = getHTML()
+                this.description = this.html
+              },
+            })
           } catch (e) {
             this.$swal({
               icon: 'error',
