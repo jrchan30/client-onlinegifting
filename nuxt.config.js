@@ -163,15 +163,16 @@ export default {
       // swScope: 'http://onlinegifting.shop/sw.js',
       //   swUrl: 'http://192.168.15.1:3000',
       //   swScope: '/static/sw.js',
-      runtimeCaching: [
-        {
-          urlPattern: `http://onlinegifting.shop/.*`,
-          handler: 'CacheFirst',
-          strategyOptions: {
-            cacheableResponse: { statuses: [0, 200] },
-          },
-        },
-      ],
+      autoRegister: true,
+      urlPattern: `http://onlinegifting.shop/.*`,
+      // runtimeCaching: [
+      //   {
+      //     handler: 'CacheFirst',
+      //     strategyOptions: {
+      //       cacheableResponse: { statuses: [0, 200] },
+      //     },
+      //   },
+      // ],
     },
   },
   /*
