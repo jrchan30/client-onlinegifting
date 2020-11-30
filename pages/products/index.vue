@@ -20,7 +20,7 @@
         </ul>
         <div>
           <vs-button flat icon @click="activeFilter = !activeFilter">
-            <i class="bx bx-menu"></i>
+            <i class="text-primary bx bx-menu"></i>
           </vs-button>
         </div>
       </div>
@@ -48,7 +48,12 @@
       </div>
     </div>
     <div class="position-sticky" style="z-index: 100">
-      <vs-sidebar v-model="active" right :open.sync="activeFilter">
+      <vs-sidebar
+        v-model="active"
+        color="#336699"
+        right
+        :open.sync="activeFilter"
+      >
         <template #logo>
           <div class="pt-5"></div>
         </template>

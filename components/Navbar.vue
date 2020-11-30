@@ -1,13 +1,13 @@
 <template>
   <div class="hidden pb-5">
-    <vs-navbar v-model="active" style="9999" fixed center-collapsed>
+    <vs-navbar v-model="active" style="z-index: 9999" fixed center-collapsed>
       <template #left>
         <vs-button flat icon @click="activeSidebar = !activeSidebar">
-          <i class="bx bx-menu"></i>
+          <i class="text-primary bx bx-menu"></i>
         </vs-button>
       </template>
       <vs-navbar-item class="w-100">
-        <vs-input v-model="search" class="w-100" color="primary" type="search">
+        <vs-input v-model="search" class="w-100" color="#336699" type="search">
           <template #icon>
             <i class="bx bx-search-alt"></i>
           </template>
@@ -39,7 +39,7 @@
       </template>
     </vs-navbar>
     <div class="position-sticky" style="z-index: 9999">
-      <vs-sidebar v-model="active" :open.sync="activeSidebar">
+      <vs-sidebar v-model="active" color="#336699" :open.sync="activeSidebar">
         <template #logo>
           <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
         </template>

@@ -71,10 +71,49 @@
               <h4 class="font-weight-bold custom-color">
                 Your Boxes <i class="fas fa-boxes"></i>
               </h4>
-              <p class="custom-color">
+              <p class="custom-color d-flex">
                 This is your list of box, you can add products to your box
                 whilst browsing our products pages
               </p>
+              <vs-button class="mb-4" gradient block @click="active = !active">
+                Create New Box
+              </vs-button>
+              <vs-dialog v-model="active" blur>
+                <template #header>
+                  <h4 class="pt-2 mb-2">Create your new <b>Box</b></h4>
+                </template>
+
+                <div>
+                  <vs-input
+                    v-model="input1"
+                    class="mb-2"
+                    placeholder="Box name"
+                    label="Box Name"
+                  >
+                    <!-- <template #icon> @ </template> -->
+                  </vs-input>
+                  <div class="d-flex justify-content-between">
+                    <div class="ml-2">
+                      <small>Choose a colour:</small>
+                    </div>
+                    <div>
+                      <v-swatches
+                        v-model="form.colour"
+                        popover-x="left"
+                      ></v-swatches>
+                    </div>
+                  </div>
+                </div>
+
+                <template #footer>
+                  <div class="pb-2">
+                    <vs-button block>
+                      <i class="fas fa-box-open"></i>
+                      <span class="ml-2">Create</span>
+                    </vs-button>
+                  </div>
+                </template>
+              </vs-dialog>
               <vs-table>
                 <template #header>
                   <vs-input
@@ -101,15 +140,17 @@
                     </vs-th>
                     <vs-th
                       sort
-                      @click="items = $vs.sortData($event, items, 'email')"
+                      @click="items = $vs.sortData($event, items, 'price')"
                     >
-                      Email
+                      Price
                     </vs-th>
                     <vs-th
                       sort
-                      @click="items = $vs.sortData($event, items, 'id')"
+                      @click="
+                        items = $vs.sortData($event, items, 'products_count')
+                      "
                     >
-                      Id
+                      Products Count
                     </vs-th>
                   </vs-tr>
                 </template>
@@ -127,10 +168,10 @@
                       {{ tr.name }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.email }}
+                      {{ tr.price }}
                     </vs-td>
                     <vs-td>
-                      {{ tr.id }}
+                      {{ tr.products.length }}
                     </vs-td>
                   </vs-tr>
                 </template>
@@ -159,8 +200,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: 'auth',
-  fetch() {
-    this.getBoxes()
+  async fetch() {
+    await this.getBoxes()
   },
   data() {
     return {
@@ -172,6 +213,11 @@ export default {
       allCheck: false,
       selected: [],
       items: [],
+
+      active: false,
+      input1: '',
+      input2: '',
+      checkbox1: false,
     }
   },
   computed: {
