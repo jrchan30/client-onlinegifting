@@ -162,37 +162,23 @@ export default {
       author: 'Jonathan Russell Chan',
       start_url: '/',
     },
-    workbox: {
-      //   swScope: 'http://onlinegifting.shop/sw.js',
-      //     swUrl: 'http://192.168.15.1:3000',
-      //     swScope: '/static/sw.js',
-      //   autoRegister: true,
-      //   urlPattern: `http://onlinegifting.shop/.*`,
-      //   runtimeCaching: [
-      //     {
-      //       handler: 'CacheFirst',
-      //       strategyOptions: {
-      //         cacheableResponse: { statuses: [0, 200] },
-      //       },
-      //     },
-      //   ],
-      runtimeCaching: [
-        {
-          urlPattern: 'http://onlinegifting.shop/_nuxt/',
-          handler: 'CacheFirst',
-          method: 'GET',
-          strategyPlugins: [],
-        },
-        {
-          urlPattern: 'http://onlinegifting.shop/',
-          handler: 'NetworkFirst',
-          method: 'GET',
-          strategyPlugins: [],
-        },
-      ],
-      pagesURLPattern: 'http://onlinegifting.shop/.*',
-      swScope: 'http://onlinegifting.shop/',
-    },
+    // workbox: {
+    //   swScope: 'http://onlinegifting.shop/sw.js',
+    //     swUrl: 'http://192.168.15.1:3000',
+    //     swScope: '/static/sw.js',
+    //   autoRegister: true,
+    //   urlPattern: `http://onlinegifting.shop/.*`,
+    //   runtimeCaching: [
+    //     {
+    //       handler: 'CacheFirst',
+    //       strategyOptions: {
+    //         cacheableResponse: { statuses: [0, 200] },
+    //       },
+    //     },
+    //   ],
+    // pagesURLPattern: 'http://onlinegifting.shop/.*',
+    // swScope: 'http://onlinegifting.shop/',
+    // },
   },
   /*
    ** Build configuration
