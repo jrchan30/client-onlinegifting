@@ -52,7 +52,6 @@
           </vs-td>
 
           <template #expand>
-            <!-- <div class="row"> -->
             <div class="float-left">
               <div class="d-flex">
                 <vs-avatar class="mb-auto" cursor>
@@ -78,11 +77,11 @@
                 </vs-button>
               </div>
             </div>
-            <!-- </div> -->
           </template>
         </vs-tr>
       </template>
     </vs-table>
+    <!-- <div>{{ items }}</div> -->
   </div>
 </template>
 
@@ -90,10 +89,10 @@
 export default {
   layout: 'default',
   middleware: 'auth',
-  asyncData({ store }) {
-    const items = store.loggedInUser.liked_products
-    return items
-  },
+  // asyncData({ store }) {
+  //   const items = store.loggedInUser
+  //   return items
+  // },
   data() {
     return {
       edit: null,
@@ -102,6 +101,7 @@ export default {
       page: 1,
       max: 100,
       isLoading: false,
+      items: this.$auth.user.liked_products,
     }
   },
   methods: {
