@@ -1,8 +1,10 @@
 <template>
   <div>
     <Navbar />
-    <div class="mt-5">
-      <Nuxt />
+    <div class="pt-5">
+      <div class="mt-5">
+        <Nuxt />
+      </div>
     </div>
     <LoginRegisterFooter />
   </div>

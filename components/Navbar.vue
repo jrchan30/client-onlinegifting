@@ -1,6 +1,12 @@
 <template>
   <div class="hidden pb-5">
-    <vs-navbar v-model="active" style="z-index: 9999" fixed center-collapsed>
+    <vs-navbar
+      v-model="active"
+      padding-scroll
+      style="z-index: 9999"
+      fixed
+      center-collapsed
+    >
       <template #left>
         <vs-button flat icon @click="activeSidebar = !activeSidebar">
           <i class="text-primary bx bx-menu"></i>
@@ -19,12 +25,7 @@
           <vs-button color="#336699" to="/register">Get Started</vs-button>
         </template>
         <template v-else>
-          <vs-avatar
-            pointer
-            :writing="$auth.user.detail === null"
-            :badge="$auth.user.detail === null"
-            @click="goToProfile()"
-          >
+          <vs-avatar pointer @click="goToProfile()">
             <template #text>
               {{ $auth.user.name }}
             </template>
@@ -146,10 +147,7 @@
         </vs-row>
         <template #footer>
           <vs-row v-if="$auth.user" justify="space-between">
-            <vs-avatar
-              :writing="$auth.user.detail.phone_num == null"
-              :badge="$auth.user.detail.phone_num == null"
-            >
+            <vs-avatar>
               <img class="text-muted" :src="getProfilePic()" alt="" />
             </vs-avatar>
 
@@ -160,7 +158,7 @@
               @click="goToCart()"
             >
               <i class="bx bx-cart"></i>
-              <template #badge> {{ $auth.user.cart }} </template>
+              <template #badge> {{ getCartItemCount }} </template>
             </vs-avatar>
           </vs-row>
         </template>
@@ -177,6 +175,13 @@ export default {
     search: '',
     cart_qty: 0,
   }),
+  computed: {
+    getCartItemCount() {
+      return (
+        this.$auth.user.cart.boxes.length + this.$auth.user.cart.bundles.length
+      )
+    },
+  },
   methods: {
     goToCart() {
       this.$router.push('/carts')
@@ -192,7 +197,7 @@ export default {
       }
     },
     getProfilePic() {
-      if (!this.$auth.user.detail.image) {
+      if (this.$auth.user.detail.image !== null) {
         return '/image/bx-user.svg'
       } else {
         return `${this.$auth.user.detail.image}`

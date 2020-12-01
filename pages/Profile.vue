@@ -2,6 +2,17 @@
   <!-- <div> -->
   <div class="box-content">
     <div class="container">
+      <template v-if="$auth.user.detail.type == 'admin'">
+        <vs-alert v-model="admin.active" closable danger class="mb-5">
+          <template #icon>
+            <strong>!</strong>
+          </template>
+          <template #title> Warning Admin </template>
+          To see admin's profile, you should navigate to the profile page in the
+          admin section provided
+          <nuxt-link to="/admin/profile">HERE!</nuxt-link>
+        </vs-alert>
+      </template>
       <div class="bg-top pt-0">
         <div class="row pt-0 pt-md-5">
           <div class="d-none d-md-flex col-md-6 col-lg-6"></div>
@@ -27,25 +38,38 @@
       </div>
     </div>
     <div class="container">
-      <div class="card">
-        <div class="card-body">
-          lalalalalalalaaaaalalallalalalalalalalalalalalalallalalalalalalaaaaalalallalalalalalalalalalalalalallalalalalalalaaaaalalallalalalalalalalalalalalalallalalalalalalaaaaalalallalalalalalalalalalalalalallalalalalalalaaaaalalallalalalalalalalalalalalalallalalalalalalaaaaalalallalalalalalalalalalalalalal
-        </div>
-      </div>
+      <CardSkeleton v-if="$auth.user.detail.type !== 'admin'">
+        <template v-slot:title>
+          <h4 class="font-weight-bold custom-color">Past Transactions</h4>
+          <p class="custom-color">
+            <span
+              >This is our latest products, click on product's card to see more
+              details about the product</span
+            >
+          </p>
+        </template>
+        <template v-slot:body> </template>
+      </CardSkeleton>
     </div>
   </div>
   <!-- </div> -->
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: ['auth'],
+  async fetch() {
+    await this.GET_TRANSACTIONS()
+  },
   data() {
     return {
       form: {
         image: null,
+      },
+      admin: {
+        active: true,
       },
     }
   },
@@ -56,6 +80,9 @@ export default {
     }),
   },
   methods: {
+    ...mapActions({
+      GET_TRANSACTIONS: 'transactions/GET_TRANSACTIONS',
+    }),
     onChange() {
       const file = this.$refs.pictureInput.file
       if (file) {
