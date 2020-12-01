@@ -93,6 +93,9 @@ export default {
   //   const items = store.loggedInUser
   //   return items
   // },
+  // async fetch() {
+  //   await this.$auth.fetchUser()
+  // },
   data() {
     return {
       edit: null,

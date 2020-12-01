@@ -15,9 +15,9 @@
       </template>
       <div class="bg-top pt-0">
         <div class="row pt-0 pt-md-5">
-          <div class="d-none d-md-flex col-md-6 col-lg-6"></div>
-          <div class="col-12 col-md-6 col-lg-5">
-            <vs-alert relief class="align-middle">
+          <div class="d-none d-md-flex col-md-3 col-lg-6"></div>
+          <div class="col-12 col-md-9 col-lg-5">
+            <vs-alert relief>
               <template #icon>
                 <i class="bx bxs-chat"></i>
               </template>
@@ -38,13 +38,16 @@
       </div>
     </div>
     <div class="container">
-      <CardSkeleton v-if="$auth.user.detail.type !== 'admin'">
+      <CardSkeleton
+        v-if="$auth.user.detail.type !== 'admin'"
+        class="pt-0 pt-lg-5"
+      >
         <template v-slot:title>
           <h4 class="font-weight-bold custom-color">Past Transactions</h4>
           <p class="custom-color">
             <span
-              >This is our latest products, click on product's card to see more
-              details about the product</span
+              >This is your latest past transactions, click on each record to
+              see more details about the transaction</span
             >
           </p>
         </template>
@@ -112,12 +115,12 @@ export default {
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  width: 100%;
-  height: 600px;
+  width: 100wh;
+  height: calc(100vh - 10rem);
 }
 
 .box-content {
   width: 100vw;
-  height: calc(100% - 10rem);
+  height: 100%;
 }
 </style>
