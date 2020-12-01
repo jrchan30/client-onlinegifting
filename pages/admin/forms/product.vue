@@ -45,7 +45,7 @@
                   <div class="card-header col-12">
                     <h3 class="mb-0">Categories</h3>
                   </div>
-                  <div class="card-body">
+                  <div v-if="!$fetchState.pending" class="card-body">
                     <v-select
                       v-model="categories"
                       multiple

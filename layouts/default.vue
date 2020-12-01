@@ -55,6 +55,10 @@ export default {
   color: #2c3e50;
 }
 
+.swal-container {
+  z-index: 100000;
+}
+
 html {
   overflow-y: scroll;
   overflow-y: overlay;

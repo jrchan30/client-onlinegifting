@@ -177,9 +177,13 @@ export default {
   }),
   computed: {
     getCartItemCount() {
-      return (
-        this.$auth.user.cart.boxes.length + this.$auth.user.cart.bundles.length
-      )
+      if (this.$auth.user.cart) {
+        return (
+          this.$auth.user.cart.boxes.length +
+          this.$auth.user.cart.bundles.length
+        )
+      }
+      return '0'
     },
   },
   methods: {
@@ -197,7 +201,7 @@ export default {
       }
     },
     getProfilePic() {
-      if (this.$auth.user.detail.image !== null) {
+      if (this.$auth.user.detail.image == null) {
         return '/image/bx-user.svg'
       } else {
         return `${this.$auth.user.detail.image}`

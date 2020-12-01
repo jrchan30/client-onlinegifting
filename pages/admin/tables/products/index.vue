@@ -265,14 +265,14 @@
                     </div>
                   </div>
                   <!--End Main Fields Loop -->
-                  <div class="col-md-12 mb-4">
+                  <div v-if="!$fetchState.pending" class="col-md-12 mb-4">
                     <v-select
                       v-model="categories"
                       multiple
                       label="name"
                       required
                       :reduce="(name) => name.id"
-                      :options="CATEGORIES"
+                      :options="SUB_CATEGORIES"
                     />
                   </div>
                   <button
@@ -305,6 +305,10 @@ import { mapGetters, mapActions, mapMutations } from 'vuex'
 export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
+  async fetch() {
+    await this.GET_CATEGORIES()
+    await this.GET_PRODUCTS()
+  },
   data() {
     return {
       isEdit: false,
@@ -367,12 +371,10 @@ export default {
     ...mapGetters({
       PRODUCTS: 'products/PRODUCTS',
       CATEGORIES: 'categories/CATEGORIES',
+      SUB_CATEGORIES: 'categories/SUB_CATEGORIES',
     }),
   },
-  async mounted() {
-    await this.GET_PRODUCTS()
-    await this.GET_CATEGORIES()
-  },
+
   methods: {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
