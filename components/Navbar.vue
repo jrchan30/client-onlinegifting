@@ -1,5 +1,5 @@
 <template>
-  <div class="hidden pb-5">
+  <div class="pb-5">
     <vs-navbar
       v-model="active"
       padding-scroll
@@ -19,7 +19,7 @@
           </template>
         </vs-input>
       </vs-navbar-item>
-      <!-- <template #right>
+      <template #right>
         <template v-if="!$auth.loggedIn">
           <vs-button flat color="#336699" to="/login"> Login </vs-button>
           <vs-button color="#336699" to="/register">Get Started</vs-button>
@@ -37,7 +37,7 @@
             </template>
           </vs-button>
         </template>
-      </template> -->
+      </template>
     </vs-navbar>
     <div class="position-sticky" style="z-index: 9999">
       <vs-sidebar v-model="active" color="#336699" :open.sync="activeSidebar">
