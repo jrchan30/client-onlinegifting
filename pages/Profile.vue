@@ -62,7 +62,7 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
-  middleware: ['auth'],
+  middleware: ['auth-user'],
   async fetch() {
     await this.GET_TRANSACTIONS()
   },
