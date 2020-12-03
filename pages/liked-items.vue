@@ -88,7 +88,7 @@
 <script>
 export default {
   layout: 'default',
-  middleware: 'auth-user',
+  middleware: 'auth',
   // asyncData({ store }) {
   //   const items = store.loggedInUser
   //   return items
