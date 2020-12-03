@@ -211,7 +211,7 @@ export default {
       if (this.$auth.user.detail.image == null) {
         return '/image/bx-user.svg'
       } else {
-        return `${this.$auth.user.detail.image}`
+        return `${this.$auth.user.detail.image.url}`
       }
     },
   },

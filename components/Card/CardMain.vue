@@ -32,8 +32,18 @@
           >
             <i class="bx bx-heart"></i>
           </vs-button>
-          <vs-button shadow icon :disabled="$auth.user == null">
-            <i class="fas fa-cart-plus text-primary"></i>
+          <vs-button
+            shadow
+            icon
+            :disabled="$auth.user == null"
+            @click="add(item.id)"
+          >
+            <i
+              class="text-primary"
+              :class="[
+                itemType.includes('product') ? 'bx bx-box' : 'fas fa-cart-plus',
+              ]"
+            ></i>
           </vs-button>
         </template>
       </vs-card>
@@ -42,6 +52,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'CardMain',
   props: {
@@ -62,7 +74,31 @@ export default {
       default: '',
     },
   },
+  // async fetch() {
+  //   await this.GET_BOXES()
+  // },
+  data() {
+    return {
+      inputs: {
+        box_id: 0,
+        qty: 0,
+      },
+    }
+  },
+  computed: {
+    ...mapGetters({
+      BOXES: 'boxes/BOXES',
+      PRODUCT: 'products/PRODUCT',
+    }),
+  },
   methods: {
+    ...mapActions({
+      GET_BOXES: 'boxes/GET_BOXES',
+      GET_PRODUCT: 'products/GET_PRODUCT',
+    }),
+    clear() {
+      Object.assign(this.$data, this.$options.data())
+    },
     async like(id, idx) {
       let type = ''
       type = this.itemType.includes('product') ? 'product' : 'bundle'
@@ -111,6 +147,62 @@ export default {
           timerProgressBar: true,
           timer: 4000,
         })
+      }
+    },
+    async add(id) {
+      if (this.itemType.includes('product')) {
+        await this.GET_BOXES()
+        await this.$store.dispatch('products/GET_PRODUCT', id)
+        try {
+          const { value: index } = await this.$swal({
+            title: 'Choose box to add to',
+            input: 'select',
+            inputOptions: this.BOXES.data.map((x) => {
+              return x.name
+            }),
+            inputPlaceholder: 'Select a box',
+            showCancelButton: true,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value) {
+                  resolve()
+                } else {
+                  resolve('You need to choose one')
+                }
+              })
+            },
+          })
+
+          this.inputs.box_id = this.BOXES.data[index].id
+          const { value: quantity } = await this.$swal({
+            title: 'Input quantity',
+            input: 'range',
+            inputLabel:
+              'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
+            inputAttributes: {
+              min: 1,
+              max: this.PRODUCT.data.stock,
+              step: 1,
+            },
+            inputValue: 1,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value || value <= this.PRODUCT.data.stock) {
+                  resolve()
+                } else {
+                  resolve('You need to choose one')
+                }
+              })
+            },
+          })
+          this.inputs.qty = quantity
+
+          await this.$axios.$patch(`/boxes/${this.inputs.box_id}`)
+        } catch (e) {
+        } finally {
+          this.clear()
+        }
+      } else {
       }
     },
     goTo(id) {

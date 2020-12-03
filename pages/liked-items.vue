@@ -124,7 +124,6 @@ export default {
     unlike(id) {
       this.isLoading = true
       try {
-        console.log('test')
         this.$axios.$delete(`/likes/${id}`)
       } catch (e) {
         console.log(e)
