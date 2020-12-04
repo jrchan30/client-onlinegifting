@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template>
+    <client-only>
       <div class="box-content">
         <template v-if="$auth.user" class="container">
           <div v-if="$auth.user.detail">
@@ -59,7 +59,7 @@
           </div>
         </template>
       </div>
-    </template>
+    </client-only>
   </div>
 </template>
 
