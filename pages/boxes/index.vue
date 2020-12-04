@@ -67,6 +67,14 @@
             </div>
           </template>
           <template v-else>
+            <vs-alert v-model="isAlert" closable primary class="">
+              <template #icon>
+                <i class="bx bxs-cart-add"></i>
+              </template>
+              <template #title> Adding to Cart </template>
+              You can select multiple boxes from the checkboxes to add them to
+              your cart
+            </vs-alert>
             <div class="bg-white rounded p-3">
               <h4 class="font-weight-bold custom-color">
                 Your Boxes <i class="fas fa-boxes"></i>
@@ -75,7 +83,15 @@
                 This is your list of box, you can add products to your box
                 whilst browsing our products pages
               </p>
-              <vs-button class="mb-4" gradient block @click="active = !active">
+              <vs-button
+                class="mb-4"
+                gradient
+                block
+                @click="
+                  active = !active
+                  ;(form.boxName = ''), (form.colour = '#336699')
+                "
+              >
                 Create New Box
               </vs-button>
               <vs-dialog v-model="active" blur>
@@ -85,7 +101,7 @@
 
                 <div>
                   <vs-input
-                    v-model="input1"
+                    v-model="form.boxName"
                     class="mb-2"
                     placeholder="Box name"
                     label="Box Name"
@@ -107,7 +123,7 @@
 
                 <template #footer>
                   <div class="pb-2">
-                    <vs-button block>
+                    <vs-button block @click="createBox()">
                       <i class="fas fa-box-open"></i>
                       <span class="ml-2">Create</span>
                     </vs-button>
@@ -152,6 +168,7 @@
                     >
                       Products Count
                     </vs-th>
+                    <vs-th> Edit/Delete </vs-th>
                   </vs-tr>
                 </template>
                 <template #tbody>
@@ -172,6 +189,16 @@
                     </vs-td>
                     <vs-td>
                       {{ tr.products.length }}
+                    </vs-td>
+                    <vs-td class="d-flex">
+                      <vs-button primary gradient>
+                        <i class="bx bxs-edit"></i>
+                        <template #animate> Edit </template>
+                      </vs-button>
+                      <vs-button danger gradient style="min-width: 60px">
+                        <i class="bx bx-trash"></i>
+                        <template #animate> Delete </template>
+                      </vs-button>
                     </vs-td>
                   </vs-tr>
                 </template>
@@ -214,9 +241,9 @@ export default {
       selected: [],
       items: [],
 
+      isAlert: true,
+
       active: false,
-      input1: '',
-      input2: '',
       checkbox1: false,
     }
   },
@@ -243,7 +270,7 @@ export default {
         this.getBoxes()
         this.clear()
       } catch (e) {
-        console.log('error')
+        alert('error')
       }
     },
     clear() {

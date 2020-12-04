@@ -39,10 +39,6 @@ export default {
           crossorigin: 'anonymous',
           body: true,
         },
-        {
-          src: '/js/navbar.js',
-          body: true,
-        },
       ],
     }
   },
@@ -97,12 +93,12 @@ body {
   background: black;
 }
 
-.navDiv {
+/* .navDiv {
   transition: transform 0.4s;
 }
 .navDiv:hover {
   transform: scale(1.1);
-}
+} */
 
 .text-size {
   font-size: 12px;

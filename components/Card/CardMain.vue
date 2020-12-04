@@ -80,8 +80,8 @@ export default {
   data() {
     return {
       inputs: {
-        box_id: 0,
-        qty: 0,
+        box_id: [],
+        qty: [],
       },
     }
   },
@@ -197,8 +197,14 @@ export default {
           })
           this.inputs.qty = quantity
 
-          await this.$axios.$patch(`/boxes/${this.inputs.box_id}`)
+          const form = {
+            products: [id],
+            quantity: [Number(this.inputs.qty)],
+          }
+          await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, form)
+          alert('success')
         } catch (e) {
+          alert(e)
         } finally {
           this.clear()
         }
