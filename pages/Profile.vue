@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <div class="container">
+        <div v-if="$auth.user.detail" class="container">
           <CardSkeleton
             v-if="$auth.user.detail.type !== 'admin'"
             class="pt-0 pt-lg-5"
