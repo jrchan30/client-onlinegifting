@@ -3,7 +3,7 @@
     <template>
       <div class="box-content">
         <div class="container">
-          <div v-if="$auth.user">
+          <div v-if="$auth.user.detail">
             <template v-if="$auth.user.detail.type == 'admin'">
               <vs-alert v-model="admin.active" closable danger class="mb-5">
                 <template #icon>
