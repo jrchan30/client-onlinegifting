@@ -63,9 +63,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: ['auth-user'],
-  async fetch() {
-    await this.GET_TRANSACTIONS()
-  },
   data() {
     return {
       form: {
@@ -75,6 +72,9 @@ export default {
         active: true,
       },
     }
+  },
+  mounted() {
+    this.GET_TRANSACTIONS()
   },
   computed: {
     ...mapGetters({
