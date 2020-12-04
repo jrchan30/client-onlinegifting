@@ -1,6 +1,6 @@
 <template>
   <!-- <div> -->
-  <div class="box-content">
+  <div v-if="$auth.user" class="box-content">
     <div class="container">
       <template v-if="$auth.user.detail.type == 'admin'">
         <vs-alert v-model="admin.active" closable danger class="mb-5">
