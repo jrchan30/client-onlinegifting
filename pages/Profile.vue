@@ -1,19 +1,21 @@
 <template>
   <div>
-    <template v-if="isAuthenticated">
+    <template>
       <div class="box-content">
         <div class="container">
-          <template v-if="$auth.user.detail.type == 'admin'">
-            <vs-alert v-model="admin.active" closable danger class="mb-5">
-              <template #icon>
-                <strong>!</strong>
-              </template>
-              <template #title> Warning Admin </template>
-              To see admin's profile, you should navigate to the profile page in
-              the admin section provided
-              <nuxt-link to="/admin/profile">HERE!</nuxt-link>
-            </vs-alert>
-          </template>
+          <div v-if="$auth.user">
+            <template v-if="$auth.user.detail.type == 'admin'">
+              <vs-alert v-model="admin.active" closable danger class="mb-5">
+                <template #icon>
+                  <strong>!</strong>
+                </template>
+                <template #title> Warning Admin </template>
+                To see admin's profile, you should navigate to the profile page
+                in the admin section provided
+                <nuxt-link to="/admin/profile">HERE!</nuxt-link>
+              </vs-alert>
+            </template>
+          </div>
           <div class="bg-top pt-0">
             <div class="row pt-0 pt-md-5">
               <div class="d-none d-md-flex col-md-3 col-lg-6"></div>
