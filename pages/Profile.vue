@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="$auth.user">
+    <template v-if="isAuthenticated">
       <div class="box-content">
         <div class="container">
           <template v-if="$auth.user.detail.type == 'admin'">

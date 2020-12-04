@@ -194,7 +194,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   layout: 'admin',
-  middleware: ['auth'],
+  middleware: ['auth', 'admin-only'],
   data() {
     return {
       userlogin: '',

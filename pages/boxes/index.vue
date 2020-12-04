@@ -227,9 +227,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: 'auth-user',
-  async fetch() {
-    await this.getBoxes()
-  },
   data() {
     return {
       form: {
@@ -246,6 +243,9 @@ export default {
       active: false,
       checkbox1: false,
     }
+  },
+  mounted() {
+    this.getBoxes()
   },
   computed: {
     ...mapGetters({
