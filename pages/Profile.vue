@@ -2,7 +2,7 @@
   <div>
     <template>
       <div class="box-content">
-        <div v-if="$auth.user" class="container">
+        <template v-if="$auth.user" class="container">
           <div v-if="$auth.user.detail">
             <template v-if="$auth.user.detail.type == 'admin'">
               <vs-alert v-model="admin.active" closable danger class="mb-5">
@@ -40,8 +40,8 @@
               </div>
             </div>
           </div>
-        </div>
-        <div v-if="$auth.user">
+        </template>
+        <template v-if="$auth.user">
           <div v-if="$auth.user.detail" class="container">
             <CardSkeleton
               v-if="$auth.user.detail.type !== 'admin'"
@@ -57,7 +57,7 @@
               <template v-slot:body> </template>
             </CardSkeleton>
           </div>
-        </div>
+        </template>
       </div>
     </template>
   </div>
