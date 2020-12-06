@@ -118,4 +118,23 @@ export const actions = {
     const data = await this.$axios.$get('all-products')
     commit('SET_ALL_PRODUCTS', data)
   },
+  GET_PRODUCT_INFO({ state }, payload) {
+    let res = null
+    switch (payload.storeState) {
+      case 'products':
+        res = state.products.data[payload.idx]
+        break
+      case 'lowprice':
+        res = state.lowPrice.data[payload.idx]
+
+        break
+      case 'latest':
+        res = state.latest[payload.idx]
+
+        break
+      default:
+        break
+    }
+    return res
+  },
 }

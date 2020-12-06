@@ -18,9 +18,10 @@
           <a
             href="https://linkedin.com/in/russell-chan-944a02195"
             target="_blank"
+            rel="noreferrer"
             >Russell</a
           >
-          & <a href="#" target="_blank">Albert</a>.
+          & <a href="#" target="_blank" rel="noreferrer">Albert</a>.
         </div>
       </div>
     </div>

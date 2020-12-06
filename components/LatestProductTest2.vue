@@ -20,10 +20,20 @@
             <span>{{ product.price }} IDR</span>
           </template>
           <template #interactions>
-            <vs-button danger icon :disabled="$auth.user == null">
+            <vs-button
+              danger
+              icon
+              aria-label="like this item"
+              :disabled="$auth.user == null"
+            >
               <i class="bx bx-heart"></i>
             </vs-button>
-            <vs-button shadow icon :disabled="$auth.user == null">
+            <vs-button
+              shadow
+              icon
+              aria-label="add to box"
+              :disabled="$auth.user == null"
+            >
               <i class="fas fa-cart-plus text-primary"></i>
             </vs-button>
           </template>

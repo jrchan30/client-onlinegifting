@@ -134,6 +134,8 @@
                 <template #header>
                   <vs-input
                     v-model="search"
+                    aria-placeholder="search box"
+                    aria-label="searchbar box"
                     border
                     color="#336699"
                     placeholder="Search"
@@ -191,11 +193,16 @@
                       {{ tr.products.length }}
                     </vs-td>
                     <vs-td class="d-flex">
-                      <vs-button primary gradient>
+                      <vs-button aria-label="edit box" primary gradient>
                         <i class="bx bxs-edit"></i>
                         <template #animate> Edit </template>
                       </vs-button>
-                      <vs-button danger gradient style="min-width: 60px">
+                      <vs-button
+                        aria-label="delete box"
+                        danger
+                        gradient
+                        style="min-width: 60px"
+                      >
                         <i class="bx bx-trash"></i>
                         <template #animate> Delete </template>
                       </vs-button>
@@ -227,8 +234,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: 'auth-user',
-  fetch() {
-    this.getBoxes()
+  async fetch() {
+    await this.getBoxes()
   },
   data() {
     return {

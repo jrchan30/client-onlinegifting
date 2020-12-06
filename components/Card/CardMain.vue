@@ -27,6 +27,7 @@
             :shadow="!item.isLiked"
             :danger="item.isLiked"
             icon
+            aria-label="like this item"
             :disabled="$auth.user == null"
             @click="like(item.id, index)"
           >
@@ -35,8 +36,9 @@
           <vs-button
             shadow
             icon
+            aria-label="add to your box or cart"
             :disabled="$auth.user == null"
-            @click="add(item.id)"
+            @click="add(item.id, index)"
           >
             <i
               class="text-primary"
@@ -95,6 +97,7 @@ export default {
     ...mapActions({
       GET_BOXES: 'boxes/GET_BOXES',
       GET_PRODUCT: 'products/GET_PRODUCT',
+      GET_PRODUCT_INFO: 'products/GET_PRODUCT_INFO',
     }),
     clear() {
       Object.assign(this.$data, this.$options.data())
@@ -149,10 +152,13 @@ export default {
         })
       }
     },
-    async add(id) {
+    async add(id, idx) {
       if (this.itemType.includes('product')) {
         await this.GET_BOXES()
-        await this.$store.dispatch('products/GET_PRODUCT', id)
+        const productInfo = await this.GET_PRODUCT_INFO({
+          idx,
+          storeState: this.storeState,
+        })
         try {
           const { value: index } = await this.$swal({
             title: 'Choose box to add to',
@@ -172,22 +178,22 @@ export default {
               })
             },
           })
-
           this.inputs.box_id = this.BOXES.data[index].id
-          const { value: quantity } = await this.$swal({
+
+          const { value: qty } = await this.$swal({
             title: 'Input quantity',
             input: 'range',
             inputLabel:
               'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
             inputAttributes: {
               min: 1,
-              max: this.PRODUCT.data.stock,
+              max: productInfo.stock,
               step: 1,
             },
             inputValue: 1,
             inputValidator: (value) => {
               return new Promise((resolve) => {
-                if (value || value <= this.PRODUCT.data.stock) {
+                if (value || value <= productInfo.stock) {
                   resolve()
                 } else {
                   resolve('You need to choose one')
@@ -195,13 +201,16 @@ export default {
               })
             },
           })
-          this.inputs.qty = quantity
 
-          const form = {
-            products: [id],
-            quantity: [Number(this.inputs.qty)],
-          }
-          await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, form)
+          const allProducts = {}
+          this.BOXES.data[index].products.map((x) => {
+            allProducts[x.id] = { quantity: x.quantity }
+          })
+          allProducts[id] = { quantity: qty }
+
+          await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
+            allProducts: JSON.stringify(allProducts),
+          })
           alert('success')
         } catch (e) {
           alert(e)

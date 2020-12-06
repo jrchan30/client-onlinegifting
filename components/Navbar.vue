@@ -9,13 +9,20 @@
         center-collapsed
       >
         <template #left>
-          <vs-button flat icon @click="activeSidebar = !activeSidebar">
+          <vs-button
+            flat
+            icon
+            aria-label="toggle dropdown"
+            @click="activeSidebar = !activeSidebar"
+          >
             <i class="text-primary bx bx-menu"></i>
           </vs-button>
         </template>
         <vs-navbar-item class="w-100">
           <vs-input
             v-model="search"
+            aria-placeholder="search"
+            aria-label="searchbar"
             class="w-100"
             color="#336699"
             type="search"
@@ -27,8 +34,12 @@
         </vs-navbar-item>
         <template #right>
           <template v-if="!$auth.loggedIn">
-            <vs-button flat color="#336699" to="/login"> Login </vs-button>
-            <vs-button color="#336699" to="/register">Get Started</vs-button>
+            <vs-button flat color="#336699" to="/login" aria-label="login">
+              Login
+            </vs-button>
+            <vs-button color="#336699" to="/register" aria-label="register"
+              >Get Started</vs-button
+            >
           </template>
           <template v-else>
             <vs-avatar pointer @click="goToProfile()">
@@ -36,7 +47,12 @@
                 {{ $auth.user.name }}
               </template>
             </vs-avatar>
-            <vs-button color="#336699" transparent @click="logout()">
+            <vs-button
+              color="#336699"
+              aria-label="logout"
+              transparent
+              @click="logout()"
+            >
               Logout
               <template #animate>
                 <i class="bx bx-run"></i>
@@ -141,6 +157,8 @@
             <vs-col w="11">
               <vs-input
                 v-model="search"
+                aria-placeholder="search"
+                aria-label="searchbar"
                 class="w-100"
                 color="primary"
                 type="search"

@@ -9,6 +9,8 @@
       <template #header>
         <vs-input
           v-model="search"
+          aria-placeholder="search liked items"
+          aria-label="searchbar liked items"
           border
           color="#336699"
           placeholder="Search"

@@ -19,7 +19,12 @@
           </li>
         </ul>
         <div>
-          <vs-button flat icon @click="activeFilter = !activeFilter">
+          <vs-button
+            aria-label="toggle filter dropdown"
+            flat
+            icon
+            @click="activeFilter = !activeFilter"
+          >
             <i class="text-primary bx bx-menu"></i>
           </vs-button>
         </div>

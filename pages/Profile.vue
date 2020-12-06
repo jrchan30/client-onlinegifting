@@ -1,65 +1,63 @@
 <template>
   <div>
-    <client-only>
-      <div class="box-content">
-        <template v-if="$auth.user" class="container">
-          <div v-if="$auth.user.detail">
-            <template v-if="$auth.user.detail.type == 'admin'">
-              <vs-alert v-model="admin.active" closable danger class="mb-5">
+    <div class="box-content">
+      <template v-if="$auth.user" class="container">
+        <div v-if="$auth.user.detail">
+          <template v-if="$auth.user.detail.type == 'admin'">
+            <vs-alert v-model="admin.active" closable danger class="mb-5">
+              <template #icon>
+                <strong>!</strong>
+              </template>
+              <template #title> Warning Admin </template>
+              To see admin's profile, you should navigate to the profile page in
+              the admin section provided
+              <nuxt-link to="/admin/profile">HERE!</nuxt-link>
+            </vs-alert>
+          </template>
+        </div>
+        <div class="bg-top pt-0">
+          <div class="row pt-0 pt-md-5">
+            <div class="d-none d-md-flex col-md-3 col-lg-6"></div>
+            <div class="col-12 col-md-9 col-lg-5">
+              <vs-alert relief>
                 <template #icon>
-                  <strong>!</strong>
+                  <i class="bx bxs-chat"></i>
                 </template>
-                <template #title> Warning Admin </template>
-                To see admin's profile, you should navigate to the profile page
-                in the admin section provided
-                <nuxt-link to="/admin/profile">HERE!</nuxt-link>
-              </vs-alert>
-            </template>
-          </div>
-          <div class="bg-top pt-0">
-            <div class="row pt-0 pt-md-5">
-              <div class="d-none d-md-flex col-md-3 col-lg-6"></div>
-              <div class="col-12 col-md-9 col-lg-5">
-                <vs-alert relief>
-                  <template #icon>
-                    <i class="bx bxs-chat"></i>
-                  </template>
-                  <template #title>
-                    Welcome to your profile page, {{ $auth.user.name }}
-                  </template>
-                  <p>
-                    Here you can see all your past transactions as well as
-                    filling out your profile details (optional).
+                <template #title>
+                  Welcome to your profile page, {{ $auth.user.name }}
+                </template>
+                <p>
+                  Here you can see all your past transactions as well as filling
+                  out your profile details (optional).
 
-                    <b class="text-info"
-                      >Your profile details will only be used to improve our
-                      items catalog to adjust based on our customers</b
-                    >
-                  </p>
-                </vs-alert>
-              </div>
+                  <b class="text-info"
+                    >Your profile details will only be used to improve our items
+                    catalog to adjust based on our customers</b
+                  >
+                </p>
+              </vs-alert>
             </div>
           </div>
-        </template>
-        <template v-if="$auth.user">
-          <div v-if="$auth.user.detail" class="container">
-            <CardSkeleton
-              v-if="$auth.user.detail.type !== 'admin'"
-              class="pt-0 pt-lg-5"
-            >
-              <template v-slot:title>
-                <h4 class="font-weight-bold custom-color">Past Transactions</h4>
-                <p class="custom-color">
-                  This is your latest past transactions, click on each record to
-                  see more details about the transaction
-                </p>
-              </template>
-              <template v-slot:body> </template>
-            </CardSkeleton>
-          </div>
-        </template>
-      </div>
-    </client-only>
+        </div>
+      </template>
+      <template v-if="$auth.user">
+        <div v-if="$auth.user.detail" class="container">
+          <CardSkeleton
+            v-if="$auth.user.detail.type !== 'admin'"
+            class="pt-0 pt-lg-5"
+          >
+            <template v-slot:title>
+              <h4 class="font-weight-bold custom-color">Past Transactions</h4>
+              <p class="custom-color">
+                This is your latest past transactions, click on each record to
+                see more details about the transaction
+              </p>
+            </template>
+            <template v-slot:body> </template>
+          </CardSkeleton>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
