@@ -202,6 +202,7 @@
                         danger
                         gradient
                         style="min-width: 60px"
+                        @click="deleteBox(tr.id, tr.name)"
                       >
                         <i class="bx bx-trash"></i>
                         <template #animate> Delete </template>
@@ -267,6 +268,9 @@ export default {
       await this.GET_BOXES()
       this.items = this.BOXES.data
     },
+    clear() {
+      Object.assign(this.$data, this.$options.data())
+    },
     async createBox() {
       const formattedForm = {
         name: this.form.boxName,
@@ -280,8 +284,30 @@ export default {
         alert('error')
       }
     },
-    clear() {
-      Object.assign(this.$data, this.$options.data())
+    deleteBox(id, name) {
+      this.$swal({
+        title: 'Are you sure?',
+        text: 'Box cannot be restored after deletion',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#336699',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await this.$axios.$delete(`/boxes/${id}`)
+            this.$swal('Deleted!', `${name} has been deleted`, 'success')
+            this.getBoxes()
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Something went wrong!',
+            })
+          }
+        }
+      })
     },
   },
 }
@@ -306,7 +332,7 @@ export default {
 
 .box-content {
   width: 100vw;
-  height: calc(100vh - 10rem);
+  min-height: calc(100vh - 10rem);
 }
 </style>
 

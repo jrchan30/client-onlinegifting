@@ -47,6 +47,7 @@
                 {{ $auth.user.name }}
               </template>
             </vs-avatar>
+
             <vs-button
               color="#336699"
               aria-label="logout"
@@ -66,13 +67,13 @@
           <template #logo>
             <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
           </template>
-          <vs-sidebar-item id="home" to="/">
+          <vs-sidebar-item id="index" to="/">
             <template #icon>
               <i class="bx bx-home"></i>
             </template>
             Home
           </vs-sidebar-item>
-          <vs-sidebar-item id="product" to="/products">
+          <vs-sidebar-item id="products" to="/products">
             <template #icon>
               <i class="bx bx-grid-alt"></i>
             </template>
@@ -96,7 +97,7 @@
             </template>
             Categories
           </vs-sidebar-item>
-          <vs-sidebar-item v-if="$auth.user" id="likes" to="/liked-items">
+          <vs-sidebar-item v-if="$auth.user" id="liked-items" to="/liked-items">
             <template #icon>
               <i class="bx bx-happy-heart-eyes"></i>
             </template>
@@ -194,12 +195,15 @@
 
 <script>
 export default {
-  data: () => ({
-    active: 'home',
-    activeSidebar: false,
-    search: '',
-    cart_qty: 0,
-  }),
+  data({ route }) {
+    return {
+      active: this.$route.name,
+      activeSidebar: false,
+      search: '',
+      cart_qty: 0,
+      activeTooltip1: false,
+    }
+  },
   computed: {
     getCartItemCount() {
       if (this.$auth.user.cart) {
@@ -235,3 +239,62 @@ export default {
   },
 }
 </script>
+
+<style>
+.vs-tooltip {
+  margin-top: 20px;
+}
+
+.content-tooltip .body {
+  /* margin-top: 30px; */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.content-tooltip .body .vs-avatar-content {
+  margin-top: -30px;
+  border: 3px solid var(--vs-theme-layout);
+  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.1);
+}
+.content-tooltip .body .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 0.55rem;
+  padding: 10px;
+  font-weight: normal;
+}
+.content-tooltip .body .text span {
+  font-weight: bold;
+  font-size: 0.7rem;
+}
+
+.content-tooltip footer {
+  /* padding-top: 20px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.content-tooltip h4 {
+  padding: 20px;
+  margin: 0px;
+  text-align: left;
+}
+.content-tooltip p {
+  text-align: left;
+  padding: 0px;
+  margin: 0px;
+  line-height: 1rem;
+  padding-bottom: 5px;
+  padding-left: 8px;
+}
+
+.vs-navbar__center {
+  width: 30%;
+}
+
+.vs-input {
+  min-width: 100%;
+}
+</style>

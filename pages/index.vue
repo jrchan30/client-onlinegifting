@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home-margin">
     <HomeSlider />
     <div class="container">
       <LatestProductTest2 />
@@ -24,5 +24,9 @@ export default {
 <style scoped>
 .carousel-inner {
   box-shadow: none;
+}
+
+.home-margin {
+  margin-top: -3.5rem;
 }
 </style>
