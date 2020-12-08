@@ -6,6 +6,7 @@ export const state = () => ({
   lowPrice: {},
   product: {},
   allProducts: {},
+  likedProducts: {},
   filter: {
     search: '',
     orderBy: 'created_at',
@@ -78,8 +79,9 @@ export const mutations = {
         ].isLiked
         break
       case 'latest':
-        state.latest[payload.index].isLiked = !state.latest[payload.index]
-          .isLiked
+        state.latest.data[payload.index].isLiked = !state.latest.data[
+          payload.index
+        ].isLiked
         break
       default:
         break
@@ -129,7 +131,7 @@ export const actions = {
 
         break
       case 'latest':
-        res = state.latest[payload.idx]
+        res = state.latest.data[payload.idx]
 
         break
       default:

@@ -43,9 +43,11 @@
           </template>
           <template v-else>
             <vs-avatar pointer @click="goToProfile()">
-              <template #text>
-                {{ $auth.user.name }}
-              </template>
+              <img
+                class="text-muted"
+                :src="getProfilePic()"
+                alt="profile picture"
+              />
             </vs-avatar>
 
             <vs-button
@@ -173,11 +175,16 @@
           <template #footer>
             <vs-row v-if="$auth.user" justify="space-between">
               <vs-avatar>
-                <img class="text-muted" :src="getProfilePic()" alt="" />
+                <template #text>
+                  {{ $auth.user.name }}
+                </template>
               </vs-avatar>
 
+              <vs-button v-if="$auth.user.detail.type == 'admin'" to="/admin">
+                Admin Page
+              </vs-button>
+
               <vs-avatar
-                to="/cart"
                 badge-color="primary"
                 badge-position="top-right"
                 @click="goToCart()"

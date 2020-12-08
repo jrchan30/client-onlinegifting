@@ -74,7 +74,7 @@
                 <vs-button flat icon @click="goTo(tr.id)">
                   See Details
                 </vs-button>
-                <vs-button border danger @click="unlike(tr.id)">
+                <vs-button border danger @click="unlike(tr.id, 'product')">
                   Unlike
                 </vs-button>
               </div>
@@ -123,10 +123,14 @@ export default {
     goTo(id) {
       this.$router.push(`/products/${id}`)
     },
-    unlike(id) {
+    async unlike(id, type) {
       this.isLoading = true
       try {
-        this.$axios.$delete(`/likes/${id}`)
+        const likeForm = {
+          type,
+          id,
+        }
+        await this.$axios.$post('/likes', likeForm)
       } catch (e) {
         console.log(e)
       } finally {

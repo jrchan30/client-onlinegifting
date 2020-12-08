@@ -325,13 +325,13 @@ export default {
 .bg-container {
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   width: 100%;
-  height: 100%;
+  min-height: calc(100vh - 10rem);
 }
 
 .box-content {
-  width: 100vw;
+  min-width: 100vw;
   min-height: calc(100vh - 10rem);
 }
 </style>

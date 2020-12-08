@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row bg-card">
     <div
       v-for="(item, index) in items"
       :key="item.id"
@@ -12,7 +12,7 @@
         <template #img>
           <img
             :src="item.main_image"
-            alt="No image"
+            alt="item image"
             class="img-ratio"
             @click="goTo(item.id)"
           />
@@ -38,7 +38,7 @@
             icon
             aria-label="add to your box or cart"
             :disabled="$auth.user == null"
-            @click="add(item.id, index)"
+            @click="add(item.id, index, item.name)"
           >
             <i
               class="text-primary"
@@ -99,6 +99,30 @@ export default {
       GET_PRODUCT: 'products/GET_PRODUCT',
       GET_PRODUCT_INFO: 'products/GET_PRODUCT_INFO',
     }),
+    addBoxNotification(productName, boxName, qty) {
+      const boxNotif = this.$vs.notification({
+        duration: 10000,
+        progress: 'auto',
+        icon: `<i class='bx bx-box'></i>`,
+        color: '#336699',
+        title: 'Click here to see your boxes!',
+        text: `Nice... Product <strong>${productName}</strong> is successfuly added to <strong>${boxName}</strong> box with quantity of <strong>${qty}</strong>`,
+        onClick: () => {
+          this.$router.push('/boxes')
+          boxNotif.close()
+        },
+      })
+    },
+    likeNotification(title, color, icon) {
+      this.$vs.notification({
+        duration: 5000,
+        progress: 'auto',
+        icon,
+        color,
+        title,
+        text: `You can check liked items in your likes page`,
+      })
+    },
     clear() {
       Object.assign(this.$data, this.$options.data())
     },
@@ -112,29 +136,17 @@ export default {
       try {
         await this.$axios.$post('/likes', likeForm).then((res) => {
           if (res.status === 204) {
-            this.$swal({
-              customClass: {
-                container: 'mt-5 pt-3',
-              },
-              position: 'top',
-              icon: 'success',
-              toast: true,
-              title: 'Unliked',
-              showConfirmButton: false,
-              timer: 2000,
-            })
+            this.likeNotification(
+              'Unliked!',
+              '#336699',
+              `<i class='bx bxs-face' ></i>`
+            )
           } else {
-            this.$swal({
-              customClass: {
-                container: 'mt-5 pt-3',
-              },
-              position: 'top',
-              icon: 'success',
-              toast: true,
-              title: 'Liked',
-              showConfirmButton: false,
-              timer: 2000,
-            })
+            this.likeNotification(
+              'Liked!',
+              'success',
+              `<i class='bx bx-happy-heart-eyes'></i>`
+            )
           }
           this.$store.commit(`${type}s/SET_LIKE`, {
             index: idx,
@@ -152,7 +164,7 @@ export default {
         })
       }
     },
-    async add(id, idx) {
+    async add(id, idx, name) {
       if (this.itemType.includes('product')) {
         await this.GET_BOXES()
         const productInfo = await this.GET_PRODUCT_INFO({
@@ -211,7 +223,7 @@ export default {
           await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
             allProducts: JSON.stringify(allProducts),
           })
-          alert('success')
+          this.addBoxNotification(name, this.BOXES.data[index].name, qty)
         } catch (e) {
           alert(e)
         } finally {
@@ -230,5 +242,14 @@ export default {
 <style scoped>
 .swal2-container {
   margin-top: 25%;
+}
+
+.card-bg {
+  background-image: url('/image/card-bg.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 100vw;
+  height: 100vh;
 }
 </style>
