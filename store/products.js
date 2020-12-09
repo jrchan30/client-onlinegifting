@@ -30,6 +30,9 @@ export const getters = {
   ALL_PRODUCTS(state) {
     return state.allProducts
   },
+  LIKED_PRODUCTS(state) {
+    return state.likedProducts
+  },
 }
 
 export const mutations = {
@@ -65,6 +68,9 @@ export const mutations = {
   },
   SET_ALL_PRODUCTS(state, payload) {
     state.allProducts = payload
+  },
+  SET_LIKED_PRODUCTS(state, payload) {
+    state.likedProducts = payload
   },
   SET_LIKE(state, payload) {
     switch (payload.storeState) {
@@ -119,6 +125,10 @@ export const actions = {
   async GET_ALL_PRODUCTS({ commit }) {
     const data = await this.$axios.$get('all-products')
     commit('SET_ALL_PRODUCTS', data)
+  },
+  async GET_LIKED_PRODUCTS({ commit }) {
+    const data = await this.$axios.$get('likes')
+    commit('SET_LIKED_PRODUCTS', data)
   },
   GET_PRODUCT_INFO({ state }, payload) {
     let res = null

@@ -161,6 +161,7 @@ export default {
       description: 'Choose your gifts, we handle the rest',
       author: 'Jonathan Russell Chan',
       start_url: '/',
+      crossorigin: 'use-credentials',
     },
     // workbox: {
     //   swScope: 'http://onlinegifting.shop/sw.js',
@@ -185,9 +186,9 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
-    extend(config, ctx) {
-      config.resolve.symlinks = false
-    },
+    // extend(config, ctx) {
+    //   config.resolve.symlinks = false
+    // },
   },
 
   serverMiddleware: ['~/serverMiddleware/selectiveSSR.js'],
