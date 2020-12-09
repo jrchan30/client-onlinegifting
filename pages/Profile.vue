@@ -67,7 +67,7 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
-  middleware: ['auth-user'],
+  middleware: ['auth'],
   data() {
     return {
       form: {
