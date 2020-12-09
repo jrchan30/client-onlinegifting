@@ -1,89 +1,179 @@
 <template>
-  <div v-if="items" class="container bg-white rounded p-3">
-    <h4 class="font-weight-bold custom-color">Liked Products</h4>
-    <p class="custom-color">
-      This is our latest products, click on product's card to see more details
-      about the product
-    </p>
-    <vs-table v-if="items">
-      <template #header>
-        <vs-input
-          v-model="search"
-          aria-placeholder="search liked items"
-          aria-label="searchbar liked items"
-          border
-          color="#336699"
-          placeholder="Search"
-        />
-      </template>
-      <template #thead>
-        <vs-tr>
-          <vs-th sort @click="items = $vs.sortData($event, items, 'name')">
-            Name
-          </vs-th>
-          <vs-th sort @click="items = $vs.sortData($event, items, 'price')">
-            Price (IDR)
-          </vs-th>
-          <vs-th sort @click="items = $vs.sortData($event, items, 'stock')">
-            Stock
-          </vs-th>
-          <vs-th sort @click="items = $vs.sortData($event, items, 'weight')">
-            Weight
-          </vs-th>
-        </vs-tr>
-      </template>
+  <div>
+    <div v-if="items" class="container bg-white rounded p-3">
+      <h4 class="font-weight-bold custom-color">Liked Products</h4>
+      <p class="custom-color">
+        This is your latest liked products, click on each record to see more
+        details about the product
+      </p>
+      <vs-table v-if="items">
+        <template #header>
+          <vs-input
+            v-model="search"
+            aria-placeholder="search liked items"
+            aria-label="searchbar liked items"
+            border
+            color="#336699"
+            placeholder="Search"
+          />
+        </template>
+        <template #thead>
+          <vs-tr>
+            <vs-th sort @click="items = $vs.sortData($event, items, 'name')">
+              Name
+            </vs-th>
+            <vs-th sort @click="items = $vs.sortData($event, items, 'price')">
+              Price (IDR)
+            </vs-th>
+            <vs-th sort @click="items = $vs.sortData($event, items, 'stock')">
+              Stock
+            </vs-th>
+            <vs-th sort @click="items = $vs.sortData($event, items, 'weight')">
+              Weight
+            </vs-th>
+          </vs-tr>
+        </template>
 
-      <template #tbody>
-        <vs-tr
-          v-for="(tr, i) in $vs.getPage(
-            $vs.getSearch(items, search),
-            page,
-            max
-          )"
-          :key="i"
-        >
-          <vs-td>
-            {{ tr.name }}
-          </vs-td>
-          <vs-td> {{ tr.price }} </vs-td>
-          <vs-td>
-            {{ tr.stock }}
-          </vs-td>
-          <vs-td>
-            {{ tr.weight }}
-          </vs-td>
+        <template #tbody>
+          <vs-tr
+            v-for="(tr, i) in $vs.getPage(
+              $vs.getSearch(items, search),
+              page,
+              max
+            )"
+            :key="i"
+          >
+            <vs-td>
+              {{ tr.name }}
+            </vs-td>
+            <vs-td> {{ tr.price }} </vs-td>
+            <vs-td>
+              {{ tr.stock }}
+            </vs-td>
+            <vs-td>
+              {{ tr.weight }}
+            </vs-td>
 
-          <template #expand>
-            <div class="float-left">
-              <div class="d-flex">
-                <vs-avatar class="mb-auto" cursor>
-                  <img
-                    :src="tr.images[0].url"
-                    alt=""
-                    class="img-ratio"
-                    @click="expandImage(tr.images[0].url)"
-                  />
-                </vs-avatar>
-                <span class="ml-2 my-auto">
-                  {{ tr.name }}
-                </span>
+            <template #expand>
+              <div class="float-left">
+                <div class="d-flex">
+                  <vs-avatar class="mb-auto" cursor>
+                    <img
+                      :src="tr.images[0].url"
+                      alt=""
+                      class="img-ratio"
+                      @click="expandImage(tr.images[0].url)"
+                    />
+                  </vs-avatar>
+                  <span class="ml-2 my-auto">
+                    {{ tr.name }}
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="float-right">
-              <div class="d-flex">
-                <vs-button flat icon @click="goTo(tr.id)">
-                  See Details
-                </vs-button>
-                <vs-button border danger @click="unlike(tr.id, 'product')">
-                  Unlike
-                </vs-button>
+              <div class="float-right">
+                <div class="d-flex">
+                  <vs-button flat icon @click="goTo(tr.id)">
+                    See Details
+                  </vs-button>
+                  <vs-button border danger @click="unlike(tr.id, 'product')">
+                    Unlike
+                  </vs-button>
+                </div>
               </div>
-            </div>
+            </template>
+          </vs-tr>
+        </template>
+      </vs-table>
+
+      <div v-if="items" class="container bg-white rounded p-3 mt-5">
+        <h4 class="font-weight-bold custom-color">Liked Bundles</h4>
+        <p class="custom-color">
+          This is our latest products, click on product's card to see more
+          details about the product
+        </p>
+        <vs-table v-if="items">
+          <template #header>
+            <vs-input
+              v-model="search"
+              aria-placeholder="search liked items"
+              aria-label="searchbar liked items"
+              border
+              color="#336699"
+              placeholder="Search"
+            />
           </template>
-        </vs-tr>
-      </template>
-    </vs-table>
-    <!-- <div>{{ items }}</div> -->
+          <template #thead>
+            <vs-tr>
+              <vs-th sort @click="items = $vs.sortData($event, items, 'name')">
+                Name
+              </vs-th>
+              <vs-th sort @click="items = $vs.sortData($event, items, 'price')">
+                Price (IDR)
+              </vs-th>
+              <vs-th sort @click="items = $vs.sortData($event, items, 'stock')">
+                Stock
+              </vs-th>
+              <vs-th
+                sort
+                @click="items = $vs.sortData($event, items, 'weight')"
+              >
+                Weight
+              </vs-th>
+            </vs-tr>
+          </template>
+
+          <template #tbody>
+            <vs-tr
+              v-for="(tr, i) in $vs.getPage(
+                $vs.getSearch(items, search),
+                page,
+                max
+              )"
+              :key="i"
+            >
+              <vs-td>
+                {{ tr.name }}
+              </vs-td>
+              <vs-td> {{ tr.price }} </vs-td>
+              <vs-td>
+                {{ tr.stock }}
+              </vs-td>
+              <vs-td>
+                {{ tr.weight }}
+              </vs-td>
+
+              <template #expand>
+                <div class="float-left">
+                  <div class="d-flex">
+                    <vs-avatar class="mb-auto" cursor>
+                      <img
+                        :src="tr.images[0].url"
+                        alt=""
+                        class="img-ratio"
+                        @click="expandImage(tr.images[0].url)"
+                      />
+                    </vs-avatar>
+                    <span class="ml-2 my-auto">
+                      {{ tr.name }}
+                    </span>
+                  </div>
+                </div>
+                <div class="float-right">
+                  <div class="d-flex">
+                    <vs-button flat icon @click="goTo(tr.id)">
+                      See Details
+                    </vs-button>
+                    <vs-button border danger @click="unlike(tr.id, 'product')">
+                      Unlike
+                    </vs-button>
+                  </div>
+                </div>
+              </template>
+            </vs-tr>
+          </template>
+        </vs-table>
+      </div>
+    </div>
   </div>
 </template>
 
