@@ -161,7 +161,6 @@ export default {
       description: 'Choose your gifts, we handle the rest',
       author: 'Jonathan Russell Chan',
       start_url: '/',
-      crossorigin: 'use-credentials',
     },
     // workbox: {
     //   swScope: 'http://onlinegifting.shop/sw.js',
