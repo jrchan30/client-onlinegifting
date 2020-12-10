@@ -1,12 +1,18 @@
 <template>
   <div class="pt-5">
-    <h4 class="font-weight-bold custom-color">
+    <h4
+      class="font-weight-bold custom-color"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       On-budget Products <i class="far fa-smile-wink"></i>
     </h4>
-    <p class="custom-color">
+    <p class="custom-color" data-aos="fade-up" data-aos-duration="1500">
       Here is a list of products to accomodate anyones budget and needs
     </p>
     <CardMain
+      data-aos="fade-up"
+      data-aos-duration="1700"
       :items="LOWPRICE"
       :item-type="'products'"
       :store-state="'lowprice'"

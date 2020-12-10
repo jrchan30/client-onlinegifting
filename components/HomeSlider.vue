@@ -1,6 +1,8 @@
 <template>
   <div
     id="carouselExampleIndicators"
+    data-aos="zoom-out"
+    data-aos-duration="1000"
     class="carousel slide"
     data-ride="carousel"
   >

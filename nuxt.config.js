@@ -79,7 +79,7 @@ export default {
   /*
    ** Global CSS
    */
-  // css: ['@/assets/style/bootstrap.min.css'],
+  // css: ['aos/dist/aos.css'],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
@@ -93,6 +93,7 @@ export default {
     { src: '~plugins/vue-picture-input.js', mode: 'client' },
     { src: '~plugins/tiptap.js', mode: 'client' },
     { src: '~plugins/vuesax.js' },
+    { src: '@/plugins/aos.js', mode: 'client' },
   ],
   /*
    ** Auto import components
@@ -162,23 +163,6 @@ export default {
       author: 'Jonathan Russell Chan',
       start_url: '/',
     },
-    // workbox: {
-    //   swScope: 'http://onlinegifting.shop/sw.js',
-    //     swUrl: 'http://192.168.15.1:3000',
-    //     swScope: '/static/sw.js',
-    //   autoRegister: true,
-    //   urlPattern: `http://onlinegifting.shop/.*`,
-    //   runtimeCaching: [
-    //     {
-    //       handler: 'CacheFirst',
-    //       strategyOptions: {
-    //         cacheableResponse: { statuses: [0, 200] },
-    //       },
-    //     },
-    //   ],
-    // pagesURLPattern: 'http://onlinegifting.shop/.*',
-    // swScope: 'http://onlinegifting.shop/',
-    // },
   },
   /*
    ** Build configuration

@@ -1,6 +1,6 @@
 <template>
   <client-only>
-    <div class="pb-5">
+    <div class="pb-5" data-aos="fade-down">
       <vs-navbar
         v-model="active"
         padding-scroll
