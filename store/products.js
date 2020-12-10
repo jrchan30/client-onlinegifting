@@ -132,7 +132,6 @@ export const actions = {
         break
       case 'latest':
         res = state.latest.data[payload.idx]
-
         break
       default:
         break

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="minheight">
     <div
       class="container bg-white rounded p-3"
       data-aos="fade-right"
@@ -10,11 +10,7 @@
         This is your latest liked products, click on each record to see more
         details about the product
       </p>
-      <div
-        v-if="!$fetchState.pending"
-        data-aos="zoom-in"
-        data-aos-duration="1500"
-      >
+      <div v-if="!$fetchState.pending" data-aos="fade" data-aos-duration="1500">
         <vs-table>
           <template #header>
             <vs-input
@@ -130,11 +126,7 @@
         This is your latest bundles, click on bundle's record to see more
         details about the bundles
       </p>
-      <div
-        v-if="!$fetchState.pending"
-        data-aos="zoom-in"
-        data-aos-duration="1500"
-      >
+      <div v-if="!$fetchState.pending" data-aos="fade" data-aos-duration="1500">
         <vs-table v-if="!$fetchState.pending">
           <template #header>
             <vs-input

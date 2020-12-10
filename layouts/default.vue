@@ -2,7 +2,7 @@
   <div>
     <Navbar />
     <div class="pt-5">
-      <div class="mt-5">
+      <div class="mt-5 minheight">
         <Nuxt />
       </div>
     </div>
@@ -108,5 +108,9 @@ body {
   object-fit: cover;
   height: 150px;
   width: 300px;
+}
+
+.minheight {
+  min-height: calc(100vh - 12.5rem);
 }
 </style>

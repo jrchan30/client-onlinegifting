@@ -12,6 +12,8 @@
           <template v-if="items.length < 1">
             <div
               class="d-flex row justify-content-center align-items-center h-100"
+              data-aos="fade-up"
+              data-aos-duration="1000"
             >
               <div
                 class="d-none d-sm-none d-md-flex col-6 col-md-6 col-lg-7"
@@ -67,7 +69,7 @@
             </div>
           </template>
           <template v-else>
-            <vs-alert v-model="isAlert" closable primary class="">
+            <vs-alert v-model="isAlert" closable primary data-aos="fade-right">
               <template #icon>
                 <i class="bx bxs-cart-add"></i>
               </template>
