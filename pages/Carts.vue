@@ -1,88 +1,123 @@
 <template>
-  <div v-if="!$fetchState.pending">
-    <div
-      class="bg-container bg-none bg-md-block"
-      :class="{
-        'bg-cart-empty':
-          CART.data[0].boxes.length < 1 && CART.data[0].bundles.length < 1,
-      }"
-    >
+  <div>
+    <div v-if="!$fetchState.pending">
       <div
-        v-if="CART.data[0].boxes.length < 1 && CART.data[0].bundles.length < 1"
+        class="bg-container bg-none bg-md-block"
+        :class="{
+          'bg-cart-empty':
+            CART.data[0].boxes.length < 1 && CART.data[0].bundles.length < 1,
+        }"
       >
-        <div class="row">
-          <div
-            class="mt-md-5 col-7 offset-1 col-md-6 col-lg-5 col-xl-4 offset-md-1 offset-lg-2 offset-xl-3"
-          >
-            <vs-alert
-              color="rgba(51, 102, 153, 0.2)"
-              class="px-0 px-xl-4"
-              shadow
-              data-aos="fade-right"
-              data-aos-duration="1000"
+        <div
+          v-if="
+            CART.data[0].boxes.length < 1 && CART.data[0].bundles.length < 1
+          "
+        >
+          <div class="row">
+            <div
+              class="mt-md-5 col-7 offset-1 col-md-6 col-lg-5 col-xl-4 offset-md-1 offset-lg-2 offset-xl-3"
             >
-              <template #title> Empty Cart </template>
-              <p class="d-none d-md-block">
-                You have an empty cart, you can add your
-                <b to="/boxes">custom boxes</b> or
-                <b to="/bundles">premade bundles</b> to your cart.
-              </p>
-              <p>Let's get started by clicking one of the button below</p>
-              <div class="d-flex">
-                <vs-button warn gradient to="/boxes"> Custom Boxes </vs-button>
-                <vs-button danger gradient to="/bundles">
-                  Premade Bundles
-                </vs-button>
-              </div>
-            </vs-alert>
+              <vs-alert
+                color="rgba(51, 102, 153, 0.2)"
+                class="px-0 px-xl-4"
+                shadow
+                data-aos="fade-right"
+                data-aos-duration="1000"
+              >
+                <template #title> Empty Cart </template>
+                <p class="d-none d-md-block">
+                  You have an empty cart, you can add your
+                  <b to="/boxes">custom boxes</b> or
+                  <b to="/bundles">premade bundles</b> to your cart.
+                </p>
+                <p>Let's get started by clicking one of the button below</p>
+                <div class="d-flex">
+                  <vs-button warn gradient to="/boxes">
+                    Custom Boxes
+                  </vs-button>
+                  <vs-button danger gradient to="/bundles">
+                    Premade Bundles
+                  </vs-button>
+                </div>
+              </vs-alert>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-else>
-        <div class="container">
-          <vs-table v-model="selected">
-            <template #thead>
-              <vs-tr>
-                <vs-th>
-                  <vs-checkbox
-                    v-model="allCheck"
-                    :indeterminate="selected.length == users.length"
-                    @change="selected = $vs.checkAll(selected, users)"
-                  />
-                </vs-th>
-                <vs-th> Name </vs-th>
-                <vs-th> Email </vs-th>
-                <vs-th> Id </vs-th>
-              </vs-tr>
-            </template>
-            <template #tbody>
-              <vs-tr
-                v-for="(tr, i) in users"
-                :key="i"
-                :data="tr"
-                :is-selected="!!selected.includes(tr)"
-              >
-                <vs-td checkbox>
-                  <vs-checkbox v-model="selected" :val="tr" />
-                </vs-td>
-                <vs-td>
-                  {{ tr.name }}
-                </vs-td>
-                <vs-td>
-                  {{ tr.email }}
-                </vs-td>
-                <vs-td>
-                  {{ tr.id }}
-                </vs-td>
-              </vs-tr>
-            </template>
-          </vs-table>
-          <span class="data">
-            <pre>
+        <div v-else>
+          <div class="container">
+            <div class="bg-white rounded p-3">
+              <h4 class="font-weight-bold custom-color">
+                Your Cart <i class="fas fa-boxes"></i>
+              </h4>
+              <p class="custom-color d-flex">
+                This is your list of box, you can add products to your box
+                whilst browsing our products pages
+              </p>
+              <client-only>
+                <vs-table v-model="selected">
+                  <template #thead>
+                    <vs-tr>
+                      <vs-th>
+                        <vs-checkbox
+                          v-model="allCheck"
+                          :indeterminate="selected.length == mergedCart.length"
+                          @change="
+                            selected = $vs.checkAll(selected, mergedCart)
+                          "
+                        />
+                      </vs-th>
+                      <vs-th> Id/Type </vs-th>
+                      <vs-th> Name </vs-th>
+                      <vs-th> Weight (gr) </vs-th>
+                      <vs-th> Quantity </vs-th>
+                      <vs-th> Price (IDR) </vs-th>
+                    </vs-tr>
+                  </template>
+                  <template #tbody>
+                    <vs-tr
+                      v-for="(tr, i) in mergedCart"
+                      :key="i"
+                      :data="tr"
+                      :is-selected="!!selected.includes(tr)"
+                    >
+                      <vs-td checkbox>
+                        <vs-checkbox v-model="selected" :val="tr" />
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.id }}
+                        <span
+                          class="badge badge-pill"
+                          :class="{
+                            'badge-primary': tr.type == 'box',
+                            'badge-warning': tr.type == 'bundle',
+                          }"
+                          >{{ tr.type }}</span
+                        >
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.name }}
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.type }}
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.id }}
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.price }}
+                      </vs-td>
+                    </vs-tr>
+                  </template>
+                </vs-table>
+              </client-only>
+            </div>
+            <span class="data">
+              <pre>
   {{ selected.length > 0 ? selected : 'Select an item in the table' }}
         </pre
-            >
-          </span>
+              >
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -100,6 +135,7 @@ export default {
   },
   data() {
     return {
+      cartBoxBundle: {},
       allCheck: false,
       selected: [],
       users: [
@@ -110,69 +146,6 @@ export default {
           email: 'Sincere@april.biz',
           website: 'hildegard.org',
         },
-        {
-          id: 2,
-          name: 'Ervin Howell',
-          username: 'Antonette',
-          email: 'Shanna@melissa.tv',
-          website: 'anastasia.net',
-        },
-        {
-          id: 3,
-          name: 'Clementine Bauch',
-          username: 'Samantha',
-          email: 'Nathan@yesenia.net',
-          website: 'ramiro.info',
-        },
-        {
-          id: 4,
-          name: 'Patricia Lebsack',
-          username: 'Karianne',
-          email: 'Julianne.OConner@kory.org',
-          website: 'kale.biz',
-        },
-        {
-          id: 5,
-          name: 'Chelsey Dietrich',
-          username: 'Kamren',
-          email: 'Lucio_Hettinger@annie.ca',
-          website: 'demarco.info',
-        },
-        {
-          id: 6,
-          name: 'Mrs. Dennis Schulist',
-          username: 'Leopoldo_Corkery',
-          email: 'Karley_Dach@jasper.info',
-          website: 'ola.org',
-        },
-        {
-          id: 7,
-          name: 'Kurtis Weissnat',
-          username: 'Elwyn.Skiles',
-          email: 'Telly.Hoeger@billy.biz',
-          website: 'elvis.io',
-        },
-        {
-          id: 8,
-          name: 'Nicholas Runolfsdottir V',
-          username: 'Maxime_Nienow',
-          email: 'Sherwood@rosamond.me',
-          website: 'jacynthe.com',
-        },
-        {
-          id: 9,
-          name: 'Glenna Reichert',
-          username: 'Delphine',
-          email: 'Chaim_McDermott@dana.io',
-          website: 'conrad.com',
-        },
-        {
-          id: 10,
-          name: 'Clementina DuBuque',
-          username: 'Moriah.Stanton',
-          email: 'Rey.Padberg@karina.biz',
-          website: 'ambrose.net',
-        },
       ],
     }
   },
@@ -180,6 +153,12 @@ export default {
     ...mapGetters({
       CART: 'users/CART',
     }),
+    mergedCart() {
+      const arrBoxes = this.CART.data[0].boxes
+      const arrBundles = this.CART.data[0].bundles
+      Array.prototype.push.apply(arrBoxes, arrBundles)
+      return arrBoxes
+    },
   },
   methods: {
     ...mapActions({

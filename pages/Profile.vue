@@ -4,7 +4,11 @@
       <template v-if="$auth.user">
         <div class="container">
           <div v-if="$auth.user.detail">
-            <template v-if="$auth.user.detail.type == 'admin'">
+            <template
+              v-if="$auth.user.detail.type == 'admin'"
+              data-aos="fade-up"
+              data-aos-duration="1000"
+            >
               <vs-alert v-model="admin.active" closable danger class="mb-5">
                 <template #icon>
                   <strong>!</strong>
@@ -78,14 +82,14 @@ export default {
       },
     }
   },
-  mounted() {
-    this.GET_TRANSACTIONS()
-  },
   computed: {
     ...mapGetters({
       isAuthenticated: 'isAuthenticated',
       loggedInUser: 'loggedInUser',
     }),
+  },
+  mounted() {
+    this.GET_TRANSACTIONS()
   },
   methods: {
     ...mapActions({
