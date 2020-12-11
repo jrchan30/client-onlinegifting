@@ -65,7 +65,12 @@
         </template>
       </vs-navbar>
       <div class="position-sticky" style="z-index: 9999">
-        <vs-sidebar v-model="active" color="#336699" :open.sync="activeSidebar">
+        <vs-sidebar
+          v-model="active"
+          color="#336699"
+          :open.sync="activeSidebar"
+          class="h-100"
+        >
           <template #logo>
             <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
           </template>
@@ -201,6 +206,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   data({ route }) {
     return {
@@ -212,6 +219,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      // CARTS: 'users/CARTS',
+    }),
     getCartItemCount() {
       if (this.$auth.user.cart) {
         return (
@@ -222,7 +232,14 @@ export default {
       return '0'
     },
   },
+  async mounted() {
+    // const test = await this.GET_CART()
+    // console.log(test)
+  },
   methods: {
+    ...mapActions({
+      // GET_CART: 'users/GET_CART',
+    }),
     goToCart() {
       this.$router.push('/carts')
     },

@@ -30,17 +30,14 @@
             <i v-if="loading" class="fas fa-spinner fa-spin"></i>
             <slot name="btnSubmit"></slot>
           </button> -->
-          <div class="grid">
-            <vs-row align="center" justify="space-around">
-              <vs-col w="3" justify="center">
-                <vs-button :loading="loading" color="rgb(51, 102, 153)" relief>
-                  <slot name="btnSubmit"></slot>
-                  <template #animate>
-                    <i class="bx bx-send"></i>
-                  </template>
-                </vs-button>
-              </vs-col>
-            </vs-row>
+
+          <div class="d-flex justify-content-center">
+            <vs-button :loading="loading" color="rgb(51, 102, 153)" relief>
+              <slot name="btnSubmit"></slot>
+              <template #animate>
+                <i class="bx bx-send"></i>
+              </template>
+            </vs-button>
           </div>
         </form>
       </div>

@@ -48,7 +48,7 @@ export const mutations = {
     state.likedBundles = payload.liked_bundles
   },
   SET_CART(state, payload) {
-    state.cart = payload.cart
+    state.cart = payload
   },
 }
 

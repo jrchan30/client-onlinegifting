@@ -6,7 +6,11 @@
       :type="'bundles'"
     /> -->
     <div class="container">
-      <div class="d-flex justify-content-between">
+      <div
+        class="d-flex justify-content-between"
+        data-aos="fade-up"
+        data-aos-duration="1000"
+      >
         <ul class="nav nav-pills">
           <li class="nav-item">
             <a class="nav-link active" href="#">Most Recent</a>
@@ -43,7 +47,13 @@
         </div>
       </div>
       <div v-else class="pt-5">
-        <CardMain :items="BUNDLES.data" :item-type="'bundles'" />
+        <div data-aos="fade" data-aos-duration="1000">
+          <CardMain
+            :items="BUNDLES.data"
+            :item-type="'bundles'"
+            :store-state="'bundles'"
+          />
+        </div>
       </div>
       <div class="d-flex justify-content-center">
         <Pagination :action="'products'" />
