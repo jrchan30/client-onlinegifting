@@ -74,6 +74,10 @@ export default {
         crossorigin: 'anonymous',
         body: true,
       },
+      {
+        src: '/assets/vendor/js-cookie/js.cookie.js',
+        body: true,
+      },
     ],
   },
   /*

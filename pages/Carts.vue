@@ -50,8 +50,8 @@
                 Your Cart <i class="fas fa-boxes"></i>
               </h4>
               <p class="custom-color d-flex">
-                This is your list of box, you can add products to your box
-                whilst browsing our products pages
+                This is your list of cart items, you can add boxes and bundles
+                to your cart
               </p>
               <client-only>
                 <vs-table v-model="selected">
@@ -66,11 +66,11 @@
                           "
                         />
                       </vs-th>
-                      <vs-th> Id/Type </vs-th>
+                      <vs-th> ID/Type </vs-th>
                       <vs-th> Name </vs-th>
                       <vs-th> Weight (gr) </vs-th>
-                      <vs-th> Quantity </vs-th>
                       <vs-th> Price (IDR) </vs-th>
+                      <vs-th> Remove </vs-th>
                     </vs-tr>
                   </template>
                   <template #tbody>
@@ -101,22 +101,30 @@
                         {{ tr.type }}
                       </vs-td>
                       <vs-td>
-                        {{ tr.id }}
+                        {{ tr.price }}
                       </vs-td>
                       <vs-td>
-                        {{ tr.price }}
+                        <vs-button
+                          danger
+                          gradient
+                          :disabled="loading"
+                          @click="remove(tr.id, tr.type)"
+                        >
+                          Remove
+                        </vs-button>
                       </vs-td>
                     </vs-tr>
                   </template>
                 </vs-table>
               </client-only>
             </div>
-            <span class="data">
+            <!-- <span class="data">
               <pre>
   {{ selected.length > 0 ? selected : 'Select an item in the table' }}
         </pre
               >
-            </span>
+            </span> -->
+            <button class="btn btn-primary" @click="midtransSnap">Pay</button>
           </div>
         </div>
       </div>
@@ -138,15 +146,8 @@ export default {
       cartBoxBundle: {},
       allCheck: false,
       selected: [],
-      users: [
-        {
-          id: 1,
-          name: 'Leanne Graham',
-          username: 'Bret',
-          email: 'Sincere@april.biz',
-          website: 'hildegard.org',
-        },
-      ],
+      loading: false,
+      courier: {},
     }
   },
   computed: {
@@ -164,6 +165,22 @@ export default {
     ...mapActions({
       GET_CART: 'users/GET_CART',
     }),
+    midtransSnap() {
+      this.$axios.$post('/checkout').then((response) => {
+        window.snap.pay(response)
+      })
+    },
+  },
+  head() {
+    return {
+      script: [
+        {
+          type: 'text/javascript',
+          src: 'https://app.sandbox.midtrans.com/snap/snap.js',
+          'data-client-key': process.env.MIDTRANS_CLIENT_KEY || null,
+        },
+      ],
+    }
   },
 }
 </script>

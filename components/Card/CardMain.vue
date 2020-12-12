@@ -76,9 +76,6 @@ export default {
       default: '',
     },
   },
-  // async fetch() {
-  //   await this.GET_BOXES()
-  // },
   data() {
     return {
       inputs: {
@@ -91,12 +88,14 @@ export default {
     ...mapGetters({
       BOXES: 'boxes/BOXES',
       PRODUCT: 'products/PRODUCT',
+      // BUNDLES: 'bundles/BUNDLES',
     }),
   },
   methods: {
     ...mapActions({
       GET_BOXES: 'boxes/GET_BOXES',
       GET_PRODUCT: 'products/GET_PRODUCT',
+      // GET_BUNDLES: 'bundles/GET_BUNDLES',
       GET_PRODUCT_INFO: 'products/GET_PRODUCT_INFO',
     }),
     addBoxNotification(productName, boxName, qty) {
@@ -109,6 +108,20 @@ export default {
         text: `Nice... Product <strong>${productName}</strong> is successfuly added to <strong>${boxName}</strong> box with quantity of <strong>${qty}</strong>`,
         onClick: () => {
           this.$router.push('/boxes')
+          boxNotif.close()
+        },
+      })
+    },
+    addCartNotification(name) {
+      const boxNotif = this.$vs.notification({
+        duration: 10000,
+        progress: 'auto',
+        icon: `<i class='bx bx-cart'></i>`,
+        color: '#336699',
+        title: 'Click here to see your cart!',
+        text: `Nice... <strong>${name}</strong> is successfuly added to your cart`,
+        onClick: () => {
+          this.$router.push('/carts')
           boxNotif.close()
         },
       })
@@ -230,6 +243,18 @@ export default {
           this.clear()
         }
       } else {
+        try {
+          console.log('id: ' + id + ', idx: ' + idx + ', name: ' + name)
+          await this.$axios.post(`/carts`, {
+            type: 'bundle',
+            ids: [id],
+          })
+          this.addCartNotification(name)
+        } catch (e) {
+          alert(e)
+        } finally {
+          this.clear()
+        }
       }
     },
     goTo(id) {
