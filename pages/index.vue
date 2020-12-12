@@ -2,7 +2,11 @@
   <div class="home-margin">
     <HomeSlider />
     <div class="container-fluid">
-      <div class="row mt-5 px-5 justify-content-center">
+      <div
+        class="row mt-5 px-5 justify-content-center"
+        data-aos="fade-left"
+        data-aos-duration="1000"
+      >
         <div class="col-4 my-auto text-center">
           <h2 class="text-primary font-weight-bold">Premade Bundles</h2>
           <p>
@@ -27,7 +31,7 @@
           alt="multiple device image"
         />
       </div>
-      <div class="row mt-5" data-aos="fade-right">
+      <div class="row mt-5" data-aos="fade-right" data-aos-duration="1000">
         <img
           class="col-7"
           src="/image/devices.svg"

@@ -53,6 +53,10 @@
                 This is your list of cart items, you can add boxes and bundles
                 to your cart
               </p>
+              <vs-alert shadow class="mb-4">
+                Select box/bundles using the checkboxes to delete from cart or
+                proceed to payment
+              </vs-alert>
               <client-only>
                 <vs-table v-model="selected">
                   <template #thead>
@@ -70,7 +74,6 @@
                       <vs-th> Name </vs-th>
                       <vs-th> Weight (gr) </vs-th>
                       <vs-th> Price (IDR) </vs-th>
-                      <vs-th> Remove </vs-th>
                     </vs-tr>
                   </template>
                   <template #tbody>
@@ -103,28 +106,50 @@
                       <vs-td>
                         {{ tr.price }}
                       </vs-td>
-                      <vs-td>
-                        <vs-button
-                          danger
-                          gradient
-                          :disabled="loading"
-                          @click="remove(tr.id, tr.type)"
-                        >
-                          Remove
-                        </vs-button>
-                      </vs-td>
                     </vs-tr>
                   </template>
                 </vs-table>
               </client-only>
+              <div class="d-flex justify-content-between">
+                <vs-button
+                  v-if="selected.length > 0"
+                  data-aos="fade"
+                  gradient
+                  danger
+                  width="6000"
+                  class="my-4 px-2"
+                >
+                  <i class="bx bxs-trash mr-2"></i> Remove
+                </vs-button>
+
+                <vs-button
+                  v-if="selected.length > 0"
+                  data-aos="fade"
+                  gradient
+                  color="#336699"
+                  class="my-4"
+                  @click="midtransSnap"
+                >
+                  <i class="far fa-credit-card mr-2"></i> Proceed to Checkout
+                </vs-button>
+              </div>
             </div>
-            <!-- <span class="data">
+
+            <!-- <button
+              v-if="selected.length > 0"
+              class="btn btn-primary"
+              data-aos="fade"
+              @click="midtransSnap"
+            >
+              Pay
+            </button> -->
+
+            <span class="data">
               <pre>
-  {{ selected.length > 0 ? selected : 'Select an item in the table' }}
+  {{ selected.length > 0 ? selected : '' }}
         </pre
               >
-            </span> -->
-            <button class="btn btn-primary" @click="midtransSnap">Pay</button>
+            </span>
           </div>
         </div>
       </div>
@@ -166,9 +191,24 @@ export default {
       GET_CART: 'users/GET_CART',
     }),
     midtransSnap() {
-      this.$axios.$post('/checkout').then((response) => {
-        window.snap.pay(response)
+      const arrBundles = []
+      const arrBoxes = []
+      this.selected.map((x) => {
+        if (x.type.includes('bundle')) {
+          arrBundles.push(x.id)
+        } else {
+          arrBoxes.push(x.id)
+        }
       })
+      const form = {
+        arrBundles,
+        arrBoxes,
+      }
+      try {
+        this.$axios.$post('/checkout', form).then((response) => {
+          window.snap.pay(response)
+        })
+      } catch (e) {}
     },
   },
   head() {

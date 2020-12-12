@@ -244,7 +244,6 @@ export default {
         }
       } else {
         try {
-          console.log('id: ' + id + ', idx: ' + idx + ', name: ' + name)
           await this.$axios.post(`/carts`, {
             type: 'bundle',
             ids: [id],

@@ -4,12 +4,12 @@
       <div
         class="bg-container"
         :class="{
-          'bg-img-empty': items.length < 1,
-          'bg-img-main': items.length > 0,
+          'bg-img-empty': BOXES.data.length < 1,
+          'bg-img-main': BOXES.data.length > 0,
         }"
       >
         <div class="container h-100">
-          <template v-if="items.length < 1">
+          <template v-if="BOXES.data.length < 1">
             <div
               class="d-flex row justify-content-center align-items-center h-100"
               data-aos="fade-up"
@@ -69,23 +69,44 @@
             </div>
           </template>
           <template v-else>
-            <vs-alert v-model="isAlert" closable primary data-aos="fade-right">
-              <template #icon>
-                <i class="bx bxs-cart-add"></i>
-              </template>
-              <template #title> Adding to Cart </template>
-              You can select multiple boxes from the checkboxes to add them to
-              your cart
-            </vs-alert>
-            <div class="bg-white rounded p-3">
-              <h4 class="font-weight-bold custom-color">
+            <div
+              class="bg-white rounded p-3"
+              data-aos="fade"
+              data-aos-duration="1000"
+            >
+              <h4
+                class="font-weight-bold custom-color"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+              >
                 Your Boxes <i class="fas fa-boxes"></i>
               </h4>
-              <p class="custom-color d-flex">
+              <p
+                class="custom-color d-flex"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+              >
                 This is your list of box, you can add products to your box
                 whilst browsing our products pages
               </p>
+              <vs-alert
+                v-model="isAlert"
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                closable
+                primary
+                class="mb-4"
+              >
+                <template #icon>
+                  <i class="bx bxs-cart-add"></i>
+                </template>
+                <template #title> Adding to Cart </template>
+                You can select multiple boxes from the checkboxes to add them to
+                your cart
+              </vs-alert>
               <vs-button
+                data-aos="fade-up"
+                data-aos-duration="500"
                 class="mb-4"
                 gradient
                 block
@@ -132,99 +153,123 @@
                   </div>
                 </template>
               </vs-dialog>
-              <vs-table>
-                <template #header>
-                  <vs-input
-                    v-model="search"
-                    aria-placeholder="search box"
-                    aria-label="searchbar box"
-                    border
-                    color="#336699"
-                    placeholder="Search"
-                  />
-                </template>
-                <template #thead>
-                  <vs-tr>
-                    <vs-th>
-                      <vs-checkbox
-                        v-model="allCheck"
-                        :indeterminate="selected.length == items.length"
-                        @change="selected = $vs.checkAll(selected, items)"
-                      />
-                    </vs-th>
-                    <vs-th
-                      sort
-                      @click="items = $vs.sortData($event, items, 'name')"
-                    >
-                      Name
-                    </vs-th>
-                    <vs-th
-                      sort
-                      @click="items = $vs.sortData($event, items, 'price')"
-                    >
-                      Price
-                    </vs-th>
-                    <vs-th
-                      sort
-                      @click="
-                        items = $vs.sortData($event, items, 'products_count')
-                      "
-                    >
-                      Products Count
-                    </vs-th>
-                    <vs-th> Edit/Delete </vs-th>
-                  </vs-tr>
-                </template>
-                <template #tbody>
-                  <vs-tr
-                    v-for="(tr, i) in $vs.getSearch(items, search)"
-                    :key="i"
-                    :data="tr"
-                    :is-selected="!!selected.includes(tr)"
-                  >
-                    <vs-td checkbox>
-                      <vs-checkbox v-model="selected" :val="tr" />
-                    </vs-td>
-                    <vs-td>
-                      {{ tr.name }}
-                    </vs-td>
-                    <vs-td>
-                      {{ tr.price }}
-                    </vs-td>
-                    <vs-td>
-                      {{ tr.products.length }}
-                    </vs-td>
-                    <vs-td class="d-flex">
-                      <vs-button aria-label="edit box" primary gradient>
-                        <i class="bx bxs-edit"></i>
-                        <template #animate> Edit </template>
-                      </vs-button>
-                      <vs-button
-                        aria-label="delete box"
-                        danger
-                        gradient
-                        style="min-width: 60px"
-                        @click="deleteBox(tr.id, tr.name)"
+              <client-only>
+                <vs-table data-aos="fade" data-aos-duration="1000">
+                  <template #header>
+                    <vs-input
+                      v-model="search"
+                      aria-placeholder="search box"
+                      aria-label="searchbar box"
+                      border
+                      color="#336699"
+                      placeholder="Search"
+                    />
+                  </template>
+                  <template #thead>
+                    <vs-tr>
+                      <vs-th>
+                        <vs-checkbox
+                          v-model="allCheck"
+                          :indeterminate="selected.length == BOXES.data.length"
+                          @change="
+                            selected = $vs.checkAll(selected, BOXES.data)
+                          "
+                        />
+                      </vs-th>
+                      <vs-th
+                        sort
+                        @click="
+                          BOXES.data = $vs.sortData($event, BOXES.data, 'name')
+                        "
                       >
-                        <i class="bx bx-trash"></i>
-                        <template #animate> Delete </template>
-                      </vs-button>
-                    </vs-td>
-                  </vs-tr>
-                </template>
-              </vs-table>
-              <span class="data">
-                <pre>
-  {{
-                    selected.length > 0
-                      ? selected
-                      : 'Select an item in the table to add to cart'
-                  }}
-        </pre
-                >
-              </span>
+                        Name
+                      </vs-th>
+                      <vs-th
+                        sort
+                        @click="
+                          BOXES.data = $vs.sortData($event, BOXES.data, 'price')
+                        "
+                      >
+                        Price
+                      </vs-th>
+                      <vs-th
+                        sort
+                        @click="
+                          BOXES.data = $vs.sortData(
+                            $event,
+                            BOXES.data,
+                            'products_count'
+                          )
+                        "
+                      >
+                        Products Count
+                      </vs-th>
+                      <vs-th> Edit/Delete </vs-th>
+                    </vs-tr>
+                  </template>
+                  <template #tbody>
+                    <vs-tr
+                      v-for="(tr, i) in $vs.getSearch(BOXES.data, search)"
+                      :key="i"
+                      :data="tr"
+                      :is-selected="!!selected.includes(tr)"
+                    >
+                      <vs-td checkbox>
+                        <vs-checkbox v-model="selected" :val="tr" />
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.name }}
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.price }}
+                      </vs-td>
+                      <vs-td>
+                        {{ tr.products.length }}
+                      </vs-td>
+                      <vs-td class="d-flex">
+                        <vs-button aria-label="edit box" primary gradient>
+                          <i class="bx bxs-edit"></i>
+                          <template #animate> Edit </template>
+                        </vs-button>
+                        <vs-button
+                          aria-label="delete box"
+                          danger
+                          gradient
+                          style="min-width: 60px"
+                          @click="deleteBox(tr.id, tr.name)"
+                        >
+                          <i class="bx bx-trash"></i>
+                          <template #animate> Delete </template>
+                        </vs-button>
+                      </vs-td>
+                    </vs-tr>
+                  </template>
+                </vs-table>
+              </client-only>
+              <vs-button
+                v-if="selected.length > 0"
+                data-aos="fade"
+                gradient
+                color="#336699"
+                block
+                class="my-3"
+                @click="addToCart()"
+              >
+                <i class="bx bxs-cart-add mr-2"></i>
+                Add to Cart
+              </vs-button>
             </div>
           </template>
+          <span class="data">
+            <pre>
+  {{
+                selected.length > 0
+                  ? selected
+                  : 'Select an item in the table to add to cart'
+              }}
+        </pre
+            >
+          </span>
         </div>
       </div>
     </template>
@@ -238,7 +283,7 @@ export default {
   layout: 'default',
   middleware: 'auth',
   async fetch() {
-    await this.getBoxes()
+    await this.GET_BOXES()
   },
   data() {
     return {
@@ -249,7 +294,7 @@ export default {
       search: '',
       allCheck: false,
       selected: [],
-      items: [],
+      // items: [],
 
       isAlert: true,
 
@@ -266,10 +311,10 @@ export default {
     ...mapActions({
       GET_BOXES: 'boxes/GET_BOXES',
     }),
-    async getBoxes() {
-      await this.GET_BOXES()
-      this.items = this.BOXES.data
-    },
+    // async getBoxes() {
+    //   await this.GET_BOXES()
+    //   this.items = this.BOXES.data
+    // },
     clear() {
       Object.assign(this.$data, this.$options.data())
     },
@@ -280,11 +325,35 @@ export default {
       }
       try {
         await this.$axios.$post('/boxes', formattedForm)
-        this.getBoxes()
+        this.GET_BOXES()
         this.clear()
       } catch (e) {
         alert('error')
       }
+    },
+    addCartNotification(name) {
+      const boxNotif = this.$vs.notification({
+        duration: 10000,
+        progress: 'auto',
+        icon: `<i class='bx bx-cart'></i>`,
+        color: '#336699',
+        title: 'Click here to see your cart!',
+        text: `Nice... <strong>${name}</strong> is successfuly added to your cart.`,
+        onClick: () => {
+          this.$router.push('/carts')
+          boxNotif.close()
+        },
+      })
+    },
+    failNotification(name) {
+      this.$vs.notification({
+        duration: 10000,
+        progress: 'auto',
+        icon: '!',
+        color: 'danger',
+        title: 'Oops.. Failed to Add to Cart',
+        text: `This box(es) <strong>${name}</strong> failed to add to cart, because there is no product.`,
+      })
     },
     deleteBox(id, name) {
       this.$swal({
@@ -300,7 +369,7 @@ export default {
           try {
             await this.$axios.$delete(`/boxes/${id}`)
             this.$swal('Deleted!', `${name} has been deleted`, 'success')
-            this.getBoxes()
+            this.GET_BOXES()
           } catch (e) {
             this.$swal({
               icon: 'error',
@@ -310,6 +379,37 @@ export default {
           }
         }
       })
+    },
+    async addToCart() {
+      try {
+        const arrIds = []
+        const arrName = []
+        const arrFailed = []
+        this.selected.map((x) => {
+          if (x.products.length > 0) {
+            arrIds.push(x.id)
+            arrName.push(x.name)
+          } else {
+            arrFailed.push(x.name)
+          }
+        })
+        const form = {
+          type: 'box',
+          ids: arrIds,
+        }
+        if (arrFailed.length > 0) {
+          this.failNotification(arrFailed.toString())
+        }
+
+        if (arrIds.length > 0) {
+          await this.$axios.post(`/carts`, form)
+          this.addCartNotification(arrName.toString())
+        }
+      } catch (e) {
+        alert(e)
+      } finally {
+        this.clear()
+      }
     },
   },
 }
