@@ -128,30 +128,147 @@
                   gradient
                   color="#336699"
                   class="my-4"
-                  @click="midtransSnap"
+                  @click="checkoutPrompt"
                 >
                   <i class="far fa-credit-card mr-2"></i> Proceed to Checkout
                 </vs-button>
               </div>
             </div>
 
-            <!-- <button
-              v-if="selected.length > 0"
-              class="btn btn-primary"
-              data-aos="fade"
-              @click="midtransSnap"
-            >
-              Pay
-            </button> -->
-
             <span class="data">
               <pre>
-  {{ selected.length > 0 ? selected : '' }}
-        </pre
-              >
+  <!-- {{ selected.length > 0 ? selected : '' }} -->
+  {{ PROVINCES.length > 0 ? PROVINCES : '' }}
+
+        </pre>
             </span>
           </div>
         </div>
+      </div>
+
+      <div class="container">
+        <vs-dialog v-model="activePrompt" overflow-hidden full-screen>
+          <template #header>
+            <h4 class="not-margin">Checkout Details</h4>
+          </template>
+
+          <div class="container">
+            <div class="row pb-5">
+              <strong class="text-center col-12">User Details</strong>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-6 pb-4">
+                <vs-input
+                  v-model="address"
+                  color="#336699"
+                  type="text"
+                  label="Your Address"
+                  placeholder="Jl. Raya Kb. Jeruk No.27, RT.2/RW.9"
+                  class="pb-3"
+                  required
+                >
+                  <template #icon>
+                    <i class="bx bxs-edit-location"></i>
+                  </template>
+                </vs-input>
+              </div>
+              <div class="col-12 col-md-6 pb-4">
+                <vs-input
+                  v-model="phoneNum"
+                  type="tel"
+                  label="Your Phone Number"
+                  placeholder="081514329539"
+                  required
+                >
+                  <template #icon> <i class="bx bx-phone"></i> </template>
+                </vs-input>
+              </div>
+            </div>
+
+            <div class="border-bottom pb-2 mb-5">
+              <vs-checkbox v-model="isUpdate"
+                >Update profile details</vs-checkbox
+              >
+            </div>
+
+            <div class="row pb-5">
+              <strong class="text-center col-12">Shipping Details</strong>
+            </div>
+
+            <div class="row">
+              <div class="col-12 col-md-6 pb-4">
+                <vs-select
+                  v-model="select.province"
+                  filter
+                  placeholder="Province"
+                  label="Receiver Province"
+                >
+                  <vs-option
+                    v-for="(province, index) in PROVINCES"
+                    :key="index"
+                    :value="`${province.province}|${province.province_id}`"
+                    :label="province.province"
+                    >{{ province.province }}</vs-option
+                  >
+                </vs-select>
+              </div>
+              <div v-if="CITIES" class="col-12 col-md-6 pb-4">
+                <client-only>
+                  <vs-select
+                    v-model="select.city"
+                    :disabled="select.province === ''"
+                    placeholder="City"
+                    label="Receiver City | Postal Code"
+                  >
+                    <template v-for="city in CITIES(select.province)">
+                      <vs-option
+                        :key="`${city.city_id}-${city.province_id}`"
+                        :value="`${city.city_name}|${city.city_id}|${city.province_id}|${city.type}|${city.postal_code}`"
+                        :label="`${city.city_name} | ${city.postal_code}`"
+                        >{{ city.city_name }} |
+                        {{ city.postal_code }}</vs-option
+                      >
+                    </template>
+                  </vs-select>
+                </client-only>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-12 col-md-6 pb-4">
+                <vs-input
+                  v-model="phoneNum"
+                  type="tel"
+                  label="Receiver Phone Number"
+                  placeholder="081514329539"
+                  required
+                >
+                  <template #icon> <i class="bx bx-phone"></i> </template>
+                </vs-input>
+              </div>
+              <div class="col-12 col-md-6 pb-4">
+                <vs-input
+                  v-model="address"
+                  color="#336699"
+                  type="text"
+                  label="Receiver Full Address"
+                  placeholder="Jl. Raya Kb. Jeruk No.27, RT.2/RW.9"
+                  class="pb-3"
+                  required
+                >
+                  <template #icon>
+                    <i class="bx bxs-edit-location"></i>
+                  </template>
+                </vs-input>
+              </div>
+            </div>
+          </div>
+
+          <template #footer>
+            <div class="container">
+              <vs-button block> Sign In </vs-button>
+            </div>
+          </template>
+        </vs-dialog>
       </div>
     </div>
   </div>
@@ -165,6 +282,8 @@ export default {
   middleware: 'auth',
   async fetch() {
     await this.GET_CART()
+    await this.GET_PROVINCES()
+    await this.GET_CITIES()
   },
   data() {
     return {
@@ -173,11 +292,21 @@ export default {
       selected: [],
       loading: false,
       courier: {},
+      activePrompt: false,
+      address: '',
+      phoneNum: '',
+      isUpdate: false,
+      select: {
+        province: '',
+        city: '',
+      },
     }
   },
   computed: {
     ...mapGetters({
       CART: 'users/CART',
+      PROVINCES: 'shipping/PROVINCES',
+      CITIES: 'shipping/CITIES',
     }),
     mergedCart() {
       const arrBoxes = this.CART.data[0].boxes
@@ -185,11 +314,36 @@ export default {
       Array.prototype.push.apply(arrBoxes, arrBundles)
       return arrBoxes
     },
+
+    // filteredCities() {
+    //   let results = {}
+    //   if (this.select.province) {
+    //     results = this.CITIES.filter(
+    //       (x) => x.province_id === this.select.province
+    //     )
+    //   } else if (this.CITIES.length > 0) {
+    //     results = this.CITIES
+    //   }
+
+    //   return results
+    // },
+  },
+  watch: {
+    'select.province'() {
+      this.select.city = ''
+    },
   },
   methods: {
     ...mapActions({
       GET_CART: 'users/GET_CART',
+      GET_PROVINCES: 'shipping/GET_PROVINCES',
+      GET_CITIES: 'shipping/GET_CITIES',
     }),
+    checkoutPrompt() {
+      this.address = this.$auth.user.detail.address
+      this.phoneNum = this.$auth.user.detail.phone_num
+      this.activePrompt = !this.activePrompt
+    },
     midtransSnap() {
       const arrBundles = []
       const arrBoxes = []
@@ -236,5 +390,9 @@ export default {
   background-size: contain;
   width: 100vw;
   min-height: calc(100vh - 15rem);
+}
+
+.vs-select-content {
+  max-width: 100%;
 }
 </style>
