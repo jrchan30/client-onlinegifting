@@ -179,4 +179,8 @@ export default {
   },
 
   serverMiddleware: ['~/serverMiddleware/selectiveSSR.js'],
+
+  loading: {
+    color: '#336699',
+  },
 }

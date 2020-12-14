@@ -13,6 +13,10 @@
 <script>
 export default {
   name: 'Default',
+  loading: {
+    color: 'blue',
+    height: '20px',
+  },
   head() {
     return {
       link: [
