@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const bgSyncPlugin = new workbox.backgroundSync.BackgroundSyncPlugin(
   'formQueue',
   {
