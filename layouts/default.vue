@@ -1,11 +1,11 @@
 <template>
   <div>
     <Navbar />
-    <div class="pt-5">
-      <div class="mt-5 minheight">
-        <Nuxt />
-      </div>
+    <!-- <div class="pt-5"> -->
+    <div class="minheight" :class="{ 'mt-5 pt-5': $nuxt.isOnline }">
+      <Nuxt />
     </div>
+    <!-- </div> -->
     <LoginRegisterFooter />
   </div>
 </template>
@@ -13,10 +13,6 @@
 <script>
 export default {
   name: 'Default',
-  loading: {
-    color: 'blue',
-    height: '20px',
-  },
   head() {
     return {
       link: [
@@ -115,6 +111,6 @@ body {
 }
 
 .minheight {
-  min-height: calc(100vh - 12.5rem);
+  min-height: calc(100vh - 9rem);
 }
 </style>

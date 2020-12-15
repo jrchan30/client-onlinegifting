@@ -1,6 +1,20 @@
 export const state = () => ({
   provinces: {},
   cities: {},
+  couriers: [
+    {
+      code: 'OGC',
+    },
+    {
+      code: 'jne',
+    },
+    {
+      code: 'tiki',
+    },
+    {
+      code: 'pos',
+    },
+  ],
 })
 
 export const getters = {
@@ -17,6 +31,9 @@ export const getters = {
     } else {
       return state.cities.rajaongkir.results
     }
+  },
+  COURIERS(state) {
+    return state.couriers
   },
 }
 

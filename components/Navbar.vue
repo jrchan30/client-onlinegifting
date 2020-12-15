@@ -42,12 +42,22 @@
             >
           </template>
           <template v-else>
-            <vs-avatar pointer @click="goToProfile()">
+            <vs-avatar
+              pointer
+              badge-position="top-right"
+              badge
+              :badge-color="colourOnOff"
+              @click="goToProfile()"
+            >
               <img
                 class="text-muted"
                 :src="getProfilePic()"
                 alt="profile picture"
               />
+              <template #badge>
+                <span v-if="$nuxt.isOnline"> On </span>
+                <span v-else> Off </span>
+              </template>
             </vs-avatar>
 
             <vs-button
@@ -64,6 +74,20 @@
           </template>
         </template>
       </vs-navbar>
+
+      <div v-if="$nuxt.isOffline">
+        <div class="mt-5 pt-5" data-aos="fade" data-aos-duration="1000">
+          <vs-alert color="danger">
+            <template #icon>
+              <strong>!</strong>
+            </template>
+            <template #title> Offline &#128561;</template>
+            It seems that you are offline, some feature and images might not
+            load properly.
+          </vs-alert>
+        </div>
+      </div>
+
       <div class="position-sticky" style="z-index: 9999">
         <vs-sidebar
           v-model="active"
@@ -179,9 +203,17 @@
           </vs-row>
           <template #footer>
             <vs-row v-if="$auth.user" justify="space-between">
-              <vs-avatar>
+              <vs-avatar
+                badge-position="top-right"
+                badge
+                :badge-color="colourOnOff"
+              >
                 <template #text>
                   {{ $auth.user.name }}
+                </template>
+                <template #badge>
+                  <span v-if="$nuxt.isOnline"> On </span>
+                  <span v-else> Off </span>
                 </template>
               </vs-avatar>
 
@@ -222,6 +254,14 @@ export default {
     ...mapGetters({
       // CARTS: 'users/CARTS',
     }),
+    colourOnOff() {
+      console.log(this.$nuxt.isOnline)
+      if (this.$nuxt.isOnline) {
+        return '#4BB543'
+      } else {
+        return '#fd4557'
+      }
+    },
     getCartItemCount() {
       if (this.$auth.user.cart) {
         return (
@@ -231,10 +271,6 @@ export default {
       }
       return '0'
     },
-  },
-  async mounted() {
-    // const test = await this.GET_CART()
-    // console.log(test)
   },
   methods: {
     ...mapActions({

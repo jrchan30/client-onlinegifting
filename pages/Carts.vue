@@ -44,7 +44,7 @@
           </div>
         </div>
         <div v-else>
-          <div class="container">
+          <div class="container" data-aos="fade" data-aos-duration="1500">
             <div class="bg-white rounded p-3">
               <h4 class="font-weight-bold custom-color">
                 Your Cart <i class="fas fa-boxes"></i>
@@ -143,7 +143,7 @@
       </div>
 
       <div class="container">
-        <vs-dialog v-model="activePrompt" overflow-hidden full-screen>
+        <vs-dialog v-model="activePrompt" overflow-hidden blur prevent-close>
           <template #header>
             <h4 class="not-margin">Checkout Details</h4>
           </template>
@@ -194,7 +194,7 @@
             <div class="row">
               <div v-if="PROVINCES" class="col-12 col-md-6 pb-4">
                 <vs-select
-                  v-model="select.province"
+                  v-model="receiver.province"
                   filter
                   placeholder="Province"
                   label="Receiver Province"
@@ -210,12 +210,12 @@
               </div>
               <div v-if="CITIES" class="col-12 col-md-6 pb-4">
                 <vs-select
-                  v-model="select.city"
-                  :disabled="select.province === ''"
+                  v-model="receiver.city"
+                  :disabled="receiver.province === ''"
                   placeholder="City"
                   label="Receiver City | Postal Code"
                 >
-                  <template v-for="city in CITIES(select.province)">
+                  <template v-for="city in CITIES(receiver.province)">
                     <vs-option
                       :key="`${city.city_id}-${city.province_id}`"
                       :value="`${city.city_name}|${city.city_id}|${city.province_id}|${city.type}|${city.postal_code}`"
@@ -253,12 +253,28 @@
                   </template>
                 </vs-input>
               </div>
+              <div v-if="COURIERS" class="col-12 col-md-6 pb-4">
+                <vs-select
+                  v-model="receiver.courier"
+                  filter
+                  placeholder="OGC"
+                  label="Courier"
+                >
+                  <vs-option
+                    v-for="(c, index) in COURIERS"
+                    :key="index"
+                    :value="`${c.code}`"
+                    :label="c.code"
+                    >{{ c.code }}</vs-option
+                  >
+                </vs-select>
+              </div>
             </div>
           </div>
 
           <template #footer>
-            <div class="container">
-              <vs-button block> Sign In </vs-button>
+            <div class="container" @click="midtransSnap">
+              <vs-button block> Proceed to payment </vs-button>
             </div>
           </template>
         </vs-dialog>
@@ -312,9 +328,11 @@ export default {
       address: '',
       phoneNum: '',
       isUpdate: false,
-      select: {
+      receiver: {
+        phoneNum: '',
         province: '',
         city: '',
+        courier: '',
       },
     }
   },
@@ -323,6 +341,7 @@ export default {
       CART: 'users/CART',
       PROVINCES: 'shipping/PROVINCES',
       CITIES: 'shipping/CITIES',
+      COURIERS: 'shipping/COURIERS',
     }),
     mergedCart() {
       const arrBoxes = this.CART.data[0].boxes
