@@ -1,14 +1,13 @@
-// import { BackgroundSyncPlugin } from 'workbox-background-sync'
-// import { registerRoute } from 'workbox-routing'
-// import { NetworkOnly } from 'workbox-strategies'
+const bgSyncPlugin = new workbox.backgroundSync.BackgroundSyncPlugin(
+  'formQueue',
+  {
+    maxRetentionTime: 24 * 60, // Retry for max of 24 Hours (specified in minutes)
+  }
+)
 
-const bgSyncPlugin = new BackgroundSyncPlugin('formQueue', {
-  maxRetentionTime: 24 * 60, // Retry for max of 24 Hours (specified in minutes)
-})
-
-registerRoute(
-  /https:\/\/onlinegifting\.shop\/api/,
-  new NetworkOnly({
+workbox.routing.registerRoute(
+  /https:\/\/api\.onlinegifting\.shop\/api/,
+  new workbox.strategies.NetworkOnly({
     plugins: [bgSyncPlugin],
   }),
   'POST'
