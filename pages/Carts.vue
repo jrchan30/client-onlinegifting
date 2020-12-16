@@ -229,7 +229,7 @@
             <div class="row mt-4">
               <div class="col-12 col-md-6 pb-4">
                 <vs-input
-                  v-model="phoneNum"
+                  v-model="receiver.phoneNum"
                   type="tel"
                   label="Receiver Phone Number"
                   placeholder="081514329539"
@@ -240,7 +240,7 @@
               </div>
               <div class="col-12 col-md-6 pb-4">
                 <vs-input
-                  v-model="address"
+                  v-model="receiver.address"
                   color="#336699"
                   type="text"
                   label="Receiver Full Address"
@@ -257,8 +257,9 @@
                 <vs-select
                   v-model="receiver.courier"
                   filter
+                  :disabled="receiver.city === ''"
                   placeholder="OGC"
-                  label="Courier"
+                  label="Courier (Need to choose city first)"
                 >
                   <vs-option
                     v-for="(c, index) in COURIERS"
@@ -269,6 +270,36 @@
                   >
                 </vs-select>
               </div>
+              <div
+                v-if="receiver.courier == 'OGC'"
+                class="col-12 col-md-6 pb-4"
+              >
+                <vs-input
+                  v-model="receiver.arrivalDate"
+                  type="date"
+                  label="Arrival Date"
+                />
+              </div>
+              <template
+                v-if="receiver.courier != 'OGC' && receiver.courier != ''"
+              >
+                <div class="col-12 col-md-6 pb-4">
+                  <vs-select
+                    v-model="receiver.service"
+                    filter
+                    placeholder="Choose Service"
+                    label="Service"
+                  >
+                    <vs-option
+                      v-for="(c, index) in COURIERS"
+                      :key="index"
+                      :value="`${c.code}`"
+                      :label="c.code"
+                      >{{ c.code }}</vs-option
+                    >
+                  </vs-select>
+                </div>
+              </template>
             </div>
           </div>
 
@@ -328,20 +359,26 @@ export default {
       address: '',
       phoneNum: '',
       isUpdate: false,
+      totalWeight: null,
       receiver: {
         phoneNum: '',
+        address: '',
         province: '',
         city: '',
         courier: '',
+        service: '',
+        arrivalDate: null,
       },
     }
   },
+
   computed: {
     ...mapGetters({
       CART: 'users/CART',
       PROVINCES: 'shipping/PROVINCES',
       CITIES: 'shipping/CITIES',
       COURIERS: 'shipping/COURIERS',
+      SERVICES_COSTS: 'shipping/SERVICES_COSTS',
     }),
     mergedCart() {
       const arrBoxes = this.CART.data[0].boxes
@@ -351,9 +388,35 @@ export default {
     },
   },
   watch: {
-    'select.province'() {
-      this.select.city = ''
+    'receiver.province'() {
+      this.receiver.city = ''
+      this.receiver.courier = ''
     },
+    'receiver.city'() {
+      this.receiver.courier = ''
+    },
+    async 'receiver.courier'(val) {
+      this.receiver.service = ''
+      if (val !== 'OGC' && val !== '' && this.receiver.city !== '') {
+        console.log('masuk')
+        const arrCity = this.receiver.city.split('|')
+        const cityId = arrCity[1]
+        const details = {
+          destination: cityId,
+          weight: this.totalWeight,
+          courier: this.receiver.courier,
+        }
+        console.log('weight: ' + this.totalWeight)
+        console.log('courier: ' + this.receiver.courier)
+        console.log('cityId: ' + cityId)
+        console.log(details)
+        await this.GET_SERVICES_COSTS(details)
+      }
+    },
+  },
+
+  created() {
+    this.getNextWeek()
   },
 
   methods: {
@@ -361,13 +424,27 @@ export default {
       GET_CART: 'users/GET_CART',
       GET_PROVINCES: 'shipping/GET_PROVINCES',
       GET_CITIES: 'shipping/GET_CITIES',
+      GET_SERVICES_COSTS: 'shipping/GET_SERVICES_COSTS',
     }),
     clear() {
       Object.assign(this.$data, this.$options.data())
     },
+    getNextWeek() {
+      const future = new Date() // get today date
+      future.setDate(future.getDate() + 7) // add 7 days
+      const finalDate =
+        future.getFullYear() +
+        '-' +
+        (future.getMonth() + 1 < 10 ? '0' : '') +
+        (future.getMonth() + 1) +
+        '-' +
+        future.getDate()
+      this.receiver.arrivalDate = finalDate
+    },
     checkoutPrompt() {
       this.address = this.$auth.user.detail.address
       this.phoneNum = this.$auth.user.detail.phone_num
+      this.totalWeight = this.selected.reduce((sum, x) => sum + x.weight, 0)
       this.activePrompt = !this.activePrompt
     },
     midtransSnap() {

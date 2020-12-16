@@ -15,6 +15,7 @@ export const state = () => ({
       code: 'pos',
     },
   ],
+  servicesCosts: {},
 })
 
 export const getters = {
@@ -35,6 +36,9 @@ export const getters = {
   COURIERS(state) {
     return state.couriers
   },
+  SERVICES_COSTS(state) {
+    return state.servicesCosts
+  },
 }
 
 export const mutations = {
@@ -44,9 +48,23 @@ export const mutations = {
   SET_CITIES(state, payload) {
     state.cities = payload
   },
+  SET_SERVICES_COSTS(state, payload) {
+    this.servicesCosts = payload
+  },
 }
 
 export const actions = {
+  async GET_SERVICES_COSTS({ commit }, obj) {
+    const form = {
+      destination: obj.destination,
+      weight: obj.weight,
+      courier: obj.courier,
+    }
+    console.log(form)
+    console.log(form.weight)
+    const data = await this.$axios.$post(`/get-services-costs`, form)
+    commit('SET_SERVICES_COSTS', data)
+  },
   async GET_CITIES({ commit }, provinceId = '') {
     const data = await this.$axios.$get(`/get-cities?province=${provinceId}`)
     commit('SET_CITIES', data)

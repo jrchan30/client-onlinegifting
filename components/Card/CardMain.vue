@@ -7,7 +7,7 @@
     >
       <vs-card>
         <template #title>
-          <h3 @click="goTo(item.id)">{{ item.name }}</h3>
+          <h4 @click="goTo(item.id)">{{ item.name }}</h4>
         </template>
         <template #img>
           <img

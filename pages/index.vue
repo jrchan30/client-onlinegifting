@@ -3,14 +3,16 @@
     <HomeSlider />
     <div class="container-fluid">
       <div
-        class="row mt-5 px-5 justify-content-center"
+        class="row mt-0 mt-md-5 justify-content-center"
         data-aos="fade-left"
         data-aos-duration="1000"
       >
-        <div class="col-4 my-auto text-center">
+        <div
+          class="col-12 col-sm-9 col-md-5 my-auto text-center order-2 order-md-1"
+        >
           <h2 class="text-primary font-weight-bold">Premade Bundles</h2>
-          <p>
-            We all know that choosing gifts is sometimes confusing and hard.
+          <p class="d-none d-md-block">
+            We all know that choosing gifts can be confusing and hard.
             <br />
             Will he/she likes it? Will this be appropriate? Where do i even buy
             this stuff?
@@ -26,28 +28,30 @@
           </div>
         </div>
         <img
-          class="col-3"
+          class="col-6 col-md-5 col-lg-3 order-1 order-md-2"
           src="/image/gift_man_top.svg"
           alt="multiple device image"
         />
       </div>
       <div class="row mt-5" data-aos="fade-right" data-aos-duration="1000">
         <img
-          class="col-7"
+          class="col-6 col-md-5 col-lg-6 mx-auto mx-md-0"
           src="/image/devices.svg"
           alt="multiple device image"
         />
-        <div class="col-4 my-auto">
+        <div
+          class="col-10 col-sm-9 col-md-6 col-lg-4 my-auto text-center text-md-left mx-auto mx-md-0"
+        >
           <h2 class="text-primary font-weight-bold">
             Supporting Multiple Screen Sizes!
           </h2>
-          <p>
+          <p class="d-none d-md-block">
             Online Gifting now supports multiple devices' screen size, this
             ensures our customer's user experience when accessing our website.
           </p>
           <p>
-            You can access our website anytime anywhere through your mobile
-            device, laptop, Smart TV, and other possible devices.
+            You can access our website anytime anywhere through your smartphone,
+            laptop, Smart TV, and other possible devices.
           </p>
         </div>
       </div>
