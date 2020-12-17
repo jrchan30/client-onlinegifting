@@ -33,7 +33,11 @@
           alt="multiple device image"
         />
       </div>
-      <div class="row mt-5" data-aos="fade-right" data-aos-duration="1000">
+      <div
+        class="row mt-5 justify-content-center"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+      >
         <img
           class="col-6 col-md-5 col-lg-6 mx-auto mx-md-0"
           src="/image/devices.svg"

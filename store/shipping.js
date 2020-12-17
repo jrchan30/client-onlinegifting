@@ -16,6 +16,7 @@ export const state = () => ({
     },
   ],
   servicesCosts: {},
+  fullDetails: {},
 })
 
 export const getters = {
@@ -49,7 +50,8 @@ export const mutations = {
     state.cities = payload
   },
   SET_SERVICES_COSTS(state, payload) {
-    this.servicesCosts = payload
+    state.servicesCosts = payload.rajaongkir.results[0].costs
+    state.fullDetails = payload.rajaongkir
   },
 }
 

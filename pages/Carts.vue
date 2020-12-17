@@ -105,7 +105,7 @@
                         {{ tr.name }}
                       </vs-td>
                       <vs-td>
-                        {{ tr.type }}
+                        {{ tr.weight }}
                       </vs-td>
                       <vs-td>
                         {{ tr.price }}
@@ -166,17 +166,24 @@
                   <template #icon>
                     <i class="bx bxs-edit-location"></i>
                   </template>
+                  <template v-if="!validUserAddress" #message-danger>
+                    Required (Between 5-60 letters)
+                  </template>
                 </vs-input>
               </div>
               <div class="col-12 col-md-6 pb-2">
                 <vs-input
                   v-model="phoneNum"
+                  color="#336699"
                   type="tel"
                   label="Your Phone Number"
-                  placeholder="081514329539"
+                  placeholder="xxxxxxxxxx"
                   required
                 >
                   <template #icon> <i class="bx bx-phone"></i> </template>
+                  <template v-if="!validUserPhone" #message-danger>
+                    Required (Indonesia Format)
+                  </template>
                 </vs-input>
               </div>
             </div>
@@ -195,10 +202,14 @@
               <div v-if="PROVINCES" class="col-12 col-md-6 pb-4">
                 <vs-select
                   v-model="receiver.province"
+                  color="#336699"
                   filter
                   placeholder="Province"
                   label="Receiver Province"
                 >
+                  <template v-if="receiver.province === ''" #message-danger>
+                    Required
+                  </template>
                   <vs-option
                     v-for="(province, index) in PROVINCES"
                     :key="index"
@@ -211,10 +222,14 @@
               <div v-if="CITIES" class="col-12 col-md-6 pb-4">
                 <vs-select
                   v-model="receiver.city"
+                  color="#336699"
                   :disabled="receiver.province === ''"
                   placeholder="City"
                   label="Receiver City | Postal Code"
                 >
+                  <template v-if="!validCity.valid" #message-danger>
+                    {{ validCity.message }}
+                  </template>
                   <template v-for="city in CITIES(receiver.province)">
                     <vs-option
                       :key="`${city.city_id}-${city.province_id}`"
@@ -226,15 +241,19 @@
                 </vs-select>
               </div>
             </div>
-            <div class="row mt-4">
+            <div class="row mt-4 pb-3 border-bottom">
               <div class="col-12 col-md-6 pb-4">
                 <vs-input
                   v-model="receiver.phoneNum"
+                  color="#336699"
                   type="tel"
                   label="Receiver Phone Number"
                   placeholder="081514329539"
                   required
                 >
+                  <template v-if="!validReceiverPhone" #message-danger>
+                    Required (Indonesia Format)
+                  </template>
                   <template #icon> <i class="bx bx-phone"></i> </template>
                 </vs-input>
               </div>
@@ -244,10 +263,13 @@
                   color="#336699"
                   type="text"
                   label="Receiver Full Address"
-                  placeholder="Jl. Raya Kb. Jeruk No.27, RT.2/RW.9"
+                  placeholder="Jl. Raya Kb. Jeruk No.27"
                   class="pb-3"
                   required
                 >
+                  <template v-if="!validReceiverAddress" #message-danger>
+                    Required (Between 5-60 letters)
+                  </template>
                   <template #icon>
                     <i class="bx bxs-edit-location"></i>
                   </template>
@@ -256,16 +278,22 @@
               <div v-if="COURIERS" class="col-12 col-md-6 pb-4">
                 <vs-select
                   v-model="receiver.courier"
+                  color="#336699"
                   filter
                   :disabled="receiver.city === ''"
                   placeholder="OGC"
-                  label="Courier (Need to choose city first)"
+                  label="Courier"
                 >
+                  <template v-if="!validCourier.valid" #message-danger>
+                    {{ validCourier.message }}
+                  </template>
                   <vs-option
                     v-for="(c, index) in COURIERS"
                     :key="index"
                     :value="`${c.code}`"
                     :label="c.code"
+                    :disabled="loading"
+                    :loading="loading"
                     >{{ c.code }}</vs-option
                   >
                 </vs-select>
@@ -276,30 +304,192 @@
               >
                 <vs-input
                   v-model="receiver.arrivalDate"
+                  color="#336699"
                   type="date"
                   label="Arrival Date"
-                />
+                >
+                  <template v-if="!validDate" #message-danger>
+                    Minimum of 7 days from now
+                  </template>
+                </vs-input>
               </div>
               <template
-                v-if="receiver.courier != 'OGC' && receiver.courier != ''"
+                v-if="
+                  receiver.courier != 'OGC' &&
+                  receiver.courier != '' &&
+                  SERVICES_COSTS
+                "
               >
                 <div class="col-12 col-md-6 pb-4">
                   <vs-select
                     v-model="receiver.service"
-                    filter
                     placeholder="Choose Service"
                     label="Service"
+                    :disabled="loading"
+                    :loading="loading"
                   >
+                    <template v-if="receiver.service == ''" #message-danger>
+                      Required
+                    </template>
                     <vs-option
-                      v-for="(c, index) in COURIERS"
+                      v-for="(service, index) in SERVICES_COSTS"
                       :key="index"
-                      :value="`${c.code}`"
-                      :label="c.code"
-                      >{{ c.code }}</vs-option
+                      :value="`${service.service}`"
+                      :label="service.service"
+                      >{{ service.service }}</vs-option
                     >
                   </vs-select>
                 </div>
               </template>
+              <template v-if="receiver.service">
+                <div class="col-12" data-aos="fade" data-aos-duration="1200">
+                  <h5>Shipping Details Summary</h5>
+                  <small>
+                    <dl class="row">
+                      <dt class="col-3">Courier:</dt>
+                      <dd class="col-9">
+                        {{ receiver.courier.toUpperCase() }}
+                      </dd>
+
+                      <dt class="col-3">Service:</dt>
+                      <dd class="col-9">
+                        {{ serviceDetails[0].description }} ({{
+                          serviceDetails[0].service
+                        }})
+                      </dd>
+
+                      <dt class="col-3">Price:</dt>
+                      <dd class="col-9">
+                        {{ serviceDetails[0].cost[0].value }} (IDR)
+                      </dd>
+
+                      <dt class="col-3">ETD:</dt>
+                      <dd class="col-9">
+                        {{ serviceDetails[0].cost[0].etd }} Days
+                      </dd>
+                    </dl>
+                  </small>
+                </div>
+              </template>
+              <template v-if="receiver.courier === 'OGC'">
+                <div class="col-12" data-aos="fade" data-aos-duration="1200">
+                  <h5>Shipping Details Summary</h5>
+                  <small>
+                    <dl class="row">
+                      <dt class="col-3">Courier:</dt>
+                      <dd class="col-9">
+                        {{ receiver.courier.toUpperCase() }}
+                      </dd>
+
+                      <dt class="col-3">Service:</dt>
+                      <dd class="col-9">AOT (Arrival On Time)</dd>
+
+                      <dt class="col-3">Price:</dt>
+                      <dd class="col-9">
+                        <strong>Free (OG Courier)</strong>
+                      </dd>
+
+                      <dt class="col-3">Arrival Date:</dt>
+                      <dd class="col-9">
+                        {{ receiver.arrivalDate }}
+                      </dd>
+                    </dl>
+                  </small>
+                </div>
+              </template>
+            </div>
+            <div class="row pt-3">
+              <strong class="text-center col-12 mb-3">Item(s) Details</strong>
+              <div class="col-12">
+                <vs-card-group class="border-bottom pb-4">
+                  <vs-card
+                    v-for="item in selected"
+                    :key="item.id"
+                    class="cursor-change"
+                  >
+                    <template #title>
+                      <h3 class="cursor-change d-flex">
+                        {{ item.name }}
+                        <span
+                          class="badge badge-pill cursor-change"
+                          :class="{
+                            'badge-primary': item.type == 'box',
+                            'badge-warning': item.type == 'bundle',
+                          }"
+                          >{{ item.type }}</span
+                        >
+                      </h3>
+                    </template>
+                    <template #img>
+                      <img
+                        v-if="item.type === 'bundle'"
+                        class="cursor-change"
+                        :src="item.detail.image.url"
+                        alt="item image"
+                      />
+                      <img
+                        v-else
+                        class="cursor-change"
+                        src="/image/custom_box.svg"
+                        alt="item image"
+                      />
+                    </template>
+                    <template #text>
+                      <div class="cursor-change justify-content-between d-flex">
+                        <div>{{ item.price }} (IDR)</div>
+                        <div>{{ item.weight }} (gr)</div>
+                      </div>
+                      <!-- <p class="cursor-change"></p> -->
+                    </template>
+                  </vs-card>
+                </vs-card-group>
+              </div>
+            </div>
+            <div v-if="receiver.service" class="row pt-3">
+              <strong class="text-center col-12 mb-3"
+                >Final Pricing Details</strong
+              >
+              <small class="font-weight-bold offset-1 offset-md-3 mb-2"
+                >Item(s) + Packaging Price</small
+              >
+              <small class="col-12">
+                <dl v-for="item in selected" :key="item.id" class="row">
+                  <dt
+                    class="offset-1 col-5 offset-md-4 col-md-4 font-weight-light border-bottom text-truncate"
+                  >
+                    {{ item.name }}
+                  </dt>
+                  <dd class="col-6 col-md-3">
+                    {{ item.price }} <b>+ 10.000</b>
+                  </dd>
+                </dl>
+              </small>
+              <small class="font-weight-bold offset-1 offset-md-3 mb-2"
+                >Shipping Price</small
+              >
+              <small class="col-12">
+                <dl class="row">
+                  <dt
+                    class="offset-1 col-5 offset-md-4 col-md-4 font-weight-light border-bottom text-truncate"
+                  >
+                    {{ receiver.courier }}
+                  </dt>
+                  <dd v-if="receiver.service !== 'OGC'" class="col-6 col-md-3">
+                    {{ serviceDetails[0].cost[0].value }}
+                  </dd>
+                  <dd v-else>Free (OGC)</dd>
+                </dl>
+              </small>
+              <small class="col-12">
+                <dl class="row">
+                  <dt class="pl-0 offset-1 col-5 offset-md-3 col-md-5">
+                    Total
+                  </dt>
+                  <dd class="col-6 col-md-3 font-weight-bold">
+                    {{ totalPrice }}
+                  </dd>
+                </dl>
+              </small>
             </div>
           </div>
 
@@ -368,6 +558,7 @@ export default {
         courier: '',
         service: '',
         arrivalDate: null,
+        minDate: null,
       },
     }
   },
@@ -386,6 +577,87 @@ export default {
       Array.prototype.push.apply(arrBoxes, arrBundles)
       return arrBoxes
     },
+    serviceDetails() {
+      const selectedService = this.SERVICES_COSTS.filter((service) => {
+        return service.service === this.receiver.service
+      })
+      return selectedService
+    },
+    totalPrice() {
+      const subPrice = this.selected.reduce((sum, x) => sum + x.price, 0)
+      const packagingPrice = this.selected.length * 10000
+      let shippingPrice = 0
+      if (this.receiver.courier !== 'OGC') {
+        shippingPrice = this.serviceDetails[0].cost[0].value
+      }
+      const totalPrice = subPrice + packagingPrice + shippingPrice
+      return totalPrice
+    },
+    validUserAddress() {
+      if (
+        this.address === '' ||
+        this.address.length <= 5 ||
+        this.receiver.address.length > 70
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
+    validUserPhone() {
+      return /^\d{6,12}$/.test(this.phoneNum)
+    },
+    validCity() {
+      let validity = {}
+      if (this.receiver.province === '') {
+        validity = {
+          valid: false,
+          message: 'Province must be selected first',
+        }
+      } else if (this.receiver.city === '') {
+        validity = {
+          valid: false,
+          message: 'Required',
+        }
+      }
+      return validity
+    },
+    validReceiverAddress() {
+      if (
+        this.receiver.address === '' ||
+        this.receiver.address.length <= 5 ||
+        this.receiver.address.length > 70
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
+    validReceiverPhone() {
+      return /^\d{6,12}$/.test(this.receiver.phoneNum)
+    },
+    validCourier() {
+      let validity = {}
+      if (this.receiver.city === '') {
+        validity = {
+          valid: false,
+          message: 'City must be selected first',
+        }
+      } else if (this.receiver.courier === '') {
+        validity = {
+          valid: false,
+          message: 'Required',
+        }
+      }
+      return validity
+    },
+    validDate() {
+      if (this.receiver.arrivalDate < this.receiver.minDate) {
+        return false
+      } else {
+        return true
+      }
+    },
   },
   watch: {
     'receiver.province'() {
@@ -398,7 +670,6 @@ export default {
     async 'receiver.courier'(val) {
       this.receiver.service = ''
       if (val !== 'OGC' && val !== '' && this.receiver.city !== '') {
-        console.log('masuk')
         const arrCity = this.receiver.city.split('|')
         const cityId = arrCity[1]
         const details = {
@@ -406,11 +677,12 @@ export default {
           weight: this.totalWeight,
           courier: this.receiver.courier,
         }
-        console.log('weight: ' + this.totalWeight)
-        console.log('courier: ' + this.receiver.courier)
-        console.log('cityId: ' + cityId)
-        console.log(details)
-        await this.GET_SERVICES_COSTS(details)
+        try {
+          this.loading = true
+          await this.GET_SERVICES_COSTS(details)
+        } finally {
+          this.loading = false
+        }
       }
     },
   },
@@ -440,6 +712,7 @@ export default {
         '-' +
         future.getDate()
       this.receiver.arrivalDate = finalDate
+      this.receiver.minDate = finalDate
     },
     checkoutPrompt() {
       this.address = this.$auth.user.detail.address
@@ -497,5 +770,13 @@ export default {
 
 .vs-select-content {
   max-width: 100%;
+}
+
+.cursor-change {
+  cursor: default;
+}
+
+.vs-card {
+  cursor: default;
 }
 </style>
