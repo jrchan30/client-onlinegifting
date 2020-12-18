@@ -46,29 +46,12 @@
           </div>
         </div>
       </template>
-      <template v-if="$auth.user">
-        <div v-if="$auth.user.detail" class="container">
-          <CardSkeleton
-            v-if="$auth.user.detail.type !== 'admin'"
-            class="pt-0 pt-lg-5"
-          >
-            <template v-slot:title>
-              <h4 class="font-weight-bold custom-color">Past Transactions</h4>
-              <p class="custom-color">
-                This is your latest past transactions, click on each record to
-                see more details about the transaction
-              </p>
-            </template>
-            <template v-slot:body> </template>
-          </CardSkeleton>
-        </div>
-      </template>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   layout: 'default',
   middleware: ['auth'],
@@ -88,13 +71,10 @@ export default {
       loggedInUser: 'loggedInUser',
     }),
   },
-  mounted() {
-    this.GET_TRANSACTIONS()
-  },
+  // mounted() {
+  //   this.GET_TRANSACTIONS()
+  // },
   methods: {
-    ...mapActions({
-      GET_TRANSACTIONS: 'transactions/GET_TRANSACTIONS',
-    }),
     onChange() {
       const file = this.$refs.pictureInput.file
       if (file) {

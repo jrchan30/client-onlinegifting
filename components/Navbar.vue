@@ -138,6 +138,39 @@
             <template #icon> <i class="bx bxs-user-detail"></i> </template>
             Profile
           </vs-sidebar-item>
+          <vs-sidebar-item v-if="$auth.user" id="transaction" to="/transaction">
+            <template #icon> <i class="bx bx-credit-card-alt"></i> </template>
+            Transaction
+          </vs-sidebar-item>
+          <!-- <vs-sidebar-group>
+            <template #header>
+              <vs-sidebar-item arrow>
+                <template #icon>
+                  <i class="bx bx-help-circle"></i>
+                </template>
+                Orders
+              </vs-sidebar-item>
+            </template>
+
+            <vs-sidebar-item
+              id="Instagram"
+              href="https://www.instagram.com/jrussellchan/"
+            >
+              <template #icon>
+                <i class="bx bxl-instagram"></i>
+              </template>
+              Details
+            </vs-sidebar-item>
+            <vs-sidebar-item
+              id="Instagram"
+              href="https://www.instagram.com/jrussellchan/"
+            >
+              <template #icon>
+                <i class="bx bx-credit-card-alt"></i>
+              </template>
+              Details
+            </vs-sidebar-item>
+          </vs-sidebar-group> -->
           <vs-sidebar-group>
             <template #header>
               <vs-sidebar-item arrow>

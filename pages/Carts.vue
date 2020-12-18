@@ -155,7 +155,7 @@
             <div class="row">
               <div class="col-12 col-md-6 pb-2">
                 <vs-input
-                  v-model="address"
+                  v-model="tempAddress"
                   color="#336699"
                   type="text"
                   label="Your Address"
@@ -167,13 +167,13 @@
                     <i class="bx bxs-edit-location"></i>
                   </template>
                   <template v-if="!validUserAddress" #message-danger>
-                    Required (Between 5-60 letters)
+                    Required (Between 10-60 letters)
                   </template>
                 </vs-input>
               </div>
               <div class="col-12 col-md-6 pb-2">
                 <vs-input
-                  v-model="phoneNum"
+                  v-model="tempPhoneNum"
                   color="#336699"
                   type="tel"
                   label="Your Phone Number"
@@ -244,7 +244,7 @@
             <div class="row mt-4 pb-3 border-bottom">
               <div class="col-12 col-md-6 pb-4">
                 <vs-input
-                  v-model="receiver.phoneNum"
+                  v-model="receiver.tempPhoneNum"
                   color="#336699"
                   type="tel"
                   label="Receiver Phone Number"
@@ -259,7 +259,7 @@
               </div>
               <div class="col-12 col-md-6 pb-4">
                 <vs-input
-                  v-model="receiver.address"
+                  v-model="receiver.tempAddress"
                   color="#336699"
                   type="text"
                   label="Receiver Full Address"
@@ -268,7 +268,7 @@
                   required
                 >
                   <template v-if="!validReceiverAddress" #message-danger>
-                    Required (Between 5-60 letters)
+                    Required (Between 10-60 letters)
                   </template>
                   <template #icon>
                     <i class="bx bxs-edit-location"></i>
@@ -494,7 +494,7 @@
           </div>
 
           <template #footer>
-            <div class="container" @click="midtransSnap">
+            <div class="container" @click="payment">
               <vs-button block> Proceed to payment </vs-button>
             </div>
           </template>
@@ -529,6 +529,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { debounce } from '@/plugins/customUtil'
 
 export default {
   layout: 'default',
@@ -547,12 +548,16 @@ export default {
       courier: {},
       activePrompt: false,
       address: '',
+      tempAddress: '',
       phoneNum: '',
+      tempPhoneNum: '',
       isUpdate: false,
       totalWeight: null,
       receiver: {
         phoneNum: '',
+        tempPhoneNum: '',
         address: '',
+        tempAddress: '',
         province: '',
         city: '',
         courier: '',
@@ -560,6 +565,7 @@ export default {
         arrivalDate: null,
         minDate: null,
       },
+      shippingPrice: 0,
     }
   },
 
@@ -596,7 +602,7 @@ export default {
     validUserAddress() {
       if (
         this.address === '' ||
-        this.address.length <= 5 ||
+        this.address.length < 10 ||
         this.receiver.address.length > 70
       ) {
         return false
@@ -619,13 +625,18 @@ export default {
           valid: false,
           message: 'Required',
         }
+      } else {
+        validity = {
+          valid: true,
+          message: 'OK',
+        }
       }
       return validity
     },
     validReceiverAddress() {
       if (
         this.receiver.address === '' ||
-        this.receiver.address.length <= 5 ||
+        this.receiver.address.length < 10 ||
         this.receiver.address.length > 70
       ) {
         return false
@@ -648,6 +659,11 @@ export default {
           valid: false,
           message: 'Required',
         }
+      } else {
+        validity = {
+          valid: true,
+          message: 'OK',
+        }
       }
       return validity
     },
@@ -660,6 +676,19 @@ export default {
     },
   },
   watch: {
+    tempAddress: debounce(function (newVal) {
+      this.address = newVal
+    }, 500),
+    tempPhoneNum: debounce(function (newVal) {
+      this.phoneNum = newVal
+    }, 500),
+    'receiver.tempAddress': debounce(function (newVal) {
+      this.receiver.address = newVal
+    }, 500),
+    'receiver.tempPhoneNum': debounce(function (newVal) {
+      this.receiver.phoneNum = newVal
+    }, 500),
+
     'receiver.province'() {
       this.receiver.city = ''
       this.receiver.courier = ''
@@ -683,6 +712,14 @@ export default {
         } finally {
           this.loading = false
         }
+      } else if (val === 'OGC') {
+        this.shippingPrice = 0
+      }
+    },
+    'receiver.service'() {
+      this.shippingPrice = 0
+      if (this.receiver.service !== '' && this.receiver.courier !== 'OGC') {
+        this.shippingPrice = this.serviceDetails[0].cost[0].value
       }
     },
   },
@@ -715,8 +752,8 @@ export default {
       this.receiver.minDate = finalDate
     },
     checkoutPrompt() {
-      this.address = this.$auth.user.detail.address
-      this.phoneNum = this.$auth.user.detail.phone_num
+      this.tempAddress = this.$auth.user.detail.address
+      this.tempPhoneNum = this.$auth.user.detail.phone_num
       this.totalWeight = this.selected.reduce((sum, x) => sum + x.weight, 0)
       this.activePrompt = !this.activePrompt
     },
@@ -733,12 +770,38 @@ export default {
       const form = {
         arrBundles,
         arrBoxes,
+        shippingFee: this.shippingPrice,
       }
       try {
         this.$axios.$post('/checkout', form).then((response) => {
-          window.snap.pay(response)
+          window.snap.pay(response).then((res) => {
+            console.log(res)
+          })
         })
       } catch (e) {}
+    },
+    payment() {
+      if (
+        this.validUserAddress &&
+        this.validUserPhone &&
+        this.validCity.valid &&
+        this.validReceiverAddress &&
+        this.validReceiverPhone &&
+        this.validCourier
+      ) {
+        if (this.receiver.courier === 'OGC' && this.validDate) {
+          this.midtransSnap()
+        } else if (
+          this.receiver.courier !== 'OGC' &&
+          this.receiver.service !== ''
+        ) {
+          this.midtransSnap()
+        } else {
+          alert('Oops.. something is wrong')
+        }
+      } else {
+        alert('Please fill all inputs as instructed')
+      }
     },
   },
   head() {
