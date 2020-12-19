@@ -798,7 +798,7 @@ export default {
         // this.$axios.$post('/checkout', form).then((response) => {
         //   window.snap.pay(response)
         // })
-        this.$axios.$post('/transaction', form)
+        this.$axios.$post('/transactions', form)
       } catch (e) {}
     },
     payment() {
