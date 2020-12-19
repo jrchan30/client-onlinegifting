@@ -767,17 +767,38 @@ export default {
           arrBoxes.push(x.id)
         }
       })
+
+      const arrCity = this.receiver.city.split('|')
+      const cityName = arrCity[0]
+      const postal = arrCity[4]
       const form = {
+        // arrBundles,
+        // arrBoxes,
+        // shippingFee: this.shippingPrice,
+        // shipping_address: {
+        //   phone: this.receiver.phoneNum,
+        //   address: this.receiver.address,
+        //   city: cityName,
+        //   postal_code: postal,
+        //   courier: ''
+        // },
         arrBundles,
         arrBoxes,
+        receiver_phone: this.receiver.phoneNum,
+        receiver_address: this.receiver.address,
+        receiver_city: cityName,
+        receiver_postal_code: postal,
+        courier: this.receiver.courier,
+        service: this.receiver.service,
         shippingFee: this.shippingPrice,
+        arrivalDate: this.receiver.arrivalDate,
+        buyer_phoneNum: this.phoneNum,
       }
       try {
-        this.$axios.$post('/checkout', form).then((response) => {
-          window.snap.pay(response).then((res) => {
-            console.log(res)
-          })
-        })
+        // this.$axios.$post('/checkout', form).then((response) => {
+        //   window.snap.pay(response)
+        // })
+        this.$axios.$post('/transaction', form)
       } catch (e) {}
     },
     payment() {
