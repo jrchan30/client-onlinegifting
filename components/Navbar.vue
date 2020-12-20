@@ -138,9 +138,13 @@
             <template #icon> <i class="bx bxs-user-detail"></i> </template>
             Profile
           </vs-sidebar-item>
-          <vs-sidebar-item v-if="$auth.user" id="transaction" to="/transaction">
+          <vs-sidebar-item
+            v-if="$auth.user"
+            id="transaction"
+            to="/transactions"
+          >
             <template #icon> <i class="bx bx-credit-card-alt"></i> </template>
-            Transaction
+            Transactions
           </vs-sidebar-item>
           <!-- <vs-sidebar-group>
             <template #header>

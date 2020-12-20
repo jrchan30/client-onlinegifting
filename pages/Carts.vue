@@ -569,6 +569,10 @@ export default {
     }
   },
 
+  beforeDestroy() {
+    this.clear()
+  },
+
   computed: {
     ...mapGetters({
       CART: 'users/CART',
@@ -757,7 +761,7 @@ export default {
       this.totalWeight = this.selected.reduce((sum, x) => sum + x.weight, 0)
       this.activePrompt = !this.activePrompt
     },
-    midtransSnap() {
+    async midtransSnap() {
       const arrBundles = []
       const arrBoxes = []
       this.selected.map((x) => {
@@ -793,13 +797,18 @@ export default {
         shippingFee: this.shippingPrice,
         arrivalDate: this.receiver.arrivalDate,
         buyer_phoneNum: this.phoneNum,
+        buyer_address: this.address,
       }
       try {
         // this.$axios.$post('/checkout', form).then((response) => {
         //   window.snap.pay(response)
         // })
-        this.$axios.$post('/transactions', form)
-      } catch (e) {}
+        await this.$axios.$post('/transactions', form)
+        // this.clear()
+        this.$router.push('/transactions')
+      } catch (e) {
+        alert(e)
+      }
     },
     payment() {
       if (
