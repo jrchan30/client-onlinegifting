@@ -169,7 +169,7 @@ export default {
     },
     workbox: {
       cachingExtensions: '@/plugins/workbox-sync.js',
-      // enabled: true, // should be off actually per workbox docs due to complications when used in prod
+      enabled: true, // should be off actually per workbox docs due to complications when used in prod
     },
   },
   /*
