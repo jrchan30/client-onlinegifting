@@ -6,11 +6,7 @@
       :type="'bundles'"
     /> -->
     <div class="container">
-      <div
-        class="d-flex justify-content-between"
-        data-aos="fade-up"
-        data-aos-duration="1000"
-      >
+      <div class="d-flex justify-content-between">
         <ul class="nav nav-pills">
           <li class="nav-item">
             <a class="nav-link active" href="#">Most Recent</a>
@@ -55,8 +51,13 @@
           />
         </div>
       </div>
-      <div class="d-flex justify-content-center">
-        <Pagination :action="'products'" />
+      <div class="d-flex justify-content-center pt-4">
+        <!-- <Pagination :action="'products'" /> -->
+        <vs-pagination
+          v-model="page"
+          :disabled="loading"
+          :length="BUNDLES.meta.last_page"
+        />
       </div>
     </div>
     <div class="position-sticky" style="z-index: 100">
@@ -97,24 +98,26 @@ export default {
     return {
       active: 'home',
       activeFilter: false,
+      page: 1,
+      loading: false,
     }
+  },
+  watch: {
+    async page(val) {
+      this.loading = true
+      try {
+        await this.$store.dispatch('bundles/GET_BUNDLES', val)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
+    },
   },
   computed: {
     ...mapGetters({
       BUNDLES: 'bundles/BUNDLES',
     }),
-
-    // bundles() {
-    //   if (this.BUNDLES.data) {
-    //     return this.BUNDLES.data.filter((bundle) => {
-    //       const bundleProducts = bundle.products.filter(
-    //         (product) => product.stock > 0
-    //       )
-    //       return bundleProducts
-    //     })
-    //   }
-    //   return []
-    // },
   },
   methods: {
     ...mapActions({

@@ -1,16 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <!-- <ItemsPage
-        :items="PRODUCTS.data"
-        :is-fetching="$fetchState.pending"
-        :type="'products'"
-      /> -->
-      <div
-        class="d-flex justify-content-between"
-        data-aos="fade-up"
-        data-aos-duration="1000"
-      >
+      <div class="d-flex justify-content-between">
         <ul class="nav nav-pills">
           <li class="nav-item">
             <a class="nav-link active" href="#">Most Recent</a>
@@ -52,9 +43,14 @@
             :item-type="'products'"
             :store-state="'products'"
           />
-          <div class="d-flex justify-content-center pt-4">
-            <Pagination :action="'products'" />
-          </div>
+        </div>
+        <div class="d-flex justify-content-center pt-4">
+          <!-- <Pagination :action="'products'" /> -->
+          <vs-pagination
+            v-model="page"
+            :disabled="loading"
+            :length="PRODUCTS.meta.last_page"
+          />
         </div>
       </div>
     </div>
@@ -96,18 +92,27 @@ export default {
     return {
       active: 'home',
       activeFilter: false,
+      page: 1,
+      loading: false,
     }
   },
+
   computed: {
     ...mapGetters({
       PRODUCTS: 'products/PRODUCTS',
     }),
-    // products() {
-    //   if (this.PRODUCTS.data) {
-    //     return this.PRODUCTS.data.filter((i) => i.stock > 0)
-    //   }
-    //   return []
-    // },
+  },
+  watch: {
+    async page(val) {
+      this.loading = true
+      try {
+        await this.$store.dispatch('products/GET_PRODUCTS', val)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
+    },
   },
   methods: {
     ...mapActions({

@@ -18,20 +18,32 @@
             <i class="text-primary bx bx-menu"></i>
           </vs-button>
         </template>
-        <vs-navbar-item class="w-100">
-          <vs-input
-            v-model="search"
-            aria-placeholder="search"
-            aria-label="searchbar"
-            class="w-100"
+        <vs-input
+          v-model="search"
+          aria-placeholder="search"
+          aria-label="searchbar"
+          placeholder="Search items..."
+          class="w-100"
+          color="#336699"
+          type="search"
+        >
+          <template #icon>
+            <i class="bx bx-search-alt"></i>
+          </template>
+        </vs-input>
+        <div v-if="search.length > 0" class="h-100 align-items-center">
+          <vs-button
+            data-aos="fade"
+            data-aos-duration="500"
+            icon
+            circle
             color="#336699"
-            type="search"
+            style="min-width: 35px"
+            class="my-auto"
           >
-            <template #icon>
-              <i class="bx bx-search-alt"></i>
-            </template>
-          </vs-input>
-        </vs-navbar-item>
+            <i class="bx bx-search-alt-2"></i>
+          </vs-button>
+        </div>
         <template #right>
           <template v-if="!$auth.loggedIn">
             <vs-button flat color="#336699" to="/login" aria-label="login">
@@ -292,7 +304,6 @@ export default {
       // CARTS: 'users/CARTS',
     }),
     colourOnOff() {
-      console.log(this.$nuxt.isOnline)
       if (this.$nuxt.isOnline) {
         return '#4BB543'
       } else {
@@ -332,6 +343,9 @@ export default {
       } else {
         return `${this.$auth.user.detail.image.url}`
       }
+    },
+    searchSubmit() {
+      console.log('submit pressed')
     },
   },
 }
