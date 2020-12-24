@@ -20,7 +20,7 @@
             icon
             @click="activeFilter = !activeFilter"
           >
-            <i class="text-primary bx bx-menu"></i>
+            <i class="bx bx-filter"></i>
           </vs-button>
         </div>
       </div>

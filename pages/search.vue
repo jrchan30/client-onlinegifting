@@ -25,8 +25,17 @@
             </vs-button>
           </vs-button-group>
         </div>
+        <vs-button
+          class="float-right"
+          aria-label="toggle filter dropdown"
+          flat
+          icon
+          @click="activeFilter = !activeFilter"
+        >
+          <i class="bx bx-filter"></i>
+        </vs-button>
         <div id="products" class="pt-5">
-          <div class="bg-light px-2 pt-4 pb-2 rounded">
+          <div class="bg-light px-2 pt-4 pb-2 rounded" data-os="fade">
             <h4
               class="font-weight-bold custom-color"
               data-aos="fade-up"
@@ -94,6 +103,30 @@
         </div>
       </div>
     </div>
+    <div class="position-sticky" style="z-index: 100">
+      <vs-sidebar
+        v-model="active"
+        color="#336699"
+        right
+        :open.sync="activeFilter"
+      >
+        <template #logo>
+          <div class="pt-5"></div>
+        </template>
+        <vs-sidebar-item id="home">
+          <template #icon>
+            <i class="bx bx-home"></i>
+          </template>
+          Home
+        </vs-sidebar-item>
+        <vs-sidebar-item id="market">
+          <template #icon>
+            <i class="bx bx-grid-alt"></i>
+          </template>
+          Market Overview
+        </vs-sidebar-item>
+      </vs-sidebar>
+    </div>
   </div>
 </template>
 
@@ -110,7 +143,8 @@ export default {
         transactions: [],
         categories: [],
       },
-      activePills: 1,
+      active: false,
+      activeFilter: false,
     }
   },
   watch: {
