@@ -35,7 +35,7 @@ export const mutations = {
   SET_PRODUCTS(state, payload) {
     payload.data.forEach((x) => {
       x.price = formatPrice(x.price)
-      x.main_image = x.images[0].url
+      // x.main_image = x.images[0].url
     })
     state.products = payload
   },

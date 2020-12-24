@@ -1,10 +1,5 @@
 <template>
   <div>
-    <!-- <ItemsPage
-      :items="BUNDLES.data"
-      :is-fetching="$fetchState.pending"
-      :type="'bundles'"
-    /> -->
     <div class="container">
       <div class="d-flex justify-content-between">
         <ul class="nav nav-pills">
@@ -50,14 +45,13 @@
             :store-state="'bundles'"
           />
         </div>
-      </div>
-      <div class="d-flex justify-content-center pt-4">
-        <!-- <Pagination :action="'products'" /> -->
-        <vs-pagination
-          v-model="page"
-          :disabled="loading"
-          :length="BUNDLES.meta.last_page"
-        />
+        <div class="d-flex justify-content-center pt-4">
+          <vs-pagination
+            v-model="page"
+            :disabled="loading"
+            :length="BUNDLES.meta.last_page"
+          />
+        </div>
       </div>
     </div>
     <div class="position-sticky" style="z-index: 100">

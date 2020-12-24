@@ -58,6 +58,7 @@ export default {
 html {
   overflow-y: scroll;
   overflow-y: overlay;
+  scroll-behavior: smooth;
 }
 body {
   font-family: 'Raleway', sans-serif;

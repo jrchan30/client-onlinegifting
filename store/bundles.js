@@ -23,7 +23,7 @@ export const mutations = {
   SET_BUNDLES(state, payload) {
     payload.data.forEach((x) => {
       x.price = formatPrice(x.price)
-      x.main_image = x.detail.image.url
+      // x.main_image = x.detail.image.url
     })
     state.bundles = payload
     // state.bundles = payload.data

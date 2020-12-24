@@ -756,8 +756,8 @@ export default {
       this.receiver.minDate = finalDate
     },
     checkoutPrompt() {
-      this.tempAddress = this.$auth.user.detail.address
-      this.tempPhoneNum = this.$auth.user.detail.phone_num
+      this.tempAddress = this.$auth.user.detail.address ?? ''
+      this.tempPhoneNum = this.$auth.user.detail.phone_num ?? ''
       this.totalWeight = this.selected.reduce((sum, x) => sum + x.weight, 0)
       this.activePrompt = !this.activePrompt
     },

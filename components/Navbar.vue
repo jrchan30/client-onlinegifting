@@ -40,6 +40,7 @@
             color="#336699"
             style="min-width: 35px"
             class="my-auto"
+            @click="searchSubmit"
           >
             <i class="bx bx-search-alt-2"></i>
           </vs-button>
@@ -345,7 +346,7 @@ export default {
       }
     },
     searchSubmit() {
-      console.log('submit pressed')
+      this.$router.push(`/search?search=${this.search}`)
     },
   },
 }
