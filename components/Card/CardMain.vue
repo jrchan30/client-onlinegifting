@@ -16,6 +16,16 @@
             class="img-ratio"
             @click="goTo(item.id)"
           />
+          <div class="position-top-right">
+            <span class="badge badge-pill badge-primary badge-danger"
+              ><i class="bx bx-heart"></i>{{ item.likes_count }}</span
+            >
+            <span
+              class="badge badge-pill badge-primary"
+              style="background-color: #ffba00"
+              ><i class="bx bx-star"></i>{{ item.likes_count }}</span
+            >
+          </div>
         </template>
         <template #text>
           <p class="text-truncate" @click="goTo(item.id)">
@@ -275,5 +285,11 @@ export default {
   background-size: contain;
   width: 100vw;
   height: 100vh;
+}
+
+.position-top-right {
+  position: absolute;
+  right: 10px;
+  top: 5px;
 }
 </style>

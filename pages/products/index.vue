@@ -2,17 +2,17 @@
   <div>
     <div class="container">
       <div class="d-flex justify-content-between">
-        <ul class="nav nav-pills">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Most Recent</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Most Likes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Top Rated</a>
-          </li>
-        </ul>
+        <vs-button-group>
+          <vs-button relief colour="#336699" to="/products?orderBy=created_at">
+            <i class="bx bx-calendar mr-1"></i>Most Recent
+          </vs-button>
+          <vs-button relief danger to="/products?orderBy=likes_count">
+            <i class="bx bx-heart mr-1"></i> Most Likes
+          </vs-button>
+          <vs-button relief warn>
+            <i class="bx bx-star mr-1"></i> Top Rated
+          </vs-button>
+        </vs-button-group>
         <div>
           <vs-button
             aria-label="toggle filter dropdown"
@@ -82,10 +82,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   async fetch() {
+    this.filter.orderBy = this.$route.query.orderBy
+    this.SET_FILTER(this.filter)
     await this.GET_PRODUCTS()
   },
   data() {
@@ -94,6 +96,11 @@ export default {
       activeFilter: false,
       page: 1,
       loading: false,
+      filter: {
+        search: '',
+        orderBy: 'created_at',
+        orderDir: 'desc',
+      },
     }
   },
 
@@ -103,6 +110,7 @@ export default {
     }),
   },
   watch: {
+    '$route.query': '$fetch',
     async page(val) {
       this.loading = true
       try {
@@ -117,6 +125,9 @@ export default {
   methods: {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
+    }),
+    ...mapMutations({
+      SET_FILTER: 'products/SET_FILTER',
     }),
   },
 }
