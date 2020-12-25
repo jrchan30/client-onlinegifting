@@ -2,17 +2,17 @@
   <div>
     <div class="container">
       <div class="d-flex justify-content-between">
-        <ul class="nav nav-pills">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Most Recent</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Most Likes</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Top Rated</a>
-          </li>
-        </ul>
+        <vs-button-group>
+          <vs-button relief colour="#336699" to="/bundles?orderBy=created_at">
+            <i class="bx bx-calendar mr-1"></i>Most Recent
+          </vs-button>
+          <vs-button relief danger to="/bundles?orderBy=likes_count">
+            <i class="bx bx-heart mr-1"></i> Most Likes
+          </vs-button>
+          <vs-button relief warn to="/bundles?orderBy=avg_rating">
+            <i class="bx bx-star mr-1"></i> Top Rated
+          </vs-button>
+        </vs-button-group>
         <div>
           <vs-button
             aria-label="toggle filter dropdown"
@@ -45,7 +45,7 @@
             :store-state="'bundles'"
           />
         </div>
-        <div class="d-flex justify-content-center pt-4">
+        <div v-if="BUNDLES.meta" class="d-flex justify-content-center pt-4">
           <vs-pagination
             v-model="page"
             :disabled="loading"
@@ -82,21 +82,39 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   async fetch() {
+    if (this.$route.query.orderBy) {
+      this.filter.orderBy = this.$route.query.orderBy
+    }
+    await this.SET_FILTER(this.filter)
     await this.GET_BUNDLES()
   },
+
   data() {
     return {
       active: 'home',
       activeFilter: false,
       page: 1,
       loading: false,
+      filter: {
+        search: '',
+        orderBy: 'created_at',
+        orderDir: 'desc',
+      },
     }
   },
+
+  computed: {
+    ...mapGetters({
+      BUNDLES: 'bundles/BUNDLES',
+    }),
+  },
+
   watch: {
+    '$route.query': '$fetch',
     async page(val) {
       this.loading = true
       try {
@@ -108,14 +126,13 @@ export default {
       }
     },
   },
-  computed: {
-    ...mapGetters({
-      BUNDLES: 'bundles/BUNDLES',
-    }),
-  },
+
   methods: {
     ...mapActions({
       GET_BUNDLES: 'bundles/GET_BUNDLES',
+    }),
+    ...mapMutations({
+      SET_FILTER: 'bundles/SET_FILTER',
     }),
     goTo(id) {
       this.$router.push(`/bundles/${id}`)

@@ -23,7 +23,7 @@
             <span
               class="badge badge-pill badge-primary"
               style="background-color: #ffba00"
-              ><i class="bx bx-star"></i>{{ item.likes_count }}</span
+              ><i class="bx bx-star"></i>{{ item.avg_rating }}</span
             >
           </div>
         </template>
@@ -195,7 +195,7 @@ export default {
           storeState: this.storeState,
         })
         try {
-          const { value: index } = await this.$swal({
+          const { value: index } = this.$swal({
             title: 'Choose box to add to',
             input: 'select',
             inputOptions: this.BOXES.data.map((x) => {
@@ -212,41 +212,51 @@ export default {
                 }
               })
             },
-          })
-          this.inputs.box_id = this.BOXES.data[index].id
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.inputs.box_id = this.BOXES.data[result.value].id
 
-          const { value: qty } = await this.$swal({
-            title: 'Input quantity',
-            input: 'range',
-            inputLabel:
-              'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
-            inputAttributes: {
-              min: 1,
-              max: productInfo.stock,
-              step: 1,
-            },
-            inputValue: 1,
-            inputValidator: (value) => {
-              return new Promise((resolve) => {
-                if (value || value <= productInfo.stock) {
-                  resolve()
-                } else {
-                  resolve('You need to choose one')
+              const { value: qty } = this.$swal({
+                title: 'Input quantity',
+                input: 'range',
+                inputLabel:
+                  'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
+                showCancelButton: true,
+                inputAttributes: {
+                  min: 1,
+                  max: productInfo.stock,
+                  step: 1,
+                },
+                inputValue: 1,
+                inputValidator: (value) => {
+                  return new Promise((resolve) => {
+                    if (value || value <= productInfo.stock) {
+                      resolve()
+                    } else {
+                      resolve('You need to choose one')
+                    }
+                  })
+                },
+              }).then(async (result2) => {
+                if (result2.isConfirmed) {
+                  const allProducts = {}
+                  this.BOXES.data[result.value].products.map((x) => {
+                    allProducts[x.id] = { quantity: x.quantity }
+                  })
+                  allProducts[id] = { quantity: result2.value }
+
+                  await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
+                    allProducts: JSON.stringify(allProducts),
+                  })
+                  this.addBoxNotification(
+                    name,
+                    this.BOXES.data[result.value].name,
+                    result2.value
+                  )
                 }
               })
-            },
+            }
           })
-
-          const allProducts = {}
-          this.BOXES.data[index].products.map((x) => {
-            allProducts[x.id] = { quantity: x.quantity }
-          })
-          allProducts[id] = { quantity: qty }
-
-          await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
-            allProducts: JSON.stringify(allProducts),
-          })
-          this.addBoxNotification(name, this.BOXES.data[index].name, qty)
         } catch (e) {
           alert(e)
         } finally {

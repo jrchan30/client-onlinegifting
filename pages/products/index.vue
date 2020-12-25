@@ -9,7 +9,7 @@
           <vs-button relief danger to="/products?orderBy=likes_count">
             <i class="bx bx-heart mr-1"></i> Most Likes
           </vs-button>
-          <vs-button relief warn>
+          <vs-button relief warn to="/products?orderBy=avg_rating">
             <i class="bx bx-star mr-1"></i> Top Rated
           </vs-button>
         </vs-button-group>
@@ -44,8 +44,7 @@
             :store-state="'products'"
           />
         </div>
-        <div class="d-flex justify-content-center pt-4">
-          <!-- <Pagination :action="'products'" /> -->
+        <div v-if="PRODUCTS.meta" class="d-flex justify-content-center pt-4">
           <vs-pagination
             v-model="page"
             :disabled="loading"
@@ -86,10 +85,13 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
   async fetch() {
-    this.filter.orderBy = this.$route.query.orderBy
-    this.SET_FILTER(this.filter)
+    if (this.$route.query.orderBy) {
+      this.filter.orderBy = this.$route.query.orderBy
+    }
+    await this.SET_FILTER(this.filter)
     await this.GET_PRODUCTS()
   },
+
   data() {
     return {
       active: 'home',
@@ -109,6 +111,7 @@ export default {
       PRODUCTS: 'products/PRODUCTS',
     }),
   },
+
   watch: {
     '$route.query': '$fetch',
     async page(val) {
@@ -122,6 +125,7 @@ export default {
       }
     },
   },
+
   methods: {
     ...mapActions({
       GET_PRODUCTS: 'products/GET_PRODUCTS',
