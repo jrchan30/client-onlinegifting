@@ -51,6 +51,14 @@ export default {
   color: #2c3e50;
 }
 
+.bg-all {
+  background-image: url('/image/Confetti-Doodles.svg');
+  background-size: contain;
+  background-repeat: repeat;
+  /* opacity: 0.1; */
+  /* background-attachment: fixed; */
+}
+
 .swal-container {
   z-index: 100000;
 }

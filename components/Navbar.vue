@@ -111,6 +111,34 @@
           <template #logo>
             <img src="/image/OnlineGiftingTextEdited.svg" alt="" />
           </template>
+          <div class="d-flex w-100 px-2">
+            <vs-input
+              v-model="search"
+              aria-placeholder="search"
+              aria-label="searchbar"
+              class="w-100"
+              color="primary"
+              type="search"
+            >
+              <template #icon>
+                <i class="bx bx-search-alt"></i>
+              </template>
+            </vs-input>
+            <div v-if="search.length > 0" class="h-100 align-items-center">
+              <vs-button
+                data-aos="fade"
+                data-aos-duration="500"
+                icon
+                circle
+                color="#336699"
+                style="min-width: 35px"
+                class="my-auto"
+                @click="searchSubmit"
+              >
+                <i class="bx bx-search-alt-2"></i>
+              </vs-button>
+            </div>
+          </div>
           <vs-sidebar-item id="index" to="/">
             <template #icon>
               <i class="bx bx-home"></i>
@@ -222,35 +250,24 @@
               </template>
               Line
             </vs-sidebar-item>
-            <vs-sidebar-item id="tutorial">
+            <vs-sidebar-item id="tutorial" disabled>
               <template #icon>
                 <i class="fas fa-info"></i>
               </template>
-              Tutorial
+              Tutorial (Unavailable)
             </vs-sidebar-item>
-            <vs-sidebar-item id="chat">
+            <vs-sidebar-item id="chat" disabled>
               <template #icon>
                 <i class="bx bx-chat"></i>
               </template>
-              Chat
+              Chat (Unavailable)
             </vs-sidebar-item>
           </vs-sidebar-group>
-          <vs-row justify="center">
-            <vs-col w="11">
-              <vs-input
-                v-model="search"
-                aria-placeholder="search"
-                aria-label="searchbar"
-                class="w-100"
-                color="primary"
-                type="search"
-              >
-                <template #icon>
-                  <i class="bx bx-search-alt"></i>
-                </template>
-              </vs-input>
-            </vs-col>
-          </vs-row>
+          <!-- <vs-row justify="center"> -->
+          <!-- <vs-col w="11"> -->
+
+          <!-- </vs-col> -->
+          <!-- </vs-row> -->
           <template #footer>
             <vs-row v-if="$auth.user" justify="space-between">
               <vs-avatar

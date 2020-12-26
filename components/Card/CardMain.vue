@@ -195,7 +195,7 @@ export default {
           storeState: this.storeState,
         })
         try {
-          const { value: index } = this.$swal({
+          this.$swal({
             title: 'Choose box to add to',
             input: 'select',
             inputOptions: this.BOXES.data.map((x) => {
@@ -216,7 +216,7 @@ export default {
             if (result.isConfirmed) {
               this.inputs.box_id = this.BOXES.data[result.value].id
 
-              const { value: qty } = this.$swal({
+              this.$swal({
                 title: 'Input quantity',
                 input: 'range',
                 inputLabel:
