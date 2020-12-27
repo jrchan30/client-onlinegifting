@@ -1,5 +1,9 @@
 export const state = () => ({
-  provinces: {},
+  provinces: {
+    rajaongkir: {
+      results: {},
+    },
+  },
   cities: {},
   couriers: [
     {

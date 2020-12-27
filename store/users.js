@@ -1,5 +1,6 @@
 export const state = () => ({
   users: {},
+  userDetails: {},
   admins: {},
   cart: {},
   likedProducts: {},
@@ -27,6 +28,9 @@ export const getters = {
   CART(state) {
     return state.cart
   },
+  USER_DETAILS(state) {
+    return state.userDetails
+  },
 }
 
 export const mutations = {
@@ -49,6 +53,9 @@ export const mutations = {
   },
   SET_CART(state, payload) {
     state.cart = payload
+  },
+  SET_USER_DETAILS(state, payload) {
+    state.userDetails = payload
   },
 }
 
@@ -75,5 +82,10 @@ export const actions = {
   async GET_CART({ commit }) {
     const data = await this.$axios.$get('carts')
     commit('SET_CART', data)
+  },
+
+  async GET_USER_DETAILS({ commit }) {
+    const data = await this.$axios.$get('user-details')
+    commit('SET_USER_DETAILS', data)
   },
 }
