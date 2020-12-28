@@ -4,7 +4,16 @@ export const state = () => ({
       results: {},
     },
   },
-  cities: {},
+  cities: {
+    rajaongkir: {
+      results: {},
+    },
+  },
+  cities_local: {
+    rajaongkir: {
+      result: {},
+    },
+  },
   couriers: [
     {
       code: 'OGC',
@@ -38,6 +47,9 @@ export const getters = {
       return state.cities.rajaongkir.results
     }
   },
+  CITIES_LOCAL(state) {
+    return state.cities_local.rajaongkir.results
+  },
   COURIERS(state) {
     return state.couriers
   },
@@ -53,6 +65,9 @@ export const mutations = {
   SET_CITIES(state, payload) {
     state.cities = payload
   },
+  SET_CITIES_LOCAL(state, payload) {
+    state.cities_local = payload
+  },
   SET_SERVICES_COSTS(state, payload) {
     state.servicesCosts = payload.rajaongkir.results[0].costs
     state.fullDetails = payload.rajaongkir
@@ -66,14 +81,13 @@ export const actions = {
       weight: obj.weight,
       courier: obj.courier,
     }
-    console.log(form)
-    console.log(form.weight)
     const data = await this.$axios.$post(`/get-services-costs`, form)
     commit('SET_SERVICES_COSTS', data)
   },
   async GET_CITIES({ commit }, provinceId = '') {
     const data = await this.$axios.$get(`/get-cities?province=${provinceId}`)
     commit('SET_CITIES', data)
+    commit('SET_CITIES_LOCAL', data)
   },
   async GET_PROVINCES({ commit }) {
     let data = null

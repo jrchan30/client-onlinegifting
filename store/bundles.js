@@ -29,14 +29,16 @@ export const mutations = {
     // state.bundles = payload.data
   },
   SET_BUNDLE(state, payload) {
+    console.log(payload)
     state.bundle = {
       data: {
         id: payload.data.id,
-        user: payload.data.user,
-        name: payload.data.name,
-        description: '',
+        type: payload.data.type,
         price: formatPrice(payload.data.price),
-        stock: 0,
+        weight: payload.data.weight,
+        // user: payload.data.user,
+        description: payload.data.description,
+        name: payload.data.name,
         images: [payload.data.detail.image],
         categories: [],
         reviews: payload.data.reviews,

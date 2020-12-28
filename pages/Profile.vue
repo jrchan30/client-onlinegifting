@@ -61,7 +61,9 @@
                     <i class="bx bx-loader-circle"></i>
                   </vs-avatar>
                   <div v-else>
-                    <div v-if="likedItems.length < 1">0</div>
+                    <div v-if="likedItems.length < 1">
+                      <span class="font-weight-bold">0</span>
+                    </div>
                     <vs-avatar-group v-else max="3">
                       <vs-avatar
                         v-for="(item, index) in likedItems"
@@ -130,12 +132,12 @@
               <h3 class="text-monospace">General Details</h3>
             </div>
             <div class="card-body">
-              <dl class="row mb-0">
+              <dl v-if="!$fetchState.pending" class="row mb-0">
                 <dt class="col-sm-4">Type</dt>
                 <dd class="col-sm-8">
                   {{ USER_DETAILS.data.type }}
                 </dd>
-                <dt class="col-sm-4">Joined At</dt>
+                <dt class="col-sm-4">Joined</dt>
                 <dd class="col-sm-8">
                   {{ $auth.user.created_at }}
                 </dd>
@@ -154,7 +156,7 @@
               <h3 class="text-monospace">User Details</h3>
             </div>
             <div class="card-body">
-              <dl class="row mb-0">
+              <dl v-if="!$fetchState.pending" class="row mb-0">
                 <dt class="col-sm-4">Name</dt>
                 <dd class="col-sm-8">
                   {{ $auth.user.name }}
@@ -165,6 +167,24 @@
                   {{ $auth.user.email }}
                 </dd>
 
+                <dt class="col-sm-4">Province</dt>
+                <dd v-if="!USER_DETAILS.data.province" class="col-sm-8">
+                  <span class="text-muted"> Not yet filled </span>
+                </dd>
+                <dd v-else class="col-sm-8">
+                  <!-- {{ USER_DETAILS.data.province }} -->
+                  {{ splittedProvinceCity.tempProvince }}
+                </dd>
+
+                <dt class="col-sm-4">City</dt>
+                <dd v-if="!USER_DETAILS.data.city" class="col-sm-8">
+                  <span class="text-muted"> Not yet filled </span>
+                </dd>
+                <dd v-else class="col-sm-8">
+                  <!-- {{ USER_DETAILS.data.city }} -->
+                  {{ splittedProvinceCity.tempCity }}
+                </dd>
+
                 <dt class="col-sm-4">Address</dt>
                 <dd v-if="!USER_DETAILS.data.address" class="col-sm-8">
                   <span class="text-muted"> Not yet filled </span>
@@ -173,20 +193,12 @@
                   {{ USER_DETAILS.data.address }}
                 </dd>
 
-                <dt class="col-sm-4">City</dt>
-                <dd v-if="!USER_DETAILS.data.city" class="col-sm-8">
+                <dt class="col-sm-4">Phone Number</dt>
+                <dd v-if="!USER_DETAILS.data.phone_num" class="col-sm-8">
                   <span class="text-muted"> Not yet filled </span>
                 </dd>
                 <dd v-else class="col-sm-8">
-                  {{ USER_DETAILS.data.city }}
-                </dd>
-
-                <dt class="col-sm-4">Province</dt>
-                <dd v-if="!USER_DETAILS.data.province" class="col-sm-8">
-                  <span class="text-muted"> Not yet filled </span>
-                </dd>
-                <dd v-else class="col-sm-8">
-                  {{ USER_DETAILS.data.province }}
+                  {{ USER_DETAILS.data.phone_num }}
                 </dd>
               </dl>
             </div>
@@ -194,66 +206,139 @@
         </div>
       </div>
     </div>
-    <div class="container">
-      <vs-dialog v-model="activePrompt" blur prevent-close>
-        <template #header>
-          <h4>Edit Profile</h4>
-        </template>
+    <!-- <div class="container"> -->
+    <vs-dialog v-model="activePrompt" blur prevent-close :loading="loading">
+      <template #header>
+        <h4>Edit Profile Details</h4>
+      </template>
 
-        <div class="container">
-          <div class="row">
-            <div v-if="PROVINCES" class="col-12 col-md-6 pb-4">
-              <vs-select
-                v-model="province_selected"
-                color="#336699"
-                filter
-                :disabled="loading"
-                :loading="loading"
-                placeholder="Province"
-                label="Receiver Province"
+      <div class="container">
+        <div class="row">
+          <div v-if="PROVINCES.length > 0" class="col-12 col-sm-6 py-4">
+            <vs-select
+              v-model="province_selected"
+              color="#336699"
+              filter
+              placeholder="Jakarta"
+              label="Province"
+            >
+              <template v-if="province_selected === ''" #message-danger>
+                Required
+              </template>
+              <vs-option
+                v-for="(province, index) in PROVINCES"
+                :key="index"
+                :value="`${province.province}|${province.province_id}`"
+                :label="province.province"
+                >{{ province.province }}</vs-option
               >
-                <template v-if="province_selected === ''" #message-danger>
-                  Required
-                </template>
+            </vs-select>
+          </div>
+          <div v-if="showCity && !loading" class="col-12 col-sm-6 py-4">
+            <vs-select
+              v-model="city_selected"
+              color="#336699"
+              placeholder="Jakarta Timur"
+              label="City | Postal Code"
+            >
+              <template v-if="!validCity.valid" #message-danger>
+                {{ validCity.message }}
+              </template>
+              <template v-for="city in CITIES_LOCAL">
                 <vs-option
-                  v-for="(province, index) in PROVINCES"
-                  :key="index"
-                  :value="`${province.province}|${province.province_id}`"
-                  :label="province.province"
-                  >{{ province.province }}</vs-option
+                  :key="`${city.city_id}-${city.province_id}`"
+                  :value="`${city.city_name}|${city.city_id}|${city.province_id}|${city.type}|${city.postal_code}`"
+                  :label="`${city.city_name} | ${city.postal_code}`"
+                  >{{ city.city_name }} | {{ city.postal_code }}</vs-option
                 >
-              </vs-select>
-            </div>
-            <!-- <div v-if="CITIES" class="col-12 col-md-6 pb-4">
-              <vs-select
-                v-model="city_selected"
-                color="#336699"
-                :disabled="province_selected === ''"
-                placeholder="City"
-                label="Receiver City | Postal Code"
-              >
-                <template v-if="!validCity.valid" #message-danger>
-                  {{ validCity.message }}
-                </template>
-                <template v-for="city in CITIES(province)">
-                  <vs-option
-                    :key="`${city.city_id}-${city.province_id}`"
-                    :value="`${city.city_name}|${city.city_id}|${city.province_id}|${city.type}|${city.postal_code}`"
-                    :label="`${city.city_name} | ${city.postal_code}`"
-                    >{{ city.city_name }} | {{ city.postal_code }}</vs-option
-                  >
-                </template>
-              </vs-select>
-            </div> -->
+              </template>
+            </vs-select>
+          </div>
+          <div class="col-12 col-md-8 py-4">
+            <vs-input
+              v-model="tempAddress"
+              color="#336699"
+              type="text"
+              label="Full Address"
+              placeholder="Jl. Raya Kb. Jeruk No.27"
+              class="pb-3"
+              required
+            >
+              <template v-if="!validAddress" #message-danger>
+                Required (Between 10-60 letters)
+              </template>
+              <template #icon>
+                <i class="bx bxs-edit-location"></i>
+              </template>
+            </vs-input>
+          </div>
+          <div class="col-12 col-md-4 py-4">
+            <vs-input
+              v-model="tempPhoneNum"
+              color="#336699"
+              type="tel"
+              label="Phone Number"
+              placeholder="081514329539"
+              required
+            >
+              <template v-if="!validPhone" #message-danger>
+                Required (Indonesia Format)
+              </template>
+              <template #icon> <i class="bx bx-phone"></i> </template>
+            </vs-input>
           </div>
         </div>
-      </vs-dialog>
-    </div>
+        <dl class="row mb-0">
+          <dt class="col-sm-4">Province</dt>
+          <dd v-if="!province_selected" class="col-sm-8">
+            <span class="text-muted"> Not yet filled </span>
+          </dd>
+          <dd v-else class="col-sm-8">
+            {{ province_selected }}
+          </dd>
+
+          <dt class="col-sm-4">City</dt>
+          <dd v-if="!city_selected" class="col-sm-8">
+            <span class="text-muted"> Not yet filled </span>
+          </dd>
+          <dd v-else class="col-sm-8">
+            {{ city_selected }}
+          </dd>
+
+          <dt class="col-sm-4">Address</dt>
+          <dd v-if="!address" class="col-sm-8">
+            <span class="text-muted"> Not yet filled </span>
+          </dd>
+          <dd v-else class="col-sm-8">
+            {{ address }}
+          </dd>
+
+          <dt class="col-sm-4">Phone Number</dt>
+          <dd v-if="!phoneNum" class="col-sm-8">
+            <span class="text-muted"> Not yet filled </span>
+          </dd>
+          <dd v-else class="col-sm-8">
+            {{ phoneNum }}
+          </dd>
+        </dl>
+        <div class="row">
+          <div class="mx-auto">
+            <vs-button animation-type="vertical" @click="submit">
+              Save
+              <template #animate> <i class="bx bx-save"></i> </template
+            ></vs-button>
+          </div>
+        </div>
+      </div>
+    </vs-dialog>
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { debounce } from '@/plugins/customUtil'
+
 export default {
   layout: 'default',
   middleware: ['auth'],
@@ -276,6 +361,11 @@ export default {
       province_selected: '',
       city_selected: '',
       loading: false,
+      tempAddress: '',
+      address: '',
+      showCity: false,
+      tempPhoneNum: '',
+      phoneNum: '',
     }
   },
 
@@ -286,31 +376,81 @@ export default {
       TRANSACTIONS: 'transactions/TRANSACTIONS',
       USER_DETAILS: 'users/USER_DETAILS',
       PROVINCES: 'shipping/PROVINCES',
-      // CITIES: 'shipping/CITIES',
+      CITIES_LOCAL: 'shipping/CITIES_LOCAL',
     }),
     likedItems() {
       return this.LIKED_PRODUCTS.concat(this.LIKED_BUNDLES)
     },
-    // validCity() {
-    //   let validity = {}
-    //   if (this.province_selected === '') {
-    //     validity = {
-    //       valid: false,
-    //       message: 'Province must be selected first',
-    //     }
-    //   } else if (this.city_selected === '') {
-    //     validity = {
-    //       valid: false,
-    //       message: 'Required',
-    //     }
-    //   } else {
-    //     validity = {
-    //       valid: true,
-    //       message: 'OK',
-    //     }
-    //   }
-    //   return validity
-    // },
+    validCity() {
+      let validity = {}
+      if (this.province_selected === '') {
+        validity = {
+          valid: false,
+          message: 'Province must be selected first',
+        }
+      } else if (this.city_selected === '') {
+        validity = {
+          valid: false,
+          message: 'Required',
+        }
+      } else {
+        validity = {
+          valid: true,
+          message: 'OK',
+        }
+      }
+      return validity
+    },
+    validAddress() {
+      if (
+        this.address === '' ||
+        this.address.length < 10 ||
+        this.address.length > 70
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
+    validPhone() {
+      return /^\d{6,12}$/.test(this.phoneNum)
+    },
+    splittedProvinceCity() {
+      let tempProvince = this.USER_DETAILS.data.province
+      let tempCity = this.USER_DETAILS.data.city
+      if (tempProvince !== null) {
+        const arrProvince = tempProvince.split('|')
+        tempProvince = arrProvince[0]
+      }
+
+      if (tempCity !== null) {
+        const arrCity = tempCity.split('|')
+        tempCity = arrCity[0]
+      }
+      return { tempProvince, tempCity }
+    },
+  },
+
+  watch: {
+    async province_selected(val) {
+      this.loading = true
+      this.city_selected = ''
+      const arrVal = val.split('|')
+      const provinceId = arrVal[1]
+      try {
+        this.showCity = false
+        await this.GET_CITIES(provinceId)
+      } finally {
+        this.showCity = true
+        this.loading = false
+      }
+    },
+    tempAddress: debounce(function (newVal) {
+      this.address = newVal
+    }, 500),
+    tempPhoneNum: debounce(function (newVal) {
+      this.phoneNum = newVal
+    }, 500),
   },
 
   methods: {
@@ -347,11 +487,42 @@ export default {
     async editPrompt() {
       this.activePrompt = !this.activePrompt
       this.loading = true
+      this.tempAddress = this.USER_DETAILS.data.address ?? ''
+      this.tempPhoneNum = this.USER_DETAILS.data.phone_num ?? ''
       try {
+        this.province_selected = this.USER_DETAILS.data.province ?? ''
+
         await this.GET_PROVINCES()
-        await this.GET_CITIES()
+        // await this.GET_CITIES()
       } finally {
         this.loading = false
+        this.city_selected = this.USER_DETAILS.data.city ?? ''
+      }
+    },
+    async submit() {
+      if (
+        this.validCity &&
+        this.validAddress &&
+        this.validPhone &&
+        this.province_selected !== ''
+      ) {
+        try {
+          const form = {
+            province: this.province_selected,
+            city: this.city_selected,
+            phone_num: this.phoneNum,
+            address: this.address,
+          }
+          this.loading = true
+          await this.$axios.$patch(`/users/${this.$auth.user.id}`, form)
+          this.GET_USER_DETAILS()
+        } catch (e) {
+          alert(e)
+        } finally {
+          this.loading = false
+        }
+      } else {
+        alert('Please fill all inputs as instructed')
       }
     },
     deleteUser() {
@@ -394,6 +565,10 @@ export default {
 }
 .item-image {
   object-fit: cover;
+}
+
+.vs-select-content {
+  max-width: 100%;
 }
 
 .bg-top {
