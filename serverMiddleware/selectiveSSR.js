@@ -2,8 +2,8 @@ export default function (req, res, next) {
   const paths = [
     '/admin',
     // '/profile',
-    '/liked-items',
-    '/boxes',
+    // '/liked-items',
+    // '/boxes',
   ]
   const url = req.originalUrl
 
