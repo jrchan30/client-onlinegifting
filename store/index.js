@@ -44,7 +44,4 @@ export const actions = {
   //   }
   //   commit('SET_AUTH', { auth, user }) // set state auth
   // },
-  nuxtServerInit({ commit }, { app, req }) {
-    this.$axios.setHeader('referer', 'https://onlinegifting.shop/')
-  },
 }

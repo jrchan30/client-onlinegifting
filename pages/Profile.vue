@@ -346,7 +346,6 @@ import { debounce } from '@/plugins/customUtil'
 export default {
   layout: 'default',
   middleware: ['auth'],
-  // middleware: ['auth-user'],
 
   async fetch() {
     await this.GET_LIKED_ITEMS()

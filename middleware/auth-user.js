@@ -32,6 +32,5 @@ export default async function ({ app, store, redirect }) {
       redirect('/login')
     }
   }
-  // console.log(store)
-  // store.commit('set', { auth, user }) // set state auth
+  store.commit('set', { auth, user }) // set state auth
 }
