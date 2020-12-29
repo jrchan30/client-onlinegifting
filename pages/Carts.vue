@@ -445,7 +445,10 @@
                 </vs-card-group>
               </div>
             </div>
-            <div v-if="receiver.service" class="row pt-3">
+            <div
+              v-if="receiver.service || receiver.courier == 'OGC'"
+              class="row pt-3"
+            >
               <strong class="text-center col-12 mb-3"
                 >Final Pricing Details</strong
               >
@@ -474,7 +477,7 @@
                   >
                     {{ receiver.courier }}
                   </dt>
-                  <dd v-if="receiver.service !== 'OGC'" class="col-6 col-md-3">
+                  <dd v-if="receiver.courier !== 'OGC'" class="col-6 col-md-3">
                     {{ serviceDetails[0].cost[0].value }}
                   </dd>
                   <dd v-else>Free (OGC)</dd>
@@ -751,7 +754,9 @@ export default {
         (future.getMonth() + 1 < 10 ? '0' : '') +
         (future.getMonth() + 1) +
         '-' +
+        (future.getDate() < 10 ? '0' : '') +
         future.getDate()
+      console.log(finalDate)
       this.receiver.arrivalDate = finalDate
       this.receiver.minDate = finalDate
     },
@@ -793,7 +798,8 @@ export default {
         receiver_city: cityName,
         receiver_postal_code: postal,
         courier: this.receiver.courier,
-        service: this.receiver.service,
+        service:
+          this.receiver.courier !== 'OGC' ? this.receiver.service : 'AOT',
         shippingFee: this.shippingPrice,
         arrivalDate: this.receiver.arrivalDate,
         buyer_phoneNum: this.phoneNum,
