@@ -20,7 +20,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ commit }, { req }) {
+  nuxtServerInit({ commit }, { req }) {
     let auth = false
     let user = null
     if (req.headers.cookie) {
@@ -28,7 +28,7 @@ export const actions = {
       // cookie found
       try {
         // check data user login with cookie
-        const res = await this.$axios.$get('/user')
+        const res = this.$axios.$get('/user')
         user = res.data
         // user = res.user.data
         console.log('berhasil get')
