@@ -120,7 +120,7 @@ export default {
       try {
         await this.$store.dispatch('bundles/GET_BUNDLES', val)
       } catch (e) {
-        console.log(e)
+        alert(e)
       } finally {
         this.loading = false
       }

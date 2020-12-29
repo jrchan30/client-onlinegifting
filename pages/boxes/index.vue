@@ -204,6 +204,7 @@
                       >
                         Products Count
                       </vs-th>
+                      <vs-th> Color/Design </vs-th>
                       <vs-th> Edit/Delete </vs-th>
                     </vs-tr>
                   </template>
@@ -226,8 +227,17 @@
                       <vs-td>
                         {{ tr.products.length }}
                       </vs-td>
+                      <vs-td>
+                        <vs-avatar size="30" :color="tr.detail.colour">
+                        </vs-avatar>
+                      </vs-td>
                       <vs-td class="d-flex">
-                        <vs-button aria-label="edit box" primary gradient>
+                        <vs-button
+                          aria-label="edit box"
+                          primary
+                          gradient
+                          @click="editBox(tr)"
+                        >
                           <i class="bx bxs-edit"></i>
                           <template #animate> Edit </template>
                         </vs-button>
@@ -259,6 +269,46 @@
                 Add to Cart
               </vs-button>
             </div>
+            <vs-dialog v-model="editShow" blur>
+              <template #header>
+                <h4 class="pt-2 mb-2">
+                  Edit
+                  <b>{{ currentEdit.name }}</b>
+                </h4>
+              </template>
+
+              <div>
+                <vs-input
+                  v-model="editForm.name"
+                  class="mb-2"
+                  placeholder="Box name"
+                  label="Box Name"
+                >
+                  <!-- <template #icon> @ </template> -->
+                </vs-input>
+                <div class="d-flex justify-content-between">
+                  <div class="ml-2">
+                    <small>Choose a colour:</small>
+                  </div>
+                  <div>
+                    <v-swatches
+                      v-model="editForm.colour"
+                      popover-x="left"
+                    ></v-swatches>
+                  </div>
+                </div>
+                <button @click="swalfire()">test swal</button>
+              </div>
+
+              <template #footer>
+                <div class="pb-2">
+                  <vs-button block @click="createBox()">
+                    <i class="fas fa-box-open"></i>
+                    <span class="ml-2">Save</span>
+                  </vs-button>
+                </div>
+              </template>
+            </vs-dialog>
           </template>
           <span class="data">
             <pre>
@@ -291,6 +341,11 @@ export default {
         boxName: '',
         colour: '#336699',
       },
+      editForm: {
+        name: '',
+        colour: '',
+        design: '',
+      },
       search: '',
       allCheck: false,
       selected: [],
@@ -300,6 +355,8 @@ export default {
 
       active: false,
       checkbox1: false,
+      editShow: false,
+      currentEdit: {},
     }
   },
   computed: {
@@ -411,6 +468,32 @@ export default {
         this.clear()
       }
     },
+    swalfire() {
+      this.$swal({
+        title: 'Choose box to add to',
+        input: 'select',
+        inputOptions: this.BOXES.data.map((x) => {
+          return x.name
+        }),
+        inputPlaceholder: 'Select a box',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value) {
+              resolve()
+            } else {
+              resolve('You need to choose one')
+            }
+          })
+        },
+      })
+    },
+    editBox(item) {
+      this.currentEdit = item
+      this.editForm.name = item.name
+      this.editForm.colour = item.detail.colour
+      this.editShow = true
+    },
   },
 }
 </script>
@@ -445,5 +528,9 @@ export default {
 
 .vs-input {
   width: 100% !important;
+}
+
+.swal2-container {
+  z-index: 100000;
 }
 </style>
