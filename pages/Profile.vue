@@ -342,7 +342,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { debounce } from '@/plugins/customUtil'
-import requrl from 'requrl'
 
 export default {
   layout: 'default',
@@ -372,13 +371,6 @@ export default {
       showCity: false,
       tempPhoneNum: '',
       phoneNum: '',
-    }
-  },
-
-  nuxtServerInit() {
-    console.log(process.server)
-    if (process.server) {
-      this.$auth.ctx.$axios.setHeader('referer', requrl(this.req))
     }
   },
 
