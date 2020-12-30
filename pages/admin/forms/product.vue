@@ -358,7 +358,7 @@ export default {
       if (file) {
         this.images[idx] = file
       } else {
-        console.log('Old browser. No support for Filereader API')
+        alert('Old browser. No support for Filereader API')
       }
     },
     addImage() {

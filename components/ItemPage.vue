@@ -118,10 +118,10 @@
             <!-- Description -->
             <div class="row py-2">
               <div class="col-12">
-                <span class="text-uppercase text-primary font-weight-bold"
-                  >item DESCRIPTION</span
-                >
-                <p>{{ item.data.description }}</p>
+                <p class="text-uppercase text-primary font-weight-bold">
+                  item DESCRIPTION
+                </p>
+                <span v-html="item.data.description"></span>
               </div>
             </div>
             <!-- End Description -->
@@ -499,6 +499,9 @@ export default {
 }
 
 .item-image {
+  object-fit: contain;
+  max-height: 310px;
+  max-width: 550px;
   border-radius: 10px;
   cursor: pointer;
 }

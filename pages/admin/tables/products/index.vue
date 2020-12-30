@@ -266,13 +266,20 @@
                   </div>
                   <!--End Main Fields Loop -->
                   <div v-if="!$fetchState.pending" class="col-md-12 mb-4">
-                    <v-select
+                    <!-- <v-select
                       v-model="categories"
                       multiple
                       label="name"
                       required
                       :reduce="(name) => name.id"
                       :options="SUB_CATEGORIES"
+                    /> -->
+                    <treeselect
+                      v-model="categories"
+                      :multiple="true"
+                      :options="CATEGORIES"
+                      value-consists-of="LEAF_PRIORITY"
+                      :normalizer="normalizer"
                     />
                   </div>
                   <button
@@ -364,6 +371,12 @@ export default {
       },
       isHiddenProducts: false,
       loading: false,
+
+      normalizer(node) {
+        if (node.children == null || node.children === 'null') {
+          delete node.children
+        }
+      },
     }
   },
 
@@ -569,7 +582,7 @@ export default {
           const form = {
             name: this.fields.name.value,
             description: this.fields.description.value,
-            price: this.fields.price.value,
+            price: this.fields.price.value.split('.').join(''),
             stock: this.fields.stock.value,
             weight: this.fields.weight.value,
           }

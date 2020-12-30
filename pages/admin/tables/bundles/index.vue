@@ -203,7 +203,7 @@
                   <div class="col-md-4">
                     <div class="form-group">
                       <label class="form-control-label">Categories</label>
-                      <v-select
+                      <!-- <v-select
                         v-model="form.categories"
                         multiple
                         label="name"
@@ -211,6 +211,13 @@
                         :reduce="(name) => name.id"
                         :options="SUB_CATEGORIES"
                         style="z-index = 1000"
+                      /> -->
+                      <treeselect
+                        v-model="form.categories"
+                        :multiple="true"
+                        :options="CATEGORIES"
+                        value-consists-of="LEAF_PRIORITY"
+                        :normalizer="normalizer"
                       />
                     </div>
                   </div>
@@ -408,6 +415,12 @@ export default {
       isHiddenBundles: false,
       loading: false,
       errors: {},
+
+      normalizer(node) {
+        if (node.children == null || node.children === 'null') {
+          delete node.children
+        }
+      },
     }
   },
   computed: {

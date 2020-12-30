@@ -3,11 +3,11 @@
     <div
       v-for="(item, index) in items"
       :key="item.id"
-      class="col-6 col-sm-4 col-lg-3 pb-4"
+      class="col-6 col-sm-4 col-lg-3 pb-4 h-100"
     >
       <vs-card>
         <template #title>
-          <h4 @click="goTo(item.id)">{{ item.name }}</h4>
+          <h5 @click="goTo(item.id)">{{ item.name }}</h5>
         </template>
         <template #img>
           <img
