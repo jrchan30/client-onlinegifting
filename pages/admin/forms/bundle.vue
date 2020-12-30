@@ -93,7 +93,7 @@
         <!-- End Image Section -->
 
         <!-- Categories Section -->
-        <div v-if="!$fetchState.pending" class="col-lg-6">
+        <div class="col-lg-6">
           <div class="card-wrapper">
             <div class="card">
               <div class="card-header col-12">
@@ -101,8 +101,8 @@
               </div>
               <div class="card-body">
                 <div class="row">
-                  <div class="col-md-12">
-                    <v-select
+                  <div v-if="!$fetchState.pending" class="col-md-12">
+                    <!-- <v-select
                       v-model="form.categories"
                       multiple
                       label="name"
@@ -110,6 +110,13 @@
                       :reduce="(name) => name.id"
                       :options="SUB_CATEGORIES"
                       style="z-index = 1000"
+                    /> -->
+                    <treeselect
+                      v-model="form.categories"
+                      :multiple="true"
+                      :options="CATEGORIES"
+                      value-consists-of="LEAF_PRIORITY"
+                      :normalizer="normalizer"
                     />
                   </div>
                 </div>
@@ -120,7 +127,7 @@
         <!-- End Categories Section -->
 
         <!-- Products to include Section -->
-        <div v-if="!$fetchState.pending" class="col-lg-6">
+        <div class="col-lg-6">
           <div class="card-wrapper">
             <div class="card">
               <div class="card-header">
@@ -128,7 +135,7 @@
               </div>
               <div class="card-body">
                 <div class="row">
-                  <div class="col-md-12">
+                  <div v-if="!$fetchState.pending" class="col-md-12">
                     <v-select
                       v-model="form.products"
                       multiple
@@ -292,6 +299,12 @@ export default {
       },
       editor: null,
       loading: false,
+
+      normalizer(node) {
+        if (node.children == null || node.children === 'null') {
+          delete node.children
+        }
+      },
     }
   },
   computed: {

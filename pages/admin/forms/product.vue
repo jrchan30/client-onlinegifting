@@ -46,7 +46,7 @@
                     <h3 class="mb-0">Categories</h3>
                   </div>
                   <div v-if="!$fetchState.pending" class="card-body">
-                    <v-select
+                    <!-- <v-select
                       v-model="categories"
                       multiple
                       label="name"
@@ -54,6 +54,13 @@
                       :reduce="(name) => name.id"
                       :options="SUB_CATEGORIES"
                       style="z-index = 1000"
+                    /> -->
+                    <treeselect
+                      v-model="categories"
+                      :multiple="true"
+                      :options="CATEGORIES"
+                      value-consists-of="LEAF_PRIORITY"
+                      :normalizer="normalizer"
                     />
                   </div>
                 </div>
@@ -295,6 +302,12 @@ export default {
       editor: null,
       description: '',
       loading: false,
+
+      normalizer(node) {
+        if (node.children == null || node.children === 'null') {
+          delete node.children
+        }
+      },
     }
   },
 

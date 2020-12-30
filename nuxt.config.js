@@ -94,6 +94,8 @@ export default {
     { src: '~/plugins/vue-skeleton.js', mode: 'client' },
     // { src: '~plugins/vue-chartjs.js', mode: 'client' },
     { src: '~plugins/vue-select.js', mode: 'client' },
+    // { src: '~plugins/vue-multiselect.js', mode: 'client' },
+    { src: '~plugins/vue-treeselect.js', mode: 'client' },
     { src: '~plugins/vue-picture-input.js', mode: 'client' },
     { src: '~plugins/tiptap.js', mode: 'client' },
     { src: '~plugins/vuesax.js' },
