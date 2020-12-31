@@ -228,8 +228,11 @@
                         {{ tr.products.length }}
                       </vs-td>
                       <vs-td>
-                        <vs-avatar size="30" :color="tr.detail.colour">
-                        </vs-avatar>
+                        <v-swatches
+                          v-model="tr.detail.colour"
+                          popover-x="left"
+                          disabled
+                        ></v-swatches>
                       </vs-td>
                       <vs-td class="d-flex">
                         <vs-button
@@ -269,7 +272,7 @@
                 Add to Cart
               </vs-button>
             </div>
-            <vs-dialog v-model="editShow" blur>
+            <vs-dialog v-model="editShow" @close="clear">
               <template #header>
                 <h4 class="pt-2 mb-2">
                   Edit
@@ -297,12 +300,69 @@
                     ></v-swatches>
                   </div>
                 </div>
-                <button @click="swalfire()">test swal</button>
+                <!-- <button @click="swalfire()">test swal</button> -->
+                <template v-if="getEditItemCount > 0">
+                  <div class="container">
+                    <h5>
+                      Products
+                      <small v-if="isQtyChanged">(Quantity changed)</small>
+                    </h5>
+
+                    <div class="row align-items-end">
+                      <vs-card
+                        v-for="(product, index) in currentEdit.products"
+                        :key="index"
+                        type="4"
+                        class="py-2 col-12 col-md-6"
+                      >
+                        <template #title>
+                          <h3 class="text-truncate">{{ product.name }}</h3>
+                        </template>
+                        <template #img>
+                          <img
+                            :src="product.main_image"
+                            alt="box default image"
+                            class="image-resize"
+                          />
+                        </template>
+                        <template #text class="w-100">
+                          <p>Qty: {{ product.quantity }}</p>
+                        </template>
+                        <template #interactions>
+                          <vs-button
+                            aria-label="edit box"
+                            primary
+                            gradient
+                            @click="editQty(product)"
+                          >
+                            Edit Qty
+                            <template #animate
+                              ><i class="bx bxs-edit"></i
+                            ></template>
+                          </vs-button>
+                          <vs-button aria-label="delete box" danger gradient>
+                            Remove
+                            <template #animate>
+                              <i class="bx bx-trash"></i>
+                            </template>
+                          </vs-button>
+                        </template>
+                      </vs-card>
+                    </div>
+                  </div>
+                </template>
+                <div v-else>
+                  <span data-aos="fade-up" data-aos-duration="1300"
+                    >There is no product in this box. Click
+                    <nuxt-link to="/products"><u> here</u></nuxt-link>
+                    to browse products
+                  </span>
+                </div>
               </div>
 
               <template #footer>
                 <div class="pb-2">
-                  <vs-button block @click="createBox()">
+                  <vs-button block @click="save()">
                     <i class="fas fa-box-open"></i>
                     <span class="ml-2">Save</span>
                   </vs-button>
@@ -357,12 +417,34 @@ export default {
       checkbox1: false,
       editShow: false,
       currentEdit: {},
+      isQtyChanged: false,
+
+      // loading: false,
     }
   },
   computed: {
     ...mapGetters({
       BOXES: 'boxes/BOXES',
     }),
+    getEditItemCount() {
+      let count = 0
+      if (this.currentEdit?.products) {
+        count = this.currentEdit.products.length
+      }
+      return count
+    },
+    isValid() {
+      console.log(this.currentEdit.name.length)
+      console.log(this.currentEdit.detail.colour.length)
+      if (
+        this.currentEdit.name.length > 0 &&
+        this.currentEdit.detail.colour.length > 0
+      ) {
+        return true
+      } else {
+        return false
+      }
+    },
   },
   methods: {
     ...mapActions({
@@ -468,31 +550,93 @@ export default {
         this.clear()
       }
     },
-    swalfire() {
+    editQty(product) {
       this.$swal({
-        title: 'Choose box to add to',
-        input: 'select',
-        inputOptions: this.BOXES.data.map((x) => {
-          return x.name
-        }),
-        inputPlaceholder: 'Select a box',
+        title: 'Input quantity',
+        input: 'range',
+        inputLabel:
+          'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
         showCancelButton: true,
+        inputAttributes: {
+          min: 1,
+          max: product.stock,
+          step: 1,
+        },
+        inputValue: 1,
         inputValidator: (value) => {
           return new Promise((resolve) => {
-            if (value) {
+            if (value || value <= product.stock) {
               resolve()
             } else {
               resolve('You need to choose one')
             }
           })
         },
+      }).then((result2) => {
+        if (result2.isConfirmed) {
+          const foundIndex = this.currentEdit.products.findIndex(
+            (x) => x.id === product.id
+          )
+          this.currentEdit.products[foundIndex].quantity = result2.value
+          this.isQtyChanged = true
+          // const allProducts = {}
+          // this.BOXES.data[result.value].products.map((x) => {
+          //   allProducts[x.id] = { quantity: x.quantity }
+          // })
+          // allProducts[id] = { quantity: result2.value }
+
+          // await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
+          //   allProducts: JSON.stringify(allProducts),
+          // })
+          // this.addBoxNotification(
+          //   name,
+          //   this.BOXES.data[result.value].name,
+          //   result2.value
+          // )
+        }
       })
     },
     editBox(item) {
-      this.currentEdit = item
+      this.currentEdit = JSON.parse(JSON.stringify(item))
       this.editForm.name = item.name
       this.editForm.colour = item.detail.colour
       this.editShow = true
+    },
+    async save() {
+      let form = {}
+      const allProducts = {}
+      if (this.isValid) {
+        // this.loading = true
+        const loading = this.$vs.loading()
+        try {
+          form = {
+            name: this.editForm.name,
+            colour: this.editForm.colour,
+          }
+          // const boxToSave = this.BOXES.data.find(
+          //   (x) => x.id === this.currentEdit.id
+          // )
+          if (this.getEditItemCount > 0) {
+            this.currentEdit.products.map((x) => {
+              allProducts[x.id] = { quantity: x.quantity }
+            })
+            form.allProducts = JSON.stringify(allProducts)
+            // form.allProducts = allProducts
+          }
+          console.log(form)
+          await this.$axios.$patch(`/boxes/${this.currentEdit.id}`, form)
+          this.GET_BOXES()
+          this.editShow = false
+          this.clear()
+        } catch (e) {
+          alert(e)
+        } finally {
+          loading.close()
+          // this.loading = false
+        }
+      } else {
+        alert('Please fill all necessary field')
+      }
     },
   },
 }
@@ -519,6 +663,18 @@ export default {
   min-width: 100vw;
   min-height: calc(100vh - 15rem);
 }
+
+.image-resize {
+  object-fit: cover;
+  height: 200px;
+  max-width: 550px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.type-4 .vs-card__text {
+  width: 100%;
+}
 </style>
 
 <style>
@@ -532,5 +688,9 @@ export default {
 
 .swal2-container {
   z-index: 100000;
+}
+
+.vs-card-content.type-4 .vs-card__text {
+  width: 100%;
 }
 </style>
