@@ -18,7 +18,7 @@
               <div
                 class="d-none d-sm-none d-md-flex col-6 col-md-6 col-lg-7"
               ></div>
-              <div class="col-8 col-md-6 col-lg-5">
+              <div class="col-12 col-md-6 col-lg-5">
                 <div class="text-secondary mb-3 bg-white rounded p-4">
                   <small>You have no box yet. Create one now!</small>
                 </div>
@@ -29,7 +29,7 @@
                         <strong class="col-12">Create Box</strong>
                       </div>
                       <div class="row">
-                        <div class="col-12 col-md-10 mb-4">
+                        <div class="col-12 col-md-10 mb-4 px-0">
                           <vs-input
                             v-model="form.boxName"
                             label="Box name"
@@ -43,7 +43,7 @@
                             class="form__field d-flex justify-content-between"
                           >
                             <div class="form__label">
-                              <small>Choose a colour:</small>
+                              <small>Choose colour:</small>
                             </div>
                             <div class="form__input">
                               <v-swatches
@@ -51,6 +51,52 @@
                                 popover-x="left"
                               ></v-swatches>
                             </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-12">
+                          <div
+                            class="form__field d-flex justify-content-between"
+                          >
+                            <div class="form__label">
+                              <small>Choose design:</small>
+                            </div>
+                            <!-- <div class="d-flex"> -->
+                            <div class="form__input position-relative">
+                              <vs-avatar @click="showDesign = !showDesign">
+                                <!-- <img
+                                  :src="form.designImage"
+                                  alt=""
+                                /> -->
+                                <div class="var"></div>
+                              </vs-avatar>
+                              <div v-show="showDesign">
+                                <div class="card custom-card">
+                                  <div class="card-body">
+                                    <div class="row mb-2">
+                                      <div class="col">
+                                        <button>No Design</button>
+                                      </div>
+                                    </div>
+                                    <div class="row justify-content-between">
+                                      <div
+                                        v-for="design in DESIGNS"
+                                        :key="design.id"
+                                      >
+                                        <vs-avatar
+                                          class="m-2"
+                                          @click="changeDesign(design)"
+                                        >
+                                          <img :src="design.image" alt="" />
+                                        </vs-avatar>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- </div> -->
                           </div>
                         </div>
                       </div>
@@ -383,6 +429,7 @@
         </div>
       </div>
     </template>
+    <div class="logo"></div>
   </div>
 </template>
 
@@ -400,6 +447,8 @@ export default {
       form: {
         boxName: '',
         colour: '#336699',
+        design: '',
+        designImage: '',
       },
       editForm: {
         name: '',
@@ -419,12 +468,14 @@ export default {
       currentEdit: {},
       isQtyChanged: false,
 
+      showDesign: false,
       // loading: false,
     }
   },
   computed: {
     ...mapGetters({
       BOXES: 'boxes/BOXES',
+      DESIGNS: 'designs/DESIGNS',
     }),
     getEditItemCount() {
       let count = 0
@@ -434,8 +485,6 @@ export default {
       return count
     },
     isValid() {
-      console.log(this.currentEdit.name.length)
-      console.log(this.currentEdit.detail.colour.length)
       if (
         this.currentEdit.name.length > 0 &&
         this.currentEdit.detail.colour.length > 0
@@ -469,6 +518,11 @@ export default {
       } catch (e) {
         alert('error')
       }
+    },
+    changeDesign(design) {
+      this.form.design = design.label
+      this.form.designImage = design.image
+      this.showDesign = false
     },
     addCartNotification(name) {
       const boxNotif = this.$vs.notification({
@@ -579,20 +633,6 @@ export default {
           )
           this.currentEdit.products[foundIndex].quantity = result2.value
           this.isQtyChanged = true
-          // const allProducts = {}
-          // this.BOXES.data[result.value].products.map((x) => {
-          //   allProducts[x.id] = { quantity: x.quantity }
-          // })
-          // allProducts[id] = { quantity: result2.value }
-
-          // await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
-          //   allProducts: JSON.stringify(allProducts),
-          // })
-          // this.addBoxNotification(
-          //   name,
-          //   this.BOXES.data[result.value].name,
-          //   result2.value
-          // )
         }
       })
     },
@@ -643,6 +683,14 @@ export default {
 </script>
 
 <style scoped>
+.logo {
+  background-color: red;
+  width: 200px;
+  height: 200px;
+  -webkit-mask: url('/image/design/architect.svg') no-repeat center;
+  mask: url('/image/design/architect.svg') no-repeat center;
+}
+
 .bg-img-empty {
   background-image: url('/image/undraw_empty_xct9.svg');
 }
@@ -692,5 +740,23 @@ export default {
 
 .vs-card-content.type-4 .vs-card__text {
   width: 100%;
+}
+
+.custom-card {
+  width: 200px;
+  position: absolute !important;
+  bottom: 0;
+  right: 50px;
+  z-index: 10000;
+}
+
+.vs-avatar-content {
+  cursor: pointer;
+}
+
+.var {
+  width: 100%;
+  height: 100%;
+  background-image: var(--bg-url);
 }
 </style>
