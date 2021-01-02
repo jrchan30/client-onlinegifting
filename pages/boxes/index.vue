@@ -64,19 +64,38 @@
                             </div>
                             <!-- <div class="d-flex"> -->
                             <div class="form__input position-relative">
-                              <vs-avatar @click="showDesign = !showDesign">
-                                <!-- <img
-                                  :src="form.designImage"
-                                  alt=""
-                                /> -->
-                                <div class="var"></div>
-                              </vs-avatar>
+                              <vs-tooltip circle>
+                                <vs-avatar
+                                  style="height: 44px; width: 44px"
+                                  @click="showDesign = !showDesign"
+                                >
+                                  <div
+                                    class="logo"
+                                    :style="{
+                                      mask: `url(${form.designImage})  center`,
+                                      '-webkit-mask': `url(${form.designImage})  center`,
+                                      backgroundColor: form.colour,
+                                    }"
+                                  ></div>
+                                </vs-avatar>
+                                <template v-if="form.design" #tooltip>
+                                  {{ form.design }}
+                                </template>
+                                <template v-else #tooltip> None </template>
+                              </vs-tooltip>
                               <div v-show="showDesign">
                                 <div class="card custom-card">
                                   <div class="card-body">
                                     <div class="row mb-2">
                                       <div class="col">
-                                        <button>No Design</button>
+                                        <vs-button
+                                          block
+                                          @click="
+                                            ;(form.design = ''),
+                                              (form.designImage = '')
+                                          "
+                                          >No Design</vs-button
+                                        >
                                       </div>
                                     </div>
                                     <div class="row justify-content-between">
@@ -86,7 +105,9 @@
                                       >
                                         <vs-avatar
                                           class="m-2"
-                                          @click="changeDesign(design)"
+                                          @click="
+                                            changeDesign(design, 'create')
+                                          "
                                         >
                                           <img :src="design.image" alt="" />
                                         </vs-avatar>
@@ -163,21 +184,21 @@
               >
                 Create New Box
               </vs-button>
-              <vs-dialog v-model="active" blur>
+              <vs-dialog v-model="active">
                 <template #header>
                   <h4 class="pt-2 mb-2">Create your new <b>Box</b></h4>
                 </template>
 
-                <div>
+                <div class="row">
                   <vs-input
                     v-model="form.boxName"
-                    class="mb-2"
+                    class="mb-2 col-12"
                     placeholder="Box name"
                     label="Box Name"
                   >
                     <!-- <template #icon> @ </template> -->
                   </vs-input>
-                  <div class="d-flex justify-content-between">
+                  <div class="col-12 d-flex justify-content-between">
                     <div class="ml-2">
                       <small>Choose a colour:</small>
                     </div>
@@ -186,6 +207,62 @@
                         v-model="form.colour"
                         popover-x="left"
                       ></v-swatches>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                      <div class="ml-2">
+                        <small>Choose design:</small>
+                      </div>
+                      <div class="form__input position-relative">
+                        <vs-tooltip circle>
+                          <vs-avatar
+                            style="height: 44px; width: 44px"
+                            @click="showDesign = !showDesign"
+                          >
+                            <div
+                              class="logo"
+                              :style="{
+                                mask: `url(${form.designImage})  center`,
+                                '-webkit-mask': `url(${form.designImage})  center`,
+                                backgroundColor: form.colour,
+                              }"
+                            ></div>
+                          </vs-avatar>
+                          <template v-if="form.design" #tooltip>
+                            {{ form.design }}
+                          </template>
+                          <template v-else #tooltip> None </template>
+                        </vs-tooltip>
+                        <div v-show="showDesign">
+                          <div class="card custom-card">
+                            <div class="card-body">
+                              <div class="row mb-2">
+                                <div class="col">
+                                  <vs-button
+                                    block
+                                    @click="
+                                      ;(form.design = ''),
+                                        (form.designImage = '')
+                                    "
+                                    >No Design</vs-button
+                                  >
+                                </div>
+                              </div>
+                              <div class="row justify-content-between">
+                                <div v-for="design in DESIGNS" :key="design.id">
+                                  <vs-avatar
+                                    class="m-2"
+                                    @click="changeDesign(design, 'create')"
+                                  >
+                                    <img :src="design.image" alt="" />
+                                  </vs-avatar>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -274,32 +351,57 @@
                         {{ tr.products.length }}
                       </vs-td>
                       <vs-td>
-                        <v-swatches
-                          v-model="tr.detail.colour"
-                          popover-x="left"
-                          disabled
-                        ></v-swatches>
+                        <div class="row">
+                          <v-swatches
+                            v-model="tr.detail.colour"
+                            class="mr-2"
+                            popover-x="left"
+                            disabled
+                          ></v-swatches>
+                          <vs-tooltip circle>
+                            <vs-avatar>
+                              <div
+                                class="logo"
+                                :style="{
+                                  mask: `url(${
+                                    getDesignImage(tr.detail.design).image
+                                  }) left top`,
+                                  '-webkit-mask': `url(${
+                                    getDesignImage(tr.detail.design).image
+                                  }) left top`,
+                                  backgroundColor: tr.detail.colour,
+                                }"
+                              ></div>
+                            </vs-avatar>
+
+                            <template #tooltip>
+                              {{ tr.detail.design }}
+                            </template>
+                          </vs-tooltip>
+                        </div>
                       </vs-td>
-                      <vs-td class="d-flex">
-                        <vs-button
-                          aria-label="edit box"
-                          primary
-                          gradient
-                          @click="editBox(tr)"
-                        >
-                          <i class="bx bxs-edit"></i>
-                          <template #animate> Edit </template>
-                        </vs-button>
-                        <vs-button
-                          aria-label="delete box"
-                          danger
-                          gradient
-                          style="min-width: 60px"
-                          @click="deleteBox(tr.id, tr.name)"
-                        >
-                          <i class="bx bx-trash"></i>
-                          <template #animate> Delete </template>
-                        </vs-button>
+                      <vs-td>
+                        <div class="row">
+                          <vs-button
+                            aria-label="edit box"
+                            primary
+                            gradient
+                            @click="editBox(tr)"
+                          >
+                            <i class="bx bxs-edit"></i>
+                            <template #animate> Edit </template>
+                          </vs-button>
+                          <vs-button
+                            aria-label="delete box"
+                            danger
+                            gradient
+                            style="min-width: 60px"
+                            @click="deleteBox(tr.id, tr.name)"
+                          >
+                            <i class="bx bx-trash"></i>
+                            <template #animate> Delete </template>
+                          </vs-button>
+                        </div>
                       </vs-td>
                     </vs-tr>
                   </template>
@@ -344,6 +446,62 @@
                       v-model="editForm.colour"
                       popover-x="left"
                     ></v-swatches>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="d-flex justify-content-between">
+                    <div class="ml-2">
+                      <small>Choose design:</small>
+                    </div>
+                    <div class="form__input position-relative">
+                      <vs-tooltip circle>
+                        <vs-avatar
+                          style="height: 44px; width: 44px"
+                          @click="showDesign = !showDesign"
+                        >
+                          <div
+                            class="logo"
+                            :style="{
+                              mask: `url(${editForm.designImage}) center`,
+                              '-webkit-mask': `url(${editForm.designImage}) center`,
+                              backgroundColor: editForm.colour,
+                            }"
+                          ></div>
+                        </vs-avatar>
+                        <template v-if="editForm.design" #tooltip>
+                          {{ editForm.design }}
+                        </template>
+                        <template v-else #tooltip> None </template>
+                      </vs-tooltip>
+                      <div v-show="showDesign">
+                        <div class="card custom-card">
+                          <div class="card-body">
+                            <div class="row mb-2">
+                              <div class="col">
+                                <vs-button
+                                  block
+                                  @click="
+                                    ;(editForm.design = ''),
+                                      (editForm.designImage = '')
+                                  "
+                                  >No Design</vs-button
+                                >
+                              </div>
+                            </div>
+                            <div class="row justify-content-between">
+                              <div v-for="design in DESIGNS" :key="design.id">
+                                <vs-avatar
+                                  class="m-2"
+                                  @click="changeDesign(design, 'edit')"
+                                >
+                                  <img :src="design.image" alt="" />
+                                </vs-avatar>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <!-- <button @click="swalfire()">test swal</button> -->
@@ -429,7 +587,7 @@
         </div>
       </div>
     </template>
-    <div class="logo"></div>
+    <!-- <div class="logo"></div> -->
   </div>
 </template>
 
@@ -454,6 +612,7 @@ export default {
         name: '',
         colour: '',
         design: '',
+        designImage: '',
       },
       search: '',
       allCheck: false,
@@ -506,10 +665,29 @@ export default {
     clear() {
       Object.assign(this.$data, this.$options.data())
     },
+    getDesignImage(label) {
+      let result = {}
+      const design = this.DESIGNS.find((x) => x.label === label)
+      if (design) {
+        result = {
+          id: design.id,
+          label: design.label,
+          image: design.image,
+        }
+      } else {
+        result = {
+          id: 0,
+          label: 'none',
+          image: '/image/design/none.svg',
+        }
+      }
+      return result
+    },
     async createBox() {
       const formattedForm = {
         name: this.form.boxName,
         colour: this.form.colour,
+        design: this.form.design !== '' ? this.form.design : 'none',
       }
       try {
         await this.$axios.$post('/boxes', formattedForm)
@@ -519,9 +697,14 @@ export default {
         alert('error')
       }
     },
-    changeDesign(design) {
-      this.form.design = design.label
-      this.form.designImage = design.image
+    changeDesign(design, type) {
+      if (type === 'create') {
+        this.form.design = design.label
+        this.form.designImage = design.image
+      } else {
+        this.editForm.design = design.label
+        this.editForm.designImage = design.image
+      }
       this.showDesign = false
     },
     addCartNotification(name) {
@@ -638,8 +821,13 @@ export default {
     },
     editBox(item) {
       this.currentEdit = JSON.parse(JSON.stringify(item))
+      this.editForm.designImage = this.getDesignImage(
+        this.currentEdit.detail.design,
+        'edit'
+      ).image
       this.editForm.name = item.name
       this.editForm.colour = item.detail.colour
+      this.editForm.design = item.detail.design
       this.editShow = true
     },
     async save() {
@@ -684,11 +872,10 @@ export default {
 
 <style scoped>
 .logo {
-  background-color: red;
-  width: 200px;
-  height: 200px;
-  -webkit-mask: url('/image/design/architect.svg') no-repeat center;
-  mask: url('/image/design/architect.svg') no-repeat center;
+  width: 44px;
+  height: 44px;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
 }
 
 .bg-img-empty {
