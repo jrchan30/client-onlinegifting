@@ -138,8 +138,8 @@
         This is your latest bundles, click on bundle's record to see more
         details about the bundles
       </p>
-      <div v-if="!$fetchState.pending" data-aos="fade" data-aos-duration="1500">
-        <!-- <vs-table v-if="!$fetchState.pending">
+      <div data-aos="fade" data-aos-duration="1500">
+        <vs-table v-if="!$fetchState.pending">
           <template #header>
             <vs-input
               v-model="search_bundle"
@@ -155,7 +155,11 @@
               <vs-th
                 sort
                 @click="
-                  LIKED_BUNDLES = $vs.sortData($event, LIKED_BUNDLES, 'name')
+                  likedItemsData.liked_bundles = $vs.sortData(
+                    $event,
+                    likedItemsData.liked_bundles,
+                    'name'
+                  )
                 "
               >
                 Name
@@ -163,7 +167,11 @@
               <vs-th
                 sort
                 @click="
-                  LIKED_BUNDLES = $vs.sortData($event, LIKED_BUNDLES, 'price')
+                  likedItemsData.liked_bundles = $vs.sortData(
+                    $event,
+                    likedItemsData.liked_bundles,
+                    'price'
+                  )
                 "
               >
                 Price (IDR)
@@ -174,7 +182,7 @@
           <template #tbody>
             <vs-tr
               v-for="(tr, i) in $vs.getPage(
-                $vs.getSearch(LIKED_BUNDLES, search_bundle),
+                $vs.getSearch(likedItemsData.liked_bundles, search_bundle),
                 page,
                 max
               )"
@@ -190,10 +198,10 @@
                   <div class="d-flex">
                     <vs-avatar class="mb-auto" cursor>
                       <img
-                        :src="tr.detail.image.url"
+                        :src="tr.main_image"
                         alt=""
                         class="img-ratio"
-                        @click="expandImage(tr.detail.image.url)"
+                        @click="expandImage(tr.main_image)"
                       />
                     </vs-avatar>
                     <span class="ml-2 my-auto">
@@ -205,8 +213,6 @@
                   <div class="d-flex">
                     <vs-button
                       aria-label="see details"
-                      +
-                      tr.name
                       flat
                       icon
                       @click="goTo(tr.id, 'bundle')"
@@ -217,7 +223,7 @@
                       aria-label="unlike"
                       border
                       danger
-                      @click="unlike(tr.id, 'product')"
+                      @click="unlike(tr.id, 'bundle')"
                     >
                       Unlike
                     </vs-button>
@@ -226,7 +232,7 @@
               </template>
             </vs-tr>
           </template>
-        </vs-table> -->
+        </vs-table>
       </div>
     </div>
   </div>
