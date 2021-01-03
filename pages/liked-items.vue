@@ -10,8 +10,8 @@
         This is your latest liked products, click on each record to see more
         details about the product
       </p>
-      <div v-if="!$fetchState.pending" data-aos="fade" data-aos-duration="1500">
-        <vs-table>
+      <div data-aos="fade" data-aos-duration="1500">
+        <vs-table v-if="!$fetchState.pending">
           <template #header>
             <vs-input
               v-model="search_product"
@@ -27,7 +27,11 @@
               <vs-th
                 sort
                 @click="
-                  LIKED_PRODUCTS = $vs.sortData($event, LIKED_PRODUCTS, 'name')
+                  likedItemsData.liked_products = $vs.sortData(
+                    $event,
+                    likedItemsData.liked_products,
+                    'name'
+                  )
                 "
               >
                 Name
@@ -35,7 +39,11 @@
               <vs-th
                 sort
                 @click="
-                  LIKED_PRODUCTS = $vs.sortData($event, LIKED_PRODUCTS, 'price')
+                  likedItemsData.liked_products = $vs.sortData(
+                    $event,
+                    likedItemsData.liked_products,
+                    'price'
+                  )
                 "
               >
                 Price (IDR)
@@ -43,7 +51,11 @@
               <vs-th
                 sort
                 @click="
-                  LIKED_PRODUCTS = $vs.sortData($event, LIKED_PRODUCTS, 'stock')
+                  likedItemsData.liked_products = $vs.sortData(
+                    $event,
+                    likedItemsData.liked_products,
+                    'stock'
+                  )
                 "
               >
                 Stock
@@ -51,9 +63,9 @@
               <vs-th
                 sort
                 @click="
-                  LIKED_PRODUCTS = $vs.sortData(
+                  likedItemsData.liked_products = $vs.sortData(
                     $event,
-                    LIKED_PRODUCTS,
+                    likedItemsData.liked_products,
                     'weight'
                   )
                 "
@@ -66,7 +78,7 @@
           <template #tbody>
             <vs-tr
               v-for="(tr, i) in $vs.getPage(
-                $vs.getSearch(LIKED_PRODUCTS, search_product),
+                $vs.getSearch(likedItemsData.liked_products, search_product),
                 page,
                 max
               )"
@@ -83,7 +95,7 @@
                 {{ tr.weight }}
               </vs-td>
 
-              <template #expand>
+              <template #expand :style="{ display: expandShow(tr.id) }">
                 <div class="float-left">
                   <div class="d-flex">
                     <vs-avatar class="mb-auto" cursor>
@@ -127,7 +139,7 @@
         details about the bundles
       </p>
       <div v-if="!$fetchState.pending" data-aos="fade" data-aos-duration="1500">
-        <vs-table v-if="!$fetchState.pending">
+        <!-- <vs-table v-if="!$fetchState.pending">
           <template #header>
             <vs-input
               v-model="search_bundle"
@@ -214,7 +226,7 @@
               </template>
             </vs-tr>
           </template>
-        </vs-table>
+        </vs-table> -->
       </div>
     </div>
   </div>
@@ -228,6 +240,7 @@ export default {
   middleware: 'auth',
   async fetch() {
     await this.GET_LIKED_ITEMS()
+    this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
   },
   data() {
     return {
@@ -238,19 +251,36 @@ export default {
       page: 1,
       max: 100,
       isLoading: false,
+      likedItemsData: {},
       // items: this.$auth.user.liked_products,
     }
   },
   computed: {
     ...mapGetters({
-      LIKED_PRODUCTS: 'users/LIKED_PRODUCTS',
-      LIKED_BUNDLES: 'users/LIKED_BUNDLES',
+      // LIKED_PRODUCTS: 'users/LIKED_PRODUCTS',
+      // LIKED_BUNDLES: 'users/LIKED_BUNDLES',
+      LIKED_ITEMS: 'users/LIKED_ITEMS',
     }),
+    // likedItemsComputed() {
+    //   this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
+    //   return this.likedItemsData
+    // },
+    likedBundlesComputed() {
+      return JSON.parse(JSON.stringify(this.LIKED_ITEMS.liked_bundles))
+    },
   },
   methods: {
     ...mapActions({
       GET_LIKED_ITEMS: 'users/GET_LIKED_ITEMS',
     }),
+    expandShow(id) {
+      // this.likedItemsComputed().includes(id)
+      if (this.likedItemsComputed.liked_products.find((x) => x.id === id)) {
+        return true
+      } else {
+        return false
+      }
+    },
     expandImage(url) {
       this.$swal({
         showCloseButton: true,
@@ -275,6 +305,8 @@ export default {
           id,
         }
         await this.$axios.$post('/likes', likeForm)
+        // this.GET_LIKED_ITEMS()
+        this.$fetch()
       } catch (e) {
         alert(e)
       } finally {

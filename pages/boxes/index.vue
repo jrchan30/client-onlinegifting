@@ -4,12 +4,12 @@
       <div
         class="bg-container"
         :class="{
-          'bg-img-empty': BOXES.data.length < 1,
-          'bg-img-main': BOXES.data.length > 0,
+          'bg-img-empty': boxesData.data.length < 1,
+          'bg-img-main': boxesData.data.length > 0,
         }"
       >
         <div class="container h-100">
-          <template v-if="BOXES.data.length < 1">
+          <template v-if="boxesData.data.length < 1">
             <div
               class="d-flex row justify-content-center align-items-center h-100"
               data-aos="fade-up"
@@ -293,16 +293,22 @@
                       <vs-th>
                         <vs-checkbox
                           v-model="allCheck"
-                          :indeterminate="selected.length == BOXES.data.length"
+                          :indeterminate="
+                            selected.length == boxesData.data.length
+                          "
                           @change="
-                            selected = $vs.checkAll(selected, BOXES.data)
+                            selected = $vs.checkAll(selected, boxesData.data)
                           "
                         />
                       </vs-th>
                       <vs-th
                         sort
                         @click="
-                          BOXES.data = $vs.sortData($event, BOXES.data, 'name')
+                          boxesData.data = $vs.sortData(
+                            $event,
+                            boxesData.data,
+                            'name'
+                          )
                         "
                       >
                         Name
@@ -310,30 +316,23 @@
                       <vs-th
                         sort
                         @click="
-                          BOXES.data = $vs.sortData($event, BOXES.data, 'price')
+                          boxesData.data = $vs.sortData(
+                            $event,
+                            boxesData.data,
+                            'price'
+                          )
                         "
                       >
                         Price
                       </vs-th>
-                      <vs-th
-                        sort
-                        @click="
-                          BOXES.data = $vs.sortData(
-                            $event,
-                            BOXES.data,
-                            'products_count'
-                          )
-                        "
-                      >
-                        Products Count
-                      </vs-th>
+                      <vs-th> Products </vs-th>
                       <vs-th> Color/Design </vs-th>
                       <vs-th> Edit/Delete </vs-th>
                     </vs-tr>
                   </template>
                   <template #tbody>
                     <vs-tr
-                      v-for="(tr, i) in $vs.getSearch(BOXES.data, search)"
+                      v-for="(tr, i) in $vs.getSearch(boxesData.data, search)"
                       :key="i"
                       :data="tr"
                       :is-selected="!!selected.includes(tr)"
@@ -348,12 +347,13 @@
                         {{ tr.price }}
                       </vs-td>
                       <vs-td>
-                        {{ tr.products.length }}
+                        {{ parseInt(tr.products.length) }}
                       </vs-td>
                       <vs-td>
                         <div class="row">
                           <v-swatches
                             v-model="tr.detail.colour"
+                            style="width: 44px; height: 44px"
                             class="mr-2"
                             popover-x="left"
                             disabled
@@ -428,24 +428,27 @@
                 </h4>
               </template>
 
-              <div>
-                <vs-input
-                  v-model="editForm.name"
-                  class="mb-2"
-                  placeholder="Box name"
-                  label="Box Name"
-                >
-                  <!-- <template #icon> @ </template> -->
-                </vs-input>
-                <div class="d-flex justify-content-between">
-                  <div class="ml-2">
-                    <small>Choose a colour:</small>
-                  </div>
-                  <div>
-                    <v-swatches
-                      v-model="editForm.colour"
-                      popover-x="left"
-                    ></v-swatches>
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <vs-input
+                    v-model="editForm.name"
+                    placeholder="Box name"
+                    label="Box Name"
+                  >
+                    <!-- <template #icon> @ </template> -->
+                  </vs-input>
+                </div>
+                <div class="col-12 mb-2">
+                  <div class="d-flex justify-content-between">
+                    <div class="ml-2">
+                      <small>Choose a colour:</small>
+                    </div>
+                    <div>
+                      <v-swatches
+                        v-model="editForm.colour"
+                        popover-x="left"
+                      ></v-swatches>
+                    </div>
                   </div>
                 </div>
                 <div class="col-12">
@@ -505,64 +508,87 @@
                   </div>
                 </div>
                 <!-- <button @click="swalfire()">test swal</button> -->
+                <!-- <div class="col-12"> -->
                 <template v-if="getEditItemCount > 0">
-                  <div class="container">
-                    <h5>
-                      Products
-                      <small v-if="isQtyChanged">(Quantity changed)</small>
-                    </h5>
+                  <h5 class="col-12">
+                    Products
+                    <small v-if="isQtyChanged">(Quantity changed)</small>
+                  </h5>
 
-                    <div class="row align-items-end">
-                      <vs-card
-                        v-for="(product, index) in currentEdit.products"
-                        :key="index"
-                        type="4"
-                        class="py-2 col-12 col-md-6"
+                  <!-- <div class="col-12 align-items-end"> -->
+                  <vs-card
+                    v-for="(product, index) in currentEdit.products"
+                    :key="index"
+                    type="4"
+                    class="py-2 col-12 col-md-6"
+                  >
+                    <template #title>
+                      <h3 class="text-truncate">{{ product.name }}</h3>
+                    </template>
+                    <template #img>
+                      <img
+                        :disabled="isRemoved(product.id)"
+                        :src="product.main_image"
+                        alt="box default image"
+                        class="image-resize"
+                      />
+                    </template>
+                    <template #text class="w-100">
+                      <p>Qty: {{ product.quantity }}</p>
+                    </template>
+                    <template #interactions>
+                      <vs-button
+                        v-if="!isRemoved(product.id)"
+                        aria-label="edit box"
+                        primary
+                        gradient
+                        @click="editQty(product)"
                       >
-                        <template #title>
-                          <h3 class="text-truncate">{{ product.name }}</h3>
+                        Edit Qty
+                        <template #animate
+                          ><i class="bx bxs-edit"></i
+                        ></template>
+                      </vs-button>
+                      <vs-button
+                        v-if="!isRemoved(product.id)"
+                        aria-label="delete box"
+                        danger
+                        gradient
+                        @click="removeProduct(product.id)"
+                      >
+                        Remove
+                        <template #animate>
+                          <i class="bx bx-trash"></i>
                         </template>
-                        <template #img>
-                          <img
-                            :src="product.main_image"
-                            alt="box default image"
-                            class="image-resize"
-                          />
+                      </vs-button>
+                      <vs-button
+                        v-else
+                        aria-label="delete box"
+                        primary
+                        gradient
+                        @click="restore(product.id)"
+                      >
+                        Restore
+                        <template #animate>
+                          <i class="bx bx-trash"></i>
                         </template>
-                        <template #text class="w-100">
-                          <p>Qty: {{ product.quantity }}</p>
-                        </template>
-                        <template #interactions>
-                          <vs-button
-                            aria-label="edit box"
-                            primary
-                            gradient
-                            @click="editQty(product)"
-                          >
-                            Edit Qty
-                            <template #animate
-                              ><i class="bx bxs-edit"></i
-                            ></template>
-                          </vs-button>
-                          <vs-button aria-label="delete box" danger gradient>
-                            Remove
-                            <template #animate>
-                              <i class="bx bx-trash"></i>
-                            </template>
-                          </vs-button>
-                        </template>
-                      </vs-card>
-                    </div>
-                  </div>
+                      </vs-button>
+                    </template>
+                  </vs-card>
+                  <!-- </div> -->
                 </template>
                 <div v-else>
-                  <span data-aos="fade-up" data-aos-duration="1300"
+                  <span
+                    data-aos="fade-up"
+                    data-aos-duration="1300"
+                    class="col-12"
                     >There is no product in this box. Click
                     <nuxt-link to="/products"><u> here</u></nuxt-link>
                     to browse products
                   </span>
                 </div>
               </div>
+              <!-- </div> -->
 
               <template #footer>
                 <div class="pb-2">
@@ -587,7 +613,6 @@
         </div>
       </div>
     </template>
-    <!-- <div class="logo"></div> -->
   </div>
 </template>
 
@@ -598,10 +623,18 @@ export default {
   layout: 'default',
   middleware: 'auth',
   async fetch() {
-    await this.GET_BOXES()
+    // const loading = this.$vs.loading()
+    try {
+      await this.GET_BOXES()
+      this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
+    } catch (e) {
+      alert(e)
+      // loading.close()
+    }
   },
   data() {
     return {
+      boxesData: {},
       form: {
         boxName: '',
         colour: '#336699',
@@ -629,6 +662,7 @@ export default {
 
       showDesign: false,
       // loading: false,
+      productsToRemove: [],
     }
   },
   computed: {
@@ -636,6 +670,9 @@ export default {
       BOXES: 'boxes/BOXES',
       DESIGNS: 'designs/DESIGNS',
     }),
+    // boxesComputed() {
+    //   return JSON.parse(JSON.stringify(this.BOXES))
+    // },
     getEditItemCount() {
       let count = 0
       if (this.currentEdit?.products) {
@@ -653,6 +690,9 @@ export default {
         return false
       }
     },
+    getBoxCount() {
+      return this.boxesData.data.length
+    },
   },
   methods: {
     ...mapActions({
@@ -664,6 +704,18 @@ export default {
     // },
     clear() {
       Object.assign(this.$data, this.$options.data())
+    },
+    isRemoved(id) {
+      return this.productsToRemove.includes(id)
+    },
+    restore(id) {
+      const index = this.productsToRemove.indexOf(id)
+      if (index > -1) {
+        this.productsToRemove.splice(index, 1)
+      }
+    },
+    removeProduct(id) {
+      this.productsToRemove.push(id)
     },
     getDesignImage(label) {
       let result = {}
@@ -691,8 +743,10 @@ export default {
       }
       try {
         await this.$axios.$post('/boxes', formattedForm)
-        this.GET_BOXES()
+        await this.GET_BOXES()
         this.clear()
+        this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
+        // this.$fetch()
       } catch (e) {
         alert('error')
       }
@@ -745,7 +799,9 @@ export default {
           try {
             await this.$axios.$delete(`/boxes/${id}`)
             this.$swal('Deleted!', `${name} has been deleted`, 'success')
-            this.GET_BOXES()
+            await this.GET_BOXES()
+            this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
+            // this.$fetch()
           } catch (e) {
             this.$swal({
               icon: 'error',
@@ -819,6 +875,7 @@ export default {
         }
       })
     },
+
     editBox(item) {
       this.currentEdit = JSON.parse(JSON.stringify(item))
       this.editForm.designImage = this.getDesignImage(
@@ -840,22 +897,23 @@ export default {
           form = {
             name: this.editForm.name,
             colour: this.editForm.colour,
+            design: this.editForm.design,
           }
-          // const boxToSave = this.BOXES.data.find(
-          //   (x) => x.id === this.currentEdit.id
-          // )
+
           if (this.getEditItemCount > 0) {
             this.currentEdit.products.map((x) => {
-              allProducts[x.id] = { quantity: x.quantity }
+              if (!this.productsToRemove.includes(x.id)) {
+                allProducts[x.id] = { quantity: x.quantity }
+              }
             })
             form.allProducts = JSON.stringify(allProducts)
-            // form.allProducts = allProducts
           }
-          console.log(form)
           await this.$axios.$patch(`/boxes/${this.currentEdit.id}`, form)
-          this.GET_BOXES()
+          await this.GET_BOXES()
+          // this.$fetch()
           this.editShow = false
           this.clear()
+          this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
         } catch (e) {
           alert(e)
         } finally {
@@ -939,11 +997,5 @@ export default {
 
 .vs-avatar-content {
   cursor: pointer;
-}
-
-.var {
-  width: 100%;
-  height: 100%;
-  background-image: var(--bg-url);
 }
 </style>

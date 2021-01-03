@@ -5,6 +5,7 @@ export const state = () => ({
   cart: {},
   likedProducts: {},
   likedBundles: {},
+  likedItems: {},
   filter: {
     search: '',
     orderBy: 'created_at',
@@ -19,11 +20,20 @@ export const getters = {
   USERS(state) {
     return state.users
   },
+  // LIKED_PRODUCTS(state) {
+  //   return state.likedProducts
+  // },
+  // LIKED_BUNDLES(state) {
+  //   return state.likedBundles
+  // },
   LIKED_PRODUCTS(state) {
-    return state.likedProducts
+    return state.likedItems.liked_products
   },
   LIKED_BUNDLES(state) {
-    return state.likedBundles
+    return state.likedItems.liked_bundles
+  },
+  LIKED_ITEMS(state) {
+    return state.likedItems
   },
   CART(state) {
     return state.cart
@@ -44,6 +54,9 @@ export const mutations = {
     state.filter.search = payload.search
     state.filter.orderBy = payload.orderBy
     state.filter.orderDir = payload.orderDir
+  },
+  SET_LIKED_ITEMS(state, payload) {
+    state.likedItems = payload
   },
   SET_LIKED_PRODUCTS(state, payload) {
     state.likedProducts = payload.liked_products
@@ -76,8 +89,9 @@ export const actions = {
   },
   async GET_LIKED_ITEMS({ commit }) {
     const data = await this.$axios.$get('likes')
-    commit('SET_LIKED_PRODUCTS', data)
-    commit('SET_LIKED_BUNDLES', data)
+    commit('SET_LIKED_ITEMS', data)
+    // commit('SET_LIKED_PRODUCTS', data)
+    // commit('SET_LIKED_BUNDLES', data)
   },
   async GET_CART({ commit }) {
     const data = await this.$axios.$get('carts')
