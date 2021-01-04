@@ -77,16 +77,31 @@ export const mutations = {
         state.products.data[payload.index].isLiked = !state.products.data[
           payload.index
         ].isLiked
+        if (state.products.data[payload.index].isLiked) {
+          state.products.data[payload.index].likes_count++
+        } else {
+          state.products.data[payload.index].likes_count--
+        }
         break
       case 'lowprice':
         state.lowPrice.data[payload.index].isLiked = !state.lowPrice.data[
           payload.index
         ].isLiked
+        if (state.products.data[payload.index].isLiked) {
+          state.products.data[payload.index].likes_count++
+        } else {
+          state.products.data[payload.index].likes_count--
+        }
         break
       case 'latest':
         state.latest.data[payload.index].isLiked = !state.latest.data[
           payload.index
         ].isLiked
+        if (state.products.data[payload.index].isLiked) {
+          state.products.data[payload.index].likes_count++
+        } else {
+          state.products.data[payload.index].likes_count--
+        }
         break
       default:
         break

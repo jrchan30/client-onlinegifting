@@ -157,7 +157,13 @@ export default {
     }
     if (this.$route.query.categories) {
       this.filter.categories = this.$route.query.categories
-      // this.categories = new Array(this.$route.query.categories)
+      this.categories = this.$route.query.categories.split(',')
+    }
+
+    if (this.$route.query.max) {
+      this.filter.max = this.$route.query.max
+      this.filter.min = this.$route.query.min
+      this.tempMin = this.$route.query.min
     }
     await this.SET_FILTER(this.filter)
     await this.GET_PRODUCTS()
@@ -181,6 +187,7 @@ export default {
         max: 10000000,
       },
       categories: [],
+      tempMin: 0,
     }
   },
 
@@ -244,6 +251,14 @@ export default {
         uri = uri + separator + key + '=' + value
       }
 
+      if (key === 'max') {
+        if (uri.includes('min')) {
+          uri = uri.replace(`&min=${this.tempMin}`, '&min=' + this.filter.min)
+        } else {
+          uri = uri + '&min=' + this.filter.min
+        }
+      }
+
       this.$router.push(uri)
     },
     normalizer(node) {
@@ -256,7 +271,7 @@ export default {
       // this.$router.push('&test=0')
     },
     async filterPrice() {
-      await this.updateQueryStringParameter('max', this.max)
+      await this.updateQueryStringParameter('max', this.filter.max)
       // await this.updateQueryStringParameter()
     },
   },

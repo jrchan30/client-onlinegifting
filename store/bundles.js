@@ -56,6 +56,11 @@ export const mutations = {
     state.bundles.data[payload.index].isLiked = !state.bundles.data[
       payload.index
     ].isLiked
+    if (state.bundles.data[payload.index].isLiked) {
+      state.bundles.data[payload.index].likes_count++
+    } else {
+      state.bundles.data[payload.index].likes_count--
+    }
   },
 }
 
