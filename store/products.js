@@ -10,6 +10,9 @@ export const state = () => ({
     search: '',
     orderBy: 'created_at',
     orderDir: 'desc',
+    categories: '',
+    min: 0,
+    max: 10000000,
   },
 })
 
@@ -61,6 +64,9 @@ export const mutations = {
     state.filter.search = payload.search
     state.filter.orderBy = payload.orderBy
     state.filter.orderDir = payload.orderDir
+    state.filter.categories = payload.categories
+    state.filter.min = payload.min
+    state.filter.max = payload.max
   },
   SET_ALL_PRODUCTS(state, payload) {
     state.allProducts = payload
@@ -92,7 +98,7 @@ export const actions = {
   async GET_PRODUCTS({ state, commit }, page = 1) {
     const filter = state.filter
     const data = await this.$axios.$get(
-      `products?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}`
+      `products?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}&min=${filter.min}&max=${filter.max}&categories=${filter.categories}`
     )
     commit('SET_PRODUCTS', data)
   },

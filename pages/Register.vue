@@ -59,19 +59,19 @@ export default {
     return {
       loading: false,
       form: {
-        username: {
-          type: 'text',
-          val: '',
-          placeholder: 'Username...',
-          icon: 'fas fa-user',
-          id: 'registerUsername',
-        },
         name: {
           type: 'text',
           val: '',
           placeholder: 'Name...',
           icon: 'fas fa-address-card',
           id: 'registerName',
+        },
+        username: {
+          type: 'text',
+          val: '',
+          placeholder: 'Username...',
+          icon: 'fas fa-user',
+          id: 'registerUsername',
         },
         email: {
           type: 'text',

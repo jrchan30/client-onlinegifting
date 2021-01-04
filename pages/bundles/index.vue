@@ -3,13 +3,28 @@
     <div class="container">
       <div class="d-flex justify-content-between">
         <vs-button-group>
-          <vs-button relief colour="#336699" to="/bundles?orderBy=created_at">
+          <vs-button
+            relief
+            colour="#336699"
+            to="/bundles?orderBy=created_at"
+            @click="page = 1"
+          >
             <i class="bx bx-calendar mr-1"></i>Most Recent
           </vs-button>
-          <vs-button relief danger to="/bundles?orderBy=likes_count">
+          <vs-button
+            relief
+            danger
+            to="/bundles?orderBy=likes_count"
+            @click="page = 1"
+          >
             <i class="bx bx-heart mr-1"></i> Most Likes
           </vs-button>
-          <vs-button relief warn to="/bundles?orderBy=avg_rating">
+          <vs-button
+            relief
+            warn
+            to="/bundles?orderBy=avg_rating"
+            @click="page = 1"
+          >
             <i class="bx bx-star mr-1"></i> Top Rated
           </vs-button>
         </vs-button-group>
@@ -61,21 +76,51 @@
         right
         :open.sync="activeFilter"
       >
-        <template #logo>
-          <div class="pt-5"></div>
-        </template>
-        <vs-sidebar-item id="home">
-          <template #icon>
-            <i class="bx bx-home"></i>
-          </template>
-          Home
-        </vs-sidebar-item>
-        <vs-sidebar-item id="market">
-          <template #icon>
-            <i class="bx bx-grid-alt"></i>
-          </template>
-          Market Overview
-        </vs-sidebar-item>
+        <div class="filter-padding"></div>
+        <div class="px-2">
+          <h5 class="mb-4">Filter by</h5>
+          <div>
+            <label for="category">Price range</label>
+            <div class="row pb-4 border-bottom">
+              <vs-input
+                v-model="min"
+                :oninput="
+                  (min = !!min && Math.abs(min) > 0 ? Math.abs(min) : 0)
+                "
+                class="mt-4 pl-3 pr-1 col"
+                type="number"
+                label="Min"
+              />
+              <vs-input
+                v-model="max"
+                class="mt-4 pl-1 pr-3 col"
+                :oninput="
+                  (max = !!max && Math.abs(max) > 0 ? Math.abs(max) : 0)
+                "
+                type="number"
+                label="Max"
+              />
+            </div>
+          </div>
+          <div class="mt-4">
+            <label for="category">Categories</label>
+            <client-only>
+              <treeselect
+                id="category"
+                v-model="categories"
+                :multiple="true"
+                :options="CATEGORIES"
+                placeholder="Select categories..."
+                value-consists-of="LEAF_PRIORITY"
+                :normalizer="normalizer"
+              />
+            </client-only>
+          </div>
+        </div>
+
+        <div class="mt-4 ml-auto pr-3">
+          <vs-button block color="#336699">Apply Filters</vs-button>
+        </div>
       </vs-sidebar>
     </div>
   </div>
@@ -104,12 +149,17 @@ export default {
         orderBy: 'created_at',
         orderDir: 'desc',
       },
+
+      min: 0,
+      max: 0,
+      categories: [],
     }
   },
 
   computed: {
     ...mapGetters({
       BUNDLES: 'bundles/BUNDLES',
+      CATEGORIES: 'categories/CATEGORIES',
     }),
   },
 
@@ -130,12 +180,18 @@ export default {
   methods: {
     ...mapActions({
       GET_BUNDLES: 'bundles/GET_BUNDLES',
+      GET_CATEGORIES: 'categories/GET_CATEGORIES',
     }),
     ...mapMutations({
       SET_FILTER: 'bundles/SET_FILTER',
     }),
-    goTo(id) {
-      this.$router.push(`/bundles/${id}`)
+    // goTo(id) {
+    //   this.$router.push(`/bundles/${id}`)
+    // },
+    normalizer(node) {
+      if (node.children == null || node.children === 'null') {
+        delete node.children
+      }
     },
   },
 }
