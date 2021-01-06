@@ -313,6 +313,7 @@ export default {
   layout: 'admin',
   middleware: ['auth', 'admin-only'],
   async fetch() {
+    this.SET_FILTER(this.filter)
     await this.GET_CATEGORIES()
     await this.GET_PRODUCTS()
   },
@@ -368,6 +369,9 @@ export default {
         search: '',
         orderBy: 'created_at',
         orderDir: 'desc',
+        categories: '',
+        min: 0,
+        max: 10000000,
       },
       isHiddenProducts: false,
       loading: false,

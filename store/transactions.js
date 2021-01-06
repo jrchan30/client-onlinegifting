@@ -2,6 +2,11 @@ import { formatPrice } from '~/plugins/customUtil'
 export const state = () => ({
   transactions: {},
   transaction: {},
+  filter: {
+    search: '',
+    orderBy: 'created_at',
+    orderDir: 'desc',
+  },
 })
 
 export const getters = {
@@ -24,6 +29,11 @@ export const mutations = {
     payload.data.total_price = formatPrice(payload.data.total_price)
     payload.data.delivery_fee = formatPrice(payload.data.delivery_fee)
     state.transaction = payload.data
+  },
+  SET_FILTER(state, payload) {
+    state.filter.search = payload.search
+    state.filter.orderBy = payload.orderBy
+    state.filter.orderDir = payload.orderDir
   },
 }
 

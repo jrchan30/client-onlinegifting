@@ -93,6 +93,19 @@
 
 <script>
 export default {
+  async fetch() {
+    const res = await this.$axios.$get('get-widgets')
+    this.cards.total_transaction.amount = res.transaction.current_month_count
+    this.cards.new_users.amount = res.user.current_month_count
+    this.cards.new_products.amount = res.product.current_month_count
+    this.cards.transaction_amount.amount =
+      res.transaction_amount.current_month_sum
+
+    this.cards.total_transaction.percentage = res.transaction.percentage
+    this.cards.new_users.percentage = res.user.percentage
+    this.cards.new_products.percentage = res.product.percentage
+    this.cards.transaction_amount.percentage = res.transaction_amount.percentage
+  },
   data() {
     return {
       page_title: '',
@@ -137,19 +150,6 @@ export default {
       const fullname = this.$route.name
       return fullname.substr(fullname.lastIndexOf('-') + 1)
     },
-  },
-  async mounted() {
-    const res = await this.$axios.$get('get-widgets')
-    this.cards.total_transaction.amount = res.transaction.current_month_count
-    this.cards.new_users.amount = res.user.current_month_count
-    this.cards.new_products.amount = res.product.current_month_count
-    this.cards.transaction_amount.amount =
-      res.transaction_amount.current_month_sum
-
-    this.cards.total_transaction.percentage = res.transaction.percentage
-    this.cards.new_users.percentage = res.user.percentage
-    this.cards.new_products.percentage = res.product.percentage
-    this.cards.transaction_amount.percentage = res.transaction_amount.percentage
   },
 }
 </script>

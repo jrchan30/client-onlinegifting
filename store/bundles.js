@@ -7,6 +7,9 @@ export const state = () => ({
     search: '',
     orderBy: 'created_at',
     orderDir: 'desc',
+    categories: '',
+    min: 0,
+    max: 10000000,
   },
 })
 
@@ -51,6 +54,9 @@ export const mutations = {
     state.filter.search = payload.search
     state.filter.orderBy = payload.orderBy
     state.filter.orderDir = payload.orderDir
+    state.filter.categories = payload.categories
+    state.filter.min = payload.min
+    state.filter.max = payload.max
   },
   SET_LIKE(state, payload) {
     state.bundles.data[payload.index].isLiked = !state.bundles.data[
@@ -68,7 +74,7 @@ export const actions = {
   async GET_BUNDLES({ state, commit }, page = 1) {
     const filter = state.filter
     const data = await this.$axios.$get(
-      `bundles?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}`
+      `bundles?page=${page}&search=${filter.search}&orderBy=${filter.orderBy}&orderDir=${filter.orderDir}&min=${filter.min}&max=${filter.max}&categories=${filter.categories}`
     )
     commit('SET_BUNDLES', data)
   },

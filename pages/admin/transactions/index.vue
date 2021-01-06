@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col">
-      <div class="card">
+      <div v-if="!$fetchState.pending" class="card">
         <div class="card-header border-0">
           <h3 class="mb-0">Products table</h3>
         </div>
@@ -99,7 +99,7 @@ export default {
       TRANSACTIONS: 'transactions/TRANSACTIONS',
     }),
   },
-  async mounted() {
+  async fetch() {
     await this.GET_TRANSACTIONS()
   },
   methods: {

@@ -6,24 +6,27 @@
           <vs-button
             relief
             colour="#336699"
-            to="/bundles?orderBy=created_at"
-            @click="page = 1"
+            @click="
+              ;(page = 1), updateQueryStringParameter('orderBy', 'created_at')
+            "
           >
             <i class="bx bx-calendar mr-1"></i>Most Recent
           </vs-button>
           <vs-button
             relief
             danger
-            to="/bundles?orderBy=likes_count"
-            @click="page = 1"
+            @click="
+              ;(page = 1), updateQueryStringParameter('orderBy', 'likes_count')
+            "
           >
             <i class="bx bx-heart mr-1"></i> Most Likes
           </vs-button>
           <vs-button
             relief
             warn
-            to="/bundles?orderBy=avg_rating"
-            @click="page = 1"
+            @click="
+              ;(page = 1), updateQueryStringParameter('orderBy', 'avg_rating')
+            "
           >
             <i class="bx bx-star mr-1"></i> Top Rated
           </vs-button>
@@ -81,25 +84,36 @@
           <h5 class="mb-4">Filter by</h5>
           <div>
             <label for="category">Price range</label>
-            <div class="row pb-4 border-bottom">
+            <div class="row">
               <vs-input
-                v-model="min"
+                v-model="filter.min"
                 :oninput="
-                  (min = !!min && Math.abs(min) > 0 ? Math.abs(min) : 0)
+                  (filter.min =
+                    !!filter.min && Math.abs(filter.min) > 0
+                      ? Math.abs(filter.min)
+                      : 0)
                 "
                 class="mt-4 pl-3 pr-1 col"
                 type="number"
                 label="Min"
               />
               <vs-input
-                v-model="max"
+                v-model="filter.max"
                 class="mt-4 pl-1 pr-3 col"
                 :oninput="
-                  (max = !!max && Math.abs(max) > 0 ? Math.abs(max) : 0)
+                  (filter.max =
+                    !!filter.max && Math.abs(filter.max) > 0
+                      ? Math.abs(filter.max)
+                      : 0)
                 "
                 type="number"
                 label="Max"
               />
+            </div>
+            <div class="mt-4 ml-auto pr-3 pb-4 border-bottom">
+              <vs-button block color="#336699" @click="filterPrice()"
+                >Apply Price</vs-button
+              >
             </div>
           </div>
           <div class="mt-4">
@@ -119,7 +133,12 @@
         </div>
 
         <div class="mt-4 ml-auto pr-3">
-          <vs-button block color="#336699">Apply Filters</vs-button>
+          <vs-button
+            block
+            color="#336699"
+            @click="updateQueryStringParameter('categories', filter.categories)"
+            >Apply Categories</vs-button
+          >
         </div>
       </vs-sidebar>
     </div>
@@ -134,8 +153,22 @@ export default {
     if (this.$route.query.orderBy) {
       this.filter.orderBy = this.$route.query.orderBy
     }
+    if (this.$route.query.categories) {
+      this.filter.categories = this.$route.query.categories
+      this.categories = this.$route.query.categories.split(',')
+    }
+
+    if (this.$route.query.max) {
+      this.filter.max = this.$route.query.max
+      this.filter.min = this.$route.query.min
+      this.tempMin = this.$route.query.min
+    }
     await this.SET_FILTER(this.filter)
     await this.GET_BUNDLES()
+  },
+
+  async asyncData({ store }) {
+    await store.dispatch('categories/GET_CATEGORIES')
   },
 
   data() {
@@ -148,11 +181,13 @@ export default {
         search: '',
         orderBy: 'created_at',
         orderDir: 'desc',
+        categories: '',
+        min: 0,
+        max: 10000000,
       },
 
-      min: 0,
-      max: 0,
       categories: [],
+      tempMin: 0,
     }
   },
 
@@ -175,6 +210,9 @@ export default {
         this.loading = false
       }
     },
+    categories() {
+      this.filter.categories = this.categories.toString()
+    },
   },
 
   methods: {
@@ -185,13 +223,36 @@ export default {
     ...mapMutations({
       SET_FILTER: 'bundles/SET_FILTER',
     }),
-    // goTo(id) {
-    //   this.$router.push(`/bundles/${id}`)
-    // },
+
+    updateQueryStringParameter(key, value) {
+      const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i')
+      let uri = this.$route.fullPath
+      const separator = uri.includes('?') ? '&' : '?'
+      if (uri.match(re)) {
+        uri = uri.replace(re, '$1' + key + '=' + value + '$2')
+      } else {
+        uri = uri + separator + key + '=' + value
+      }
+
+      if (key === 'max') {
+        if (uri.includes('min')) {
+          uri = uri.replace(`&min=${this.tempMin}`, '&min=' + this.filter.min)
+        } else {
+          uri = uri + '&min=' + this.filter.min
+        }
+      }
+
+      this.$router.push(uri)
+    },
+
     normalizer(node) {
       if (node.children == null || node.children === 'null') {
         delete node.children
       }
+    },
+    async filterPrice() {
+      await this.updateQueryStringParameter('max', this.filter.max)
+      // await this.updateQueryStringParameter()
     },
   },
 }

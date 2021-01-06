@@ -216,7 +216,7 @@ export default {
       DISCUSSIONS: 'discussions/DISCUSSIONS',
     }),
   },
-  async mounted() {
+  async fetch() {
     this.lineChart.loaded = false
     this.barChart.loaded = false
     try {
@@ -228,7 +228,7 @@ export default {
       }
       this.lineChart.loaded = true
     } catch (e) {
-      console.error(e)
+      alert(e)
     }
     try {
       const res = await this.$axios.$get('/transactions-count')
@@ -248,7 +248,7 @@ export default {
       }
       this.barChart.loaded = true
     } catch (e) {
-      console.error(e)
+      alert(e)
     }
     await this.GET_DISCUSSIONS()
   },

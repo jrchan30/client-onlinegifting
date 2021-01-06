@@ -420,7 +420,7 @@
                 Add to Cart
               </vs-button>
             </div>
-            <vs-dialog v-model="editShow" @close="clear">
+            <vs-dialog v-model="editShow">
               <template #header>
                 <h4 class="pt-2 mb-2">
                   Edit

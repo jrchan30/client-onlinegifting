@@ -64,9 +64,9 @@ export const mutations = {
     state.filter.search = payload.search
     state.filter.orderBy = payload.orderBy
     state.filter.orderDir = payload.orderDir
-    state.filter.categories = payload.categories
-    state.filter.min = payload.min
-    state.filter.max = payload.max
+    state.filter.categories = payload.categories ?? ''
+    state.filter.min = payload.min ?? 0
+    state.filter.max = payload.max ?? 10000000
   },
   SET_ALL_PRODUCTS(state, payload) {
     state.allProducts = payload
