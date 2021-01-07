@@ -116,7 +116,7 @@
               >
             </div>
           </div>
-          <div class="mt-4">
+          <div v-if="CATEGORIES" class="mt-4">
             <label for="category">Categories</label>
             <client-only>
               <treeselect
@@ -166,11 +166,6 @@ export default {
     await this.SET_FILTER(this.filter)
     await this.GET_BUNDLES()
   },
-
-  async asyncData({ store }) {
-    await store.dispatch('categories/GET_CATEGORIES')
-  },
-
   data() {
     return {
       active: 'home',
@@ -191,6 +186,13 @@ export default {
     }
   },
 
+  // async asyncData({ store }) {
+  //   await store.dispatch('categories/GET_CATEGORIES')
+  // },
+  async mounted() {
+    await this.GET_CATEGORIES()
+  },
+
   computed: {
     ...mapGetters({
       BUNDLES: 'bundles/BUNDLES',
@@ -202,13 +204,13 @@ export default {
     '$route.query': '$fetch',
     async page(val) {
       this.loading = true
-      try {
-        await this.$store.dispatch('bundles/GET_BUNDLES', val)
-      } catch (e) {
-        alert(e)
-      } finally {
-        this.loading = false
-      }
+      // try {
+      await this.$store.dispatch('bundles/GET_BUNDLES', val)
+      // } catch (e) {
+      //   alert(e)
+      // } finally {
+      //   this.loading = false
+      // }
     },
     categories() {
       this.filter.categories = this.categories.toString()

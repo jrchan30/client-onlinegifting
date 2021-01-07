@@ -18,8 +18,7 @@
                 <vs-tr>
                   <vs-th> Transaction Number </vs-th>
                   <vs-th> Total Price (IDR)</vs-th>
-                  <vs-th> Payment Status </vs-th>
-                  <vs-th> Transaction Status </vs-th>
+                  <vs-th> Status </vs-th>
                   <vs-th> Payment </vs-th>
                 </vs-tr>
               </template>
@@ -37,9 +36,11 @@
                   <vs-td>
                     {{ transaction.total_price }}
                   </vs-td>
-                  <vs-td> {{ transaction.payment_status }} </vs-td>
                   <vs-td>
-                    {{ transaction.transaction_status }}
+                    {{ transaction.payment_status }}
+                    <span v-if="transaction.transaction_status"
+                      >({{ transaction.transaction_status }})</span
+                    >
                   </vs-td>
                   <vs-td
                     v-if="
@@ -47,8 +48,20 @@
                       transaction.transaction_status == 'settlement' ||
                       transaction.transaction_status == 'challenge'
                     "
+                    class="d-flex"
                   >
-                    Already Paid
+                    <vs-button success gradient @click="confirmArrival()"
+                      ><span class="text-dark">Confirm Arrival</span></vs-button
+                    >
+                  </vs-td>
+                  <vs-td v-else-if="transaction.transaction_status == 'expire'">
+                    <vs-button
+                      danger
+                      gradient
+                      @click="midtransSnap(transaction.token)"
+                    >
+                      Expired
+                    </vs-button>
                   </vs-td>
                   <vs-td v-else>
                     <vs-button
@@ -98,6 +111,9 @@ export default {
       } catch (e) {
         alert(e)
       }
+    },
+    confirmArrival() {
+      console.log('test')
     },
   },
   head() {

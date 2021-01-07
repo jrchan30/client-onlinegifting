@@ -44,171 +44,168 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col-12 col-md-6 col-lg-5">
+              <div class="card border-0 card-shadow">
+                <div class="card-body text-center p-2">
+                  <div class="row justify-content-between">
+                    <div class="col">
+                      <small
+                        ><nuxt-link to="/liked-items"
+                          >Liked Items</nuxt-link
+                        ></small
+                      >
+                      <vs-avatar v-if="$fetchState.pending">
+                        <i class="bx bx-loader-circle"></i>
+                      </vs-avatar>
+                      <div v-else>
+                        <div v-if="likedItems.length < 1">
+                          <span class="font-weight-bold">0</span>
+                        </div>
+                        <vs-avatar-group v-else max="3">
+                          <vs-avatar
+                            v-for="(item, index) in likedItems"
+                            :key="index"
+                            badge-position="bottom-left"
+                          >
+                            <template #badge>
+                              <i v-if="item.type == 'product'">P</i>
+                              <i v-else>B</i>
+                            </template>
+                            <img
+                              class="profilepic-ratio h-100 w-100"
+                              :src="item.main_image"
+                              alt=""
+                            />
+                          </vs-avatar>
+                        </vs-avatar-group>
+                      </div>
+                    </div>
+                    <div class="col p-0">
+                      <vs-avatar
+                        class="mx-auto mt-n5"
+                        style="width: 100px; height: 100px"
+                        circle
+                        history
+                        history-gradient
+                      >
+                        <img :src="$auth.user.profile_pic" alt="" />
+                      </vs-avatar>
+                    </div>
+                    <div class="col">
+                      <small class="text-small"
+                        ><nuxt-link to="/transactions"
+                          >Transactions</nuxt-link
+                        ></small
+                      >
+                      <div v-if="!$fetchState.pending">
+                        <span class="font-weight-bold">
+                          {{ TRANSACTIONS.data.length }}</span
+                        >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col d-flex justify-content-center">
+                      <vs-button
+                        circle
+                        icon
+                        border
+                        danger
+                        @click="deleteUser()"
+                      >
+                        <i class="bx bxs-trash"></i>
+                      </vs-button>
+                      <vs-button circle color="#336699" @click="editPrompt"
+                        >Edit Profile
+                      </vs-button>
+                      <vs-button circle icon border to="/carts">
+                        <i class="bx bx-cart-alt"></i>
+                      </vs-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-lg-5"> -->
+              <div class="card my-4 card-shadow">
+                <div class="card-header border-0">
+                  <h3 class="text-monospace">General Details</h3>
+                </div>
+                <div class="card-body">
+                  <dl v-if="!$fetchState.pending" class="row mb-0">
+                    <dt class="col-sm-4">Type</dt>
+                    <dd class="col-sm-8">
+                      {{ USER_DETAILS.data.type }}
+                    </dd>
+                    <dt class="col-sm-4">Joined</dt>
+                    <dd class="col-sm-8">
+                      {{ $auth.user.created_at }}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+              <!-- </div> -->
+            </div>
+            <div class="col-md-6 col-lg-7">
+              <div class="card card-shadow mb-4">
+                <div class="card-header border-0">
+                  <h3 class="text-monospace">User Details</h3>
+                </div>
+                <div class="card-body">
+                  <dl v-if="!$fetchState.pending" class="row mb-0">
+                    <dt class="col-sm-4">Name</dt>
+                    <dd class="col-sm-8">
+                      {{ $auth.user.name }}
+                    </dd>
+
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">
+                      {{ $auth.user.email }}
+                    </dd>
+
+                    <dt class="col-sm-4">Province</dt>
+                    <dd v-if="!USER_DETAILS.data.province" class="col-sm-8">
+                      <span class="text-muted"> Not yet filled </span>
+                    </dd>
+                    <dd v-else class="col-sm-8">
+                      <!-- {{ USER_DETAILS.data.province }} -->
+                      {{ splittedProvinceCity.tempProvince }}
+                    </dd>
+
+                    <dt class="col-sm-4">City</dt>
+                    <dd v-if="!USER_DETAILS.data.city" class="col-sm-8">
+                      <span class="text-muted"> Not yet filled </span>
+                    </dd>
+                    <dd v-else class="col-sm-8">
+                      <!-- {{ USER_DETAILS.data.city }} -->
+                      {{ splittedProvinceCity.tempCity }}
+                    </dd>
+
+                    <dt class="col-sm-4">Address</dt>
+                    <dd v-if="!USER_DETAILS.data.address" class="col-sm-8">
+                      <span class="text-muted"> Not yet filled </span>
+                    </dd>
+                    <dd v-else class="col-sm-8">
+                      {{ USER_DETAILS.data.address }}
+                    </dd>
+
+                    <dt class="col-sm-4">Phone Number</dt>
+                    <dd v-if="!USER_DETAILS.data.phone_num" class="col-sm-8">
+                      <span class="text-muted"> Not yet filled </span>
+                    </dd>
+                    <dd v-else class="col-sm-8">
+                      {{ USER_DETAILS.data.phone_num }}
+                    </dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </template>
     </div>
-    <template v-if="$auth.user">
-      <div class="container pt-5 pt-md-5">
-        <div class="row">
-          <div class="col-12 col-md-6 col-lg-5">
-            <div class="card border-0 card-shadow" data-aos="fade-up">
-              <div class="card-body text-center p-2">
-                <div class="row justify-content-between">
-                  <div class="col">
-                    <small
-                      ><nuxt-link to="/liked-items"
-                        >Liked Items</nuxt-link
-                      ></small
-                    >
-                    <vs-avatar v-if="$fetchState.pending">
-                      <i class="bx bx-loader-circle"></i>
-                    </vs-avatar>
-                    <div v-else>
-                      <div v-if="likedItems.length < 1">
-                        <span class="font-weight-bold">0</span>
-                      </div>
-                      <vs-avatar-group v-else max="3">
-                        <vs-avatar
-                          v-for="(item, index) in likedItems"
-                          :key="index"
-                          badge-position="bottom-left"
-                        >
-                          <template #badge>
-                            <i v-if="item.type == 'product'">P</i>
-                            <i v-else>B</i>
-                          </template>
-                          <img
-                            class="profilepic-ratio h-100 w-100"
-                            :src="item.main_image"
-                            alt=""
-                          />
-                        </vs-avatar>
-                      </vs-avatar-group>
-                    </div>
-                  </div>
-                  <div class="col p-0">
-                    <vs-avatar
-                      class="mx-auto mt-n5"
-                      style="width: 100px; height: 100px"
-                      circle
-                      history
-                      history-gradient
-                    >
-                      <img :src="$auth.user.profile_pic" alt="" />
-                    </vs-avatar>
-                  </div>
-                  <div class="col">
-                    <small class="text-small"
-                      ><nuxt-link to="/transactions"
-                        >Transactions</nuxt-link
-                      ></small
-                    >
-                    <div v-if="!$fetchState.pending">
-                      <span class="font-weight-bold">
-                        {{ TRANSACTIONS.data.length }}</span
-                      >
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col d-flex justify-content-center">
-                    <vs-button circle icon border danger @click="deleteUser()">
-                      <i class="bx bxs-trash"></i>
-                    </vs-button>
-                    <vs-button circle color="#336699" @click="editPrompt"
-                      >Edit Profile
-                    </vs-button>
-                    <vs-button circle icon border to="/carts">
-                      <i class="bx bx-cart-alt"></i>
-                    </vs-button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- <div class="col-lg-5"> -->
-            <div
-              class="card my-4 card-shadow"
-              data-aos="fade-up"
-              data-aos-duration="1200"
-            >
-              <div class="card-header border-0">
-                <h3 class="text-monospace">General Details</h3>
-              </div>
-              <div class="card-body">
-                <dl v-if="!$fetchState.pending" class="row mb-0">
-                  <dt class="col-sm-4">Type</dt>
-                  <dd class="col-sm-8">
-                    {{ USER_DETAILS.data.type }}
-                  </dd>
-                  <dt class="col-sm-4">Joined</dt>
-                  <dd class="col-sm-8">
-                    {{ $auth.user.created_at }}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-            <!-- </div> -->
-          </div>
-          <div class="col-md-6 col-lg-7">
-            <div
-              class="card card-shadow mb-4"
-              data-aos="fade-up"
-              data-aos-duration="1200"
-            >
-              <div class="card-header border-0">
-                <h3 class="text-monospace">User Details</h3>
-              </div>
-              <div class="card-body">
-                <dl v-if="!$fetchState.pending" class="row mb-0">
-                  <dt class="col-sm-4">Name</dt>
-                  <dd class="col-sm-8">
-                    {{ $auth.user.name }}
-                  </dd>
-
-                  <dt class="col-sm-4">Email</dt>
-                  <dd class="col-sm-8">
-                    {{ $auth.user.email }}
-                  </dd>
-
-                  <dt class="col-sm-4">Province</dt>
-                  <dd v-if="!USER_DETAILS.data.province" class="col-sm-8">
-                    <span class="text-muted"> Not yet filled </span>
-                  </dd>
-                  <dd v-else class="col-sm-8">
-                    <!-- {{ USER_DETAILS.data.province }} -->
-                    {{ splittedProvinceCity.tempProvince }}
-                  </dd>
-
-                  <dt class="col-sm-4">City</dt>
-                  <dd v-if="!USER_DETAILS.data.city" class="col-sm-8">
-                    <span class="text-muted"> Not yet filled </span>
-                  </dd>
-                  <dd v-else class="col-sm-8">
-                    <!-- {{ USER_DETAILS.data.city }} -->
-                    {{ splittedProvinceCity.tempCity }}
-                  </dd>
-
-                  <dt class="col-sm-4">Address</dt>
-                  <dd v-if="!USER_DETAILS.data.address" class="col-sm-8">
-                    <span class="text-muted"> Not yet filled </span>
-                  </dd>
-                  <dd v-else class="col-sm-8">
-                    {{ USER_DETAILS.data.address }}
-                  </dd>
-
-                  <dt class="col-sm-4">Phone Number</dt>
-                  <dd v-if="!USER_DETAILS.data.phone_num" class="col-sm-8">
-                    <span class="text-muted"> Not yet filled </span>
-                  </dd>
-                  <dd v-else class="col-sm-8">
-                    {{ USER_DETAILS.data.phone_num }}
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <template>
+      <div class="container pt-5 pt-md-5"></div>
       <!-- <div class="container"> -->
       <vs-dialog v-model="activePrompt" blur prevent-close :loading="loading">
         <template #header>
@@ -503,6 +500,16 @@ export default {
         this.city_selected = this.USER_DETAILS.data.city ?? ''
       }
     },
+    profileNotification(icon, color, title, text) {
+      this.$vs.notification({
+        duration: 10000,
+        progress: 'auto',
+        icon,
+        color,
+        title,
+        text,
+      })
+    },
     async submit() {
       if (
         this.validCity &&
@@ -520,13 +527,30 @@ export default {
           this.loading = true
           await this.$axios.$patch(`/users/${this.$auth.user.id}`, form)
           this.GET_USER_DETAILS()
+          this.activePrompt = false
+          this.profileNotification(
+            `<i class='bx bxs-user'></i>`,
+            'success',
+            'Edit Successful',
+            'Your edits are successfully persisted.'
+          )
         } catch (e) {
-          alert(e)
+          this.profileNotification(
+            `<i class='bx bxs-user'></i>`,
+            'danger',
+            'Whoops...',
+            `Uh-oh, something went wrong ${e}.`
+          )
         } finally {
           this.loading = false
         }
       } else {
-        alert('Please fill all inputs as instructed')
+        this.profileNotification(
+          `<i class='bx bxs-user'></i>`,
+          'danger',
+          'Whoops...',
+          `Please fill inputs as instructed.`
+        )
       }
     },
     deleteUser() {

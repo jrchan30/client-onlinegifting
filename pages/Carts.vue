@@ -541,6 +541,7 @@ export default {
     await this.GET_CART()
     await this.GET_PROVINCES()
     await this.GET_CITIES()
+    await this.GET_USER_DETAILS()
   },
   data() {
     return {
@@ -583,6 +584,7 @@ export default {
       CITIES: 'shipping/CITIES',
       COURIERS: 'shipping/COURIERS',
       SERVICES_COSTS: 'shipping/SERVICES_COSTS',
+      USER_DETAILS: 'users/USER_DETAILS',
     }),
     mergedCart() {
       const arrBoxes = this.CART.data[0].boxes
@@ -741,6 +743,7 @@ export default {
       GET_PROVINCES: 'shipping/GET_PROVINCES',
       GET_CITIES: 'shipping/GET_CITIES',
       GET_SERVICES_COSTS: 'shipping/GET_SERVICES_COSTS',
+      GET_USER_DETAILS: 'users/GET_USER_DETAILS',
     }),
     clear() {
       Object.assign(this.$data, this.$options.data())
@@ -761,8 +764,10 @@ export default {
       this.receiver.minDate = finalDate
     },
     checkoutPrompt() {
-      this.tempAddress = this.$auth.user.detail.address ?? ''
-      this.tempPhoneNum = this.$auth.user.detail.phone_num ?? ''
+      this.tempAddress = this.USER_DETAILS.data.address ?? ''
+      // this.tempAddress = this.$auth.user.detail.address ?? ''
+      this.tempPhoneNum = this.USER_DETAILS.data.phone_num ?? ''
+      // this.tempPhoneNum = this.$auth.user.detail.phone_num ?? ''
       this.totalWeight = this.selected.reduce((sum, x) => sum + x.weight, 0)
       this.activePrompt = !this.activePrompt
     },
@@ -809,8 +814,16 @@ export default {
         // this.$axios.$post('/checkout', form).then((response) => {
         //   window.snap.pay(response)
         // })
+        if (this.isUpdate) {
+          const udetail = {
+            phone_num: this.phoneNum,
+            address: this.address,
+          }
+          await this.$axios.$patch(`/users/${this.$auth.user.id}`, udetail)
+        }
         await this.$axios.$post('/transactions', form)
         // this.clear()
+        this.activePrompt = false
         this.$router.push('/transactions')
       } catch (e) {
         alert(e)

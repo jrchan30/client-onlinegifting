@@ -624,13 +624,8 @@ export default {
   middleware: 'auth',
   async fetch() {
     // const loading = this.$vs.loading()
-    try {
-      await this.GET_BOXES()
-      this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
-    } catch (e) {
-      alert(e)
-      // loading.close()
-    }
+    await this.GET_BOXES()
+    this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
   },
   data() {
     return {
@@ -837,10 +832,11 @@ export default {
           await this.$axios.post(`/carts`, form)
           this.addCartNotification(arrName.toString())
         }
+        await this.GET_BOXES()
+        this.clear()
+        this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
       } catch (e) {
         alert(e)
-      } finally {
-        this.clear()
       }
     },
     editQty(product) {

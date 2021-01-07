@@ -117,7 +117,7 @@
               >
             </div>
           </div>
-          <div class="mt-4">
+          <div v-if="CATEGORIES" class="mt-4">
             <label for="category">Categories</label>
             <client-only>
               <treeselect
@@ -151,6 +151,7 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 
 export default {
+  layout: 'default',
   async fetch() {
     if (this.$route.query.orderBy) {
       this.filter.orderBy = this.$route.query.orderBy
@@ -168,10 +169,6 @@ export default {
     await this.SET_FILTER(this.filter)
     await this.GET_PRODUCTS()
   },
-  async asyncData({ store }) {
-    await store.dispatch('categories/GET_CATEGORIES')
-  },
-
   data() {
     return {
       active: 'home',
@@ -190,6 +187,13 @@ export default {
       tempMin: 0,
     }
   },
+  // async asyncData({ store }) {
+  //   await store.dispatch('categories/GET_CATEGORIES')
+  // },
+
+  async mounted() {
+    await this.GET_CATEGORIES()
+  },
 
   computed: {
     ...mapGetters({
@@ -202,13 +206,13 @@ export default {
     '$route.query': '$fetch',
     async page(val) {
       this.loading = true
-      try {
-        await this.$store.dispatch('products/GET_PRODUCTS', val)
-      } catch (e) {
-        alert(e)
-      } finally {
-        this.loading = false
-      }
+      // try {
+      await this.$store.dispatch('products/GET_PRODUCTS', val)
+      // } catch (e) {
+      //   alert(e)
+      // } finally {
+      //   this.loading = false
+      // }
     },
     categories() {
       this.filter.categories = this.categories.toString()
@@ -265,10 +269,6 @@ export default {
       if (node.children == null || node.children === 'null') {
         delete node.children
       }
-    },
-    applyFilter() {
-      console.log(this.$route.path)
-      // this.$router.push('&test=0')
     },
     async filterPrice() {
       await this.updateQueryStringParameter('max', this.filter.max)
