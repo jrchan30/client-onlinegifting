@@ -107,6 +107,14 @@ export const mutations = {
         break
     }
   },
+  ADD_DISCUSSION(state, payload) {
+    state.product.data.discussions.unshift(payload)
+  },
+  ADD_REPLY(state, payload) {
+    state.product.data.discussions[payload.discussionIdx].replies.unshift(
+      payload.response
+    )
+  },
 }
 
 export const actions = {

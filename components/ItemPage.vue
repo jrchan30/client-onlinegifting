@@ -130,33 +130,22 @@
 
         <!-- Sub-Navigation Headers -->
         <div class="row mt-5 sticky-top">
-          <div class="col-12 border-top border-bottom align-middle">
-            <ul class="list-inline my-auto">
-              <li
-                id="discussions"
-                class="list-inline-item py-3 mr-2 mr-md-4 border-primary navDiv"
-                :class="{ 'border-bottom': navigation == 1 }"
-                @click="navigation = 1"
-              >
+          <div class="col-12 py-3 border-top border-bottom align-middle">
+            <vs-button-group>
+              <vs-button relief colour="#336699" href="#discussions">
                 DISCUSSIONS
-              </li>
-              <li
-                id="reviews"
-                class="list-inline-item py-3 mr-2 mr-md-4 border-primary navDiv"
-                :class="{ 'border-bottom': navigation == 2 }"
-                @click="navigation = 2"
-              >
+              </vs-button>
+              <vs-button relief colour="#336699" href="#reviews">
                 REVIEWS
-              </li>
-              <li
-                id="policy"
-                class="list-inline-item py-3 mr-2 mr-md-4 border-primary navDiv"
-                :class="{ 'border-bottom': navigation == 3 }"
-                @click="navigation = 3"
+              </vs-button>
+              <vs-button
+                v-if="item.data.type == 'product'"
+                relief
+                colour="#336699"
               >
                 BUNDLED
-              </li>
-            </ul>
+              </vs-button>
+            </vs-button-group>
           </div>
         </div>
         <!-- End Sub-Navigation Headers -->
@@ -167,20 +156,40 @@
       <!-- Discussions -->
       <div class="wrapper">
         <div class="container mt-3">
-          <div class="row pb-4 border-bottom">
+          <div id="discussions" class="row pb-4 border-bottom">
             <div class="col-md-12 font-weight-bold mb-3">
               DISCUSSIONS ({{ item.data.discussions.length }})
             </div>
+            <div class="col-md-6 mb-2 d-flex">
+              <vs-input
+                v-model="newDiscussion"
+                primary
+                class="flex-grow-1"
+                state="dark"
+                type="text"
+                placeholder="Add Discussion"
+              />
+              <vs-button
+                circle
+                icon
+                color="#7d33ff"
+                relief
+                :disabled="isLoading"
+                @click="addDiscussion()"
+              >
+                <i class="bx bxs-paper-plane"></i>
+              </vs-button>
+            </div>
             <template v-if="item.data.discussions.length > 0">
               <div
-                v-for="discussion in item.data.discussions"
+                v-for="(discussion, index) in item.data.discussions"
                 :key="'discussion' + discussion.id"
-                class="col-md-12"
+                class="col-md-12 py-3 hover rounded"
               >
                 <div class="media">
                   <vs-avatar circle class="mr-2 shadow">
                     <img
-                      alt="Bootstrap Media Preview"
+                      :alt="`${discussion.user.name} profile picture`"
                       :src="discussion.user.profile_pic"
                     />
                   </vs-avatar>
@@ -196,9 +205,20 @@
                       </div>
                       <div class="col-4">
                         <div class="float-right reply">
-                          <a href="#"
-                            ><span><i class="fa fa-reply"></i> reply</span></a
+                          <button
+                            class="reply-button"
+                            @click="
+                              addReply(
+                                discussion.id,
+                                index,
+                                discussion.user.name
+                              )
+                            "
                           >
+                            <span class="text-primary"
+                              ><i class="fa fa-reply"></i> reply</span
+                            >
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -210,7 +230,7 @@
                     >
                       <vs-avatar circle class="mr-2">
                         <img
-                          alt="Bootstrap Media Preview"
+                          :alt="`${reply.user.name} profile picture`"
                           :src="reply.user.profile_pic"
                         />
                       </vs-avatar>
@@ -233,34 +253,39 @@
               </div>
             </template>
             <template v-else>
-              <div>
+              <div class="col-md-12">
                 <p class="text-muted">There is no discussions</p>
               </div>
             </template>
           </div>
 
-          <div class="row mt-5">
-            <div class="col-md-12 font-weight-bold mb-3">
+          <div class="row my-5">
+            <div id="reviews" class="col-md-12 font-weight-bold mb-3">
               REVIEWS ({{ item.data.reviews.length }})
             </div>
             <template v-if="item.data.reviews.length > 0">
               <div
                 v-for="review in item.data.reviews"
                 :key="'review' + review.id"
-                class="col-md-12"
+                class="col-md-12 py-3 hover rounded"
               >
                 <div class="media">
                   <vs-avatar circle class="mr-2 shadow">
                     <img
-                      alt="Bootstrap Media Preview"
+                      :alt="`${review.user.name} profile picture`"
                       :src="review.user.profile_pic"
                     />
                   </vs-avatar>
                   <div class="media-body">
                     <div class="row">
-                      <div class="col-8 d-flex">
+                      <div class="col-12 d-flex">
                         <small
-                          ><b> {{ review.user.name }} </b> -
+                          ><b> {{ review.user.name }} </b>
+                          <span
+                            ><i class="bx bxs-star" style="color: #ffdf00"></i
+                            >({{ review.rating }})</span
+                          >
+                          -
                           <span class="text-muted">{{
                             review.created_at
                           }}</span></small
@@ -279,36 +304,6 @@
             </template>
           </div>
         </div>
-        <!-- End Discussions -->
-
-        <!-- Reviews -->
-        <!-- <div class="row py-3 mt-5">
-        <span class="col-12 font-weight-bold"
-          >REVIEWS ({{ item.data.reviews.length }})</span
-        >
-      </div>
-      <template v-if="item.data.reviews.length > 0">
-        <div v-for="review in item.data.reviews" :key="'review' + review.id">
-          <div class="row py-2">
-            <div
-              class="col text-size text-truncate border-right font-weight-bold"
-            >
-              {{ review.user.name }}
-              <p class="text-muted mb-0">{{ review.created_at }}</p>
-            </div>
-
-            <div class="col-10">
-              <p class="mb-0">{{ review.body }}</p>
-            </div>
-          </div>
-        </div>
-      </template>
-      <template v-else>
-        <div>
-          <p class="text-muted">There is no reviews</p>
-        </div>
-      </template> -->
-        <!-- End Reviews -->
       </div>
     </div>
   </div>
@@ -341,6 +336,9 @@ export default {
         box_id: [],
         qty: [],
       },
+      newDiscussion: '',
+      newReview: '',
+      isLoading: false,
     }
   },
 
@@ -485,6 +483,60 @@ export default {
         }
       }
     },
+    async addDiscussion() {
+      try {
+        this.isLoading = true
+        const form = {
+          type: this.item.data.type,
+          id: this.item.data.id,
+          body: this.newDiscussion,
+        }
+        // if (type === 'discussion') {
+        const res = await this.$axios.$post('/discussions', form)
+        // this.item.data.discussions.unshift(res.data)
+        this.$store.commit(`${this.item.data.type}s/ADD_DISCUSSION`, res.data)
+        // } else {
+        //   form.rating = 5
+        //   const res = await this.$axios.$post('/reviews', form)
+        //   this.item.data.reviews.unshift(res.data)
+        // }
+        this.newDiscussion = ''
+      } catch (e) {
+        alert(e)
+      } finally {
+        this.isLoading = false
+      }
+    },
+    addReply(discussionId, discussionIdx, name) {
+      this.$swal({
+        title: `Reply to ${name.substring(0, 18)}`,
+        input: 'text',
+        inputLabel: 'Your reply',
+        showCancelButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'You need to write something!'
+          }
+        },
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const form = {
+            discussion_id: discussionId,
+            body: result.value,
+          }
+          const res = await this.$axios.$post('/replies', form)
+          const replyToUpdate = {
+            response: res.data,
+            discussionIdx,
+          }
+          this.$store.commit(`${this.item.data.type}s/ADD_REPLY`, replyToUpdate)
+        }
+      })
+    },
+    // const form = {
+    //   id,
+    //   body:
+    // }
   },
 }
 </script>
@@ -511,6 +563,12 @@ export default {
   cursor: pointer;
   transition: transform 0.4s;
 }
+.hover {
+  transition: 0.4s;
+}
+.hover:hover {
+  background-color: #e4e4e4;
+}
 
 .item-image-bottom:hover {
   transform: scale(1.1);
@@ -520,14 +578,14 @@ export default {
   box-shadow: 0px 8px 25px -3px rgba(0, 0, 0, 1);
 }
 
-input[type='number']::-webkit-inner-spin-button {
+/* input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
 textarea:focus,
 input:focus {
   outline: none;
-}
+} */
 
 input {
   text-align: center;
@@ -542,28 +600,26 @@ input {
   display: grid;
   place-items: center;
 }
-/* .card {
-  position: relative;
-  display: flex;
-  padding: 20px;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 1px solid #d2d2dc;
-  border-radius: 11px;
-  -webkit-box-shadow: 0px 0px 5px 0px rgb(249, 249, 250);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(212, 182, 212, 1);
-  box-shadow: 0px 0px 5px 0px rgb(161, 163, 164);
-} */
 
 .media img {
   width: 60px;
   height: 60px;
 }
 
-.reply a {
+/* .reply a {
   text-decoration: none;
+} */
+.reply-button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+.vs-button-group {
+  justify-content: left;
 }
 </style>

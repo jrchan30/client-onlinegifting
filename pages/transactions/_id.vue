@@ -31,10 +31,26 @@
             </vs-button>
             <vs-button
               v-if="
-                transaction.data.transaction_status !== 'success' &&
-                transaction.data.transaction_status !== 'settlement' &&
-                transaction.data.transaction_status !== 'challenge'
+                transaction.data.transaction_status == 'success' ||
+                transaction.data.transaction_status == 'settlement' ||
+                transaction.data.transaction_status == 'challenge'
               "
+              success
+              gradient
+              @click="confirmArrival()"
+            >
+              <i class="bx bxs-credit-card mr-2"></i> Confirm Arrival
+            </vs-button>
+            <vs-button
+              v-else-if="transaction.data.transaction_status == 'expire'"
+              danger
+              gradient
+              @click="midtransSnap(transaction.data.token, transaction.data.id)"
+            >
+              <i class="bx bxs-credit-card mr-2"></i> Expired
+            </vs-button>
+            <vs-button
+              v-else
               warn
               gradient
               @click="midtransSnap(transaction.data.token, transaction.data.id)"
@@ -43,8 +59,108 @@
             </vs-button>
           </div>
         </div>
+        <div class="pb-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Bundles</h3>
+              <template v-if="transaction.data.paid_bundles.length > 0">
+                <div
+                  v-for="bundle in transaction.data.paid_bundles"
+                  :key="bundle.id"
+                  class="row py-2 border-bottom"
+                >
+                  <div class="col-12 col-md-4">
+                    <vs-card>
+                      <template #title>
+                        <h3>{{ bundle.name }}</h3>
+                      </template>
+                      <template #img>
+                        <img :src="bundle.url" :alt="`${bundle.name} image`" />
+                      </template>
+                      <template #text>
+                        <p>
+                          Products Type Count: {{ bundle.paid_products.length }}
+                        </p>
+                      </template>
+                    </vs-card>
+                  </div>
+                  <div class="col-12 mt-2 mt-md-0 col-md-8">
+                    <h5>Products</h5>
+                    <div
+                      v-for="(product, index) in bundle.paid_products"
+                      :key="product.id"
+                      class="row"
+                    >
+                      <div class="col-10 text-truncate">
+                        {{ index + 1 }}. {{ product.name }} (Rp.{{
+                          priceFormatted(product.price)
+                        }}
+                        x {{ product.quantity }} qty)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div>No bundles in this transaction</div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <div class="pb-4">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Boxes</h3>
+              <template v-if="transaction.data.paid_boxes.length > 0">
+                <div
+                  v-for="box in transaction.data.paid_boxes"
+                  :key="box.id"
+                  class="row py-2 border-bottom"
+                >
+                  <div class="col-12 col-md-4">
+                    <vs-card>
+                      <template #title>
+                        <h3>{{ box.name }}</h3>
+                      </template>
+                      <template #img>
+                        <img
+                          src="/image/undraw_gift.svg"
+                          :alt="`${box.name} image`"
+                        />
+                      </template>
+                      <template #text>
+                        <p>
+                          Products Type Count: {{ box.paid_products.length }}
+                        </p>
+                      </template>
+                    </vs-card>
+                  </div>
+                  <div class="col-12 mt-2 mt-md-0 col-md-8">
+                    <h5>Products</h5>
+                    <div
+                      v-for="(product, index) in box.paid_products"
+                      :key="product.id"
+                      class="row"
+                    >
+                      <div class="col-10 text-truncate">
+                        {{ index + 1 }}. {{ product.name }} (Rp.{{
+                          priceFormatted(product.price)
+                        }}
+                        x {{ product.quantity }} qty)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <template v-else>
+                <div>No boxes in this transaction</div>
+              </template>
+            </div>
+          </div>
+        </div>
       </div>
-      <div>Disini tampilin bundle / box beserta dengan detilnya</div>
+
       <div class=""></div>
       <vs-dialog
         v-model="isShow"
@@ -129,6 +245,8 @@
 </template>
 
 <script>
+import { formatPrice } from '@/plugins/customUtil'
+
 export default {
   layout: 'default',
   middleware: 'auth',
@@ -150,6 +268,9 @@ export default {
       } catch (e) {
         alert(e)
       }
+    },
+    priceFormatted(price) {
+      return formatPrice(price)
     },
   },
   head() {

@@ -163,12 +163,12 @@
             </template>
             Bundles
           </vs-sidebar-item>
-          <vs-sidebar-item id="categories" to="/categories">
+          <!-- <vs-sidebar-item id="categories" to="/categories">
             <template #icon>
               <i class="bx bx-book-content"></i>
             </template>
             Categories
-          </vs-sidebar-item>
+          </vs-sidebar-item> -->
           <vs-sidebar-item v-if="$auth.user" id="liked-items" to="/liked-items">
             <template #icon>
               <i class="bx bx-happy-heart-eyes"></i>
@@ -263,6 +263,9 @@
               Chat (Unavailable)
             </vs-sidebar-item>
           </vs-sidebar-group>
+          <div v-if="!$auth.user" class="col-12 pt-2">
+            Login to unlock all features
+          </div>
           <!-- <vs-row justify="center"> -->
           <!-- <vs-col w="11"> -->
 

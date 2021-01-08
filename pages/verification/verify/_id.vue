@@ -1,30 +1,32 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
-        <div class="card border text-center shadow border-0">
-          <img
-            class="card-image-top w-25 m-auto pt-3"
-            src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
-            alt=""
-          />
+  <div class="bg-wave minheight">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
+          <div class="card border text-center shadow border-0">
+            <img
+              class="card-image-top w-25 m-auto pt-3"
+              src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
+              alt=""
+            />
 
-          <div class="card-body">
-            <h2 class="card-title text-uppercase">Email verification</h2>
-            <div
-              :class="alertClass"
-              class="alert mt-4 mb-0"
-              style="border-radius: 0"
-              role="alert"
-            >
-              <h4>{{ title }}</h4>
-              <span>{{ status }}</span>
-            </div>
-            <div>
-              <nuxt-link to="/login"
-                ><p v-if="success">Proceed to login page</p>
-                <p v-else>Back to login page</p></nuxt-link
+            <div class="card-body">
+              <h2 class="card-title text-uppercase">Email verification</h2>
+              <div
+                :class="alertClass"
+                class="alert mt-4 mb-0"
+                style="border-radius: 0"
+                role="alert"
               >
+                <h4>{{ title }}</h4>
+                <span>{{ status }}</span>
+              </div>
+              <div>
+                <nuxt-link to="/login"
+                  ><p v-if="success">Proceed to login page</p>
+                  <p v-else>Back to login page</p></nuxt-link
+                >
+              </div>
             </div>
           </div>
         </div>

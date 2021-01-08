@@ -4,12 +4,12 @@
       <div
         class="bg-container"
         :class="{
-          'bg-img-empty': boxesData.data.length < 1,
-          'bg-img-main': boxesData.data.length > 0,
+          'bg-img-empty': BOXES.data.length < 1,
+          'bg-img-main': BOXES.data.length > 0,
         }"
       >
         <div class="container h-100">
-          <template v-if="boxesData.data.length < 1">
+          <template v-if="BOXES.data.length < 1">
             <div
               class="d-flex row justify-content-center align-items-center h-100"
               data-aos="fade-up"
@@ -301,30 +301,8 @@
                           "
                         />
                       </vs-th>
-                      <vs-th
-                        sort
-                        @click="
-                          boxesData.data = $vs.sortData(
-                            $event,
-                            boxesData.data,
-                            'name'
-                          )
-                        "
-                      >
-                        Name
-                      </vs-th>
-                      <vs-th
-                        sort
-                        @click="
-                          boxesData.data = $vs.sortData(
-                            $event,
-                            boxesData.data,
-                            'price'
-                          )
-                        "
-                      >
-                        Price
-                      </vs-th>
+                      <vs-th> Name </vs-th>
+                      <vs-th> Price </vs-th>
                       <vs-th> Products </vs-th>
                       <vs-th> Color/Design </vs-th>
                       <vs-th> Edit/Delete </vs-th>
@@ -409,7 +387,6 @@
               </client-only>
               <vs-button
                 v-if="selected.length > 0"
-                data-aos="fade"
                 gradient
                 color="#336699"
                 block
@@ -600,7 +577,7 @@
               </template>
             </vs-dialog>
           </template>
-          <span class="data">
+          <!-- <span class="data">
             <pre>
   {{
                 selected.length > 0
@@ -609,7 +586,7 @@
               }}
         </pre
             >
-          </span>
+          </span> -->
         </div>
       </div>
     </template>

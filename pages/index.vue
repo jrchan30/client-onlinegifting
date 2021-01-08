@@ -27,6 +27,7 @@
             </vs-button>
           </div>
         </div>
+
         <img
           class="col-6 col-md-5 col-lg-3 order-1 order-md-2"
           src="/image/gift_man_top.svg"

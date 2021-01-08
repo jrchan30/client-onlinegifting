@@ -1,39 +1,45 @@
 <template>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
-        <CardForm
-          :loading="loading"
-          :alert-class="alert.class"
-          :alert-show="alert.show"
-          @formSubmitted="formSubmit"
-        >
-          <template v-slot:alert><span v-html="alert.text"></span></template>
-          <template v-slot:title> Resend </template>
+  <div class="bg-wave minheight">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
+          <CardForm
+            :loading="loading"
+            :alert-class="alert.class"
+            :alert-show="alert.show"
+            @formSubmitted="formSubmit"
+          >
+            <template v-slot:alert><span v-html="alert.text"></span></template>
+            <template v-slot:title> Resend </template>
 
-          <template v-slot:fields>
-            <div v-for="(value, key, index) in form" :key="index" class="px-2">
-              <label
-                :for="value.id"
-                class="text-capitalize text-primary float-left mb-0"
-                >{{ key }}</label
+            <template v-slot:fields>
+              <div
+                v-for="(value, key, index) in form"
+                :key="index"
+                class="px-2"
               >
-              <InputField
-                :id="value.id"
-                class="pb-3"
-                :errors="errors"
-                :name="key"
-                :key-value="value.val"
-                :icon="value.icon"
-                :placeholder="value.placeholder"
-                :input-type="value.type"
-                @new-input="value.val = $event"
-              />
-            </div>
-          </template>
+                <label
+                  :for="value.id"
+                  class="text-capitalize text-primary float-left mb-0"
+                  >{{ key }}</label
+                >
+                <InputField
+                  :id="value.id"
+                  class="pb-3"
+                  :errors="errors"
+                  :name="key"
+                  :key-value="value.val"
+                  :icon="value.icon"
+                  :placeholder="value.placeholder"
+                  :input-type="value.type"
+                  @new-input="value.val = $event"
+                />
+              </div>
+            </template>
 
-          <template v-slot:btnSubmit> Resend </template>
-        </CardForm>
+            <template v-slot:btnSubmit> Resend </template>
+          </CardForm>
+        </div>
       </div>
     </div>
   </div>

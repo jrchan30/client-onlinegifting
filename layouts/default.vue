@@ -47,6 +47,10 @@ export default {
 
 <style>
 /* @import '~/static/style/bootstrap.min.css'; */
+.swal2-container {
+  z-index: 100000 !important;
+}
+
 .custom-color {
   color: #2c3e50;
 }
@@ -61,6 +65,14 @@ export default {
 
 .swal-container {
   z-index: 100000;
+}
+
+.bg-wave {
+  background-image: url('/image/wave-bg.svg');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+  width: 100vw;
 }
 
 html {

@@ -148,6 +148,7 @@ export default {
         endpoints: {
           logout: { url: '/logout', method: 'post' },
         },
+        watchLoggedIn: true,
       },
     },
   },
@@ -169,10 +170,10 @@ export default {
       author: 'Jonathan Russell Chan',
       start_url: '/',
     },
-    workbox: {
-      cachingExtensions: '@/plugins/workbox-sync.js',
-      enabled: true, // should be off actually per workbox docs due to complications when used in prod
-    },
+    // workbox: {
+    //   cachingExtensions: '@/plugins/workbox-sync.js',
+    //   enabled: true, // should be off actually per workbox docs due to complications when used in prod
+    // },
   },
   /*
    ** Build configuration

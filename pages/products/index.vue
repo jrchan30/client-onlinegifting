@@ -1,7 +1,25 @@
 <template>
   <div>
     <div class="container">
-      <div class="d-flex justify-content-between">
+      <div data-aos="fade" data-aos-duration="2000">
+        <h4
+          class="font-weight-bold custom-color"
+          data-aos="fade"
+          data-aos-duration="1000"
+        >
+          Products
+        </h4>
+        <p class="custom-color">
+          Here is a list of all our products, we will continue to improve and
+          add more in the near future
+        </p>
+        <vs-alert v-model="initialAlert" closable>
+          <template #title> Filtering </template>
+          You can further filter products by clicking the button on the right or
+          <u class="cursor" @click="activeFilter = !activeFilter">here</u>
+        </vs-alert>
+      </div>
+      <div class="d-flex justify-content-between mt-4">
         <vs-button-group>
           <vs-button
             relief
@@ -63,7 +81,7 @@
             :store-state="'products'"
           />
         </div>
-        <div v-if="PRODUCTS.meta" class="d-flex justify-content-center pt-4">
+        <div v-if="PRODUCTS.meta" class="d-flex justify-content-center py-4">
           <vs-pagination
             v-model="page"
             :disabled="loading"
@@ -172,6 +190,7 @@ export default {
   data() {
     return {
       active: 'home',
+      initialAlert: true,
       activeFilter: false,
       page: 1,
       loading: false,
@@ -281,5 +300,9 @@ export default {
 <style>
 .filter-padding {
   min-height: 90px;
+}
+
+.cursor {
+  cursor: pointer;
 }
 </style>

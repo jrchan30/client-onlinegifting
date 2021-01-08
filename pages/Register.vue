@@ -2,14 +2,20 @@
   <div class="container-fluid">
     <div class="register-bg w-100">
       <div class="row justify-content-center">
-        <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
+        <div class="col-11 col-md-6 col-lg-4 col-xl-3 my-3 p-0">
           <CardForm
             :loading="loading"
             :alert-class="alert.class"
             :alert-show="alert.show"
             @formSubmitted="formSubmit"
           >
-            <template v-slot:alert><span v-html="alert.text"></span></template>
+            <template v-slot:alert
+              ><span v-html="alert.text"></span
+              ><span v-if="alert.text">
+                Didn't receive it?
+                <nuxt-link to="/verification/resend">Resend</nuxt-link></span
+              ></template
+            >
             <template v-slot:title> Register </template>
 
             <template v-slot:fields>
@@ -103,6 +109,9 @@ export default {
       },
     }
   },
+  beforeDestroy() {
+    this.clear()
+  },
   methods: {
     async formSubmit() {
       this.errors = {}
@@ -119,7 +128,7 @@ export default {
         // this.clear()
         this.alert.class = 'alert-success'
         this.alert.show = true
-        this.alert.text = `Success! Please verify your email <strong>${this.form.email.val}</strong>`
+        this.alert.text = `Success! Please verify your email <strong>${this.form.email.val}</strong>.`
       } catch (e) {
         this.errors = e.response.data.errors
       } finally {
