@@ -225,13 +225,13 @@ export default {
     '$route.query': '$fetch',
     async page(val) {
       this.loading = true
-      // try {
-      await this.$store.dispatch('products/GET_PRODUCTS', val)
-      // } catch (e) {
-      //   alert(e)
-      // } finally {
-      //   this.loading = false
-      // }
+      try {
+        await this.$store.dispatch('products/GET_PRODUCTS', val)
+      } catch (e) {
+        alert(e)
+      } finally {
+        this.loading = false
+      }
     },
     categories() {
       this.filter.categories = this.categories.toString()

@@ -223,13 +223,13 @@ export default {
     '$route.query': '$fetch',
     async page(val) {
       this.loading = true
-      // try {
-      await this.$store.dispatch('bundles/GET_BUNDLES', val)
-      // } catch (e) {
-      //   alert(e)
-      // } finally {
-      //   this.loading = false
-      // }
+      try {
+        await this.$store.dispatch('bundles/GET_BUNDLES', val)
+      } catch (e) {
+        alert(e)
+      } finally {
+        this.loading = false
+      }
     },
     categories() {
       this.filter.categories = this.categories.toString()
