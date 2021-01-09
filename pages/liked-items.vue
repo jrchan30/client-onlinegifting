@@ -287,11 +287,11 @@ export default {
       return JSON.parse(JSON.stringify(this.LIKED_ITEMS.liked_bundles))
     },
   },
-  watch:{
-    isLoggedIn(){
-      $fetch()
-    }
-  }
+  watch: {
+    isLoggedIn() {
+      this.$fetch()
+    },
+  },
   methods: {
     ...mapActions({
       GET_LIKED_ITEMS: 'users/GET_LIKED_ITEMS',
