@@ -598,7 +598,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'default',
-  middleware: 'auth',
+  middleware: ['custom-auth'],
   async fetch() {
     // const loading = this.$vs.loading()
     await this.GET_BOXES()

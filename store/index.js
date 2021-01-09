@@ -14,14 +14,13 @@ export const getters = {
 
 export const mutations = {
   SET_AUTH(state, payload) {
-    console.log(payload)
     state.isLoggedIn = payload.auth ?? false
     state.auth.user = payload.user ?? null
   },
 }
 
 export const actions = {
-  async nuxtServerInit({ commit }, { app, req, $axios }) {
+  async nuxtServerInit({ commit }, { app, req, $axios, redirect }) {
     let auth = false
     let user = null
     const cookie = app.$cookies.get('auth._token.laravelSanctum')
@@ -46,18 +45,15 @@ export const actions = {
     //   }
     // }
     if (cookie) {
-      // cookie found
       try {
-        // check data user login with cookie
         const res = await $axios.$get('/user')
         user = res.data
         // user = res.user.data
-        // console.log(user)
         console.log('berhasil get')
         // server return the data is cookie valid loggedIn is true
         auth = true // set the data auth
       } catch (err) {
-        console.log('tidak berhasil')
+        // console.log('tidak berhasil')
         // No valid cookie found
         auth = false
         user = null
