@@ -136,8 +136,7 @@ export default {
   auth: {
     redirect: {
       home: '/',
-      // login: '/login',
-      login: false,
+      login: '/login',
       logout: '/login',
     },
     strategies: {
