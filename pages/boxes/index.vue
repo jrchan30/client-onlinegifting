@@ -276,115 +276,115 @@
                   </div>
                 </template>
               </vs-dialog>
-              <client-only>
-                <vs-table data-aos="fade" data-aos-duration="1000">
-                  <template #header>
-                    <vs-input
-                      v-model="search"
-                      aria-placeholder="search box"
-                      aria-label="searchbar box"
-                      border
-                      color="#336699"
-                      placeholder="Search"
-                    />
-                  </template>
-                  <template #thead>
-                    <vs-tr>
-                      <vs-th>
-                        <vs-checkbox
-                          v-model="allCheck"
-                          :indeterminate="
-                            selected.length == boxesData.data.length
-                          "
-                          @change="
-                            selected = $vs.checkAll(selected, boxesData.data)
-                          "
-                        />
-                      </vs-th>
-                      <vs-th> Name </vs-th>
-                      <vs-th> Price </vs-th>
-                      <vs-th> Products </vs-th>
-                      <vs-th> Color/Design </vs-th>
-                      <vs-th> Edit/Delete </vs-th>
-                    </vs-tr>
-                  </template>
-                  <template #tbody>
-                    <vs-tr
-                      v-for="(tr, i) in $vs.getSearch(boxesData.data, search)"
-                      :key="i"
-                      :data="tr"
-                      :is-selected="!!selected.includes(tr)"
-                    >
-                      <vs-td checkbox>
-                        <vs-checkbox v-model="selected" :val="tr" />
-                      </vs-td>
-                      <vs-td>
-                        {{ tr.name }}
-                      </vs-td>
-                      <vs-td>
-                        {{ tr.price }}
-                      </vs-td>
-                      <vs-td>
-                        {{ parseInt(tr.products.length) }}
-                      </vs-td>
-                      <vs-td>
-                        <div class="row">
-                          <v-swatches
-                            v-model="tr.detail.colour"
-                            style="width: 44px; height: 44px"
-                            class="mr-2"
-                            popover-x="left"
-                            disabled
-                          ></v-swatches>
-                          <vs-tooltip circle>
-                            <vs-avatar>
-                              <div
-                                class="logo"
-                                :style="{
-                                  mask: `url(${
-                                    getDesignImage(tr.detail.design).image
-                                  }) left top`,
-                                  '-webkit-mask': `url(${
-                                    getDesignImage(tr.detail.design).image
-                                  }) left top`,
-                                  backgroundColor: tr.detail.colour,
-                                }"
-                              ></div>
-                            </vs-avatar>
+              <!-- <client-only> -->
+              <vs-table data-aos="fade" data-aos-duration="1000">
+                <template #header>
+                  <vs-input
+                    v-model="search"
+                    aria-placeholder="search box"
+                    aria-label="searchbar box"
+                    border
+                    color="#336699"
+                    placeholder="Search"
+                  />
+                </template>
+                <template #thead>
+                  <vs-tr>
+                    <vs-th>
+                      <vs-checkbox
+                        v-model="allCheck"
+                        :indeterminate="
+                          selected.length == boxesData.data.length
+                        "
+                        @change="
+                          selected = $vs.checkAll(selected, boxesData.data)
+                        "
+                      />
+                    </vs-th>
+                    <vs-th> Name </vs-th>
+                    <vs-th> Price </vs-th>
+                    <vs-th> Products </vs-th>
+                    <vs-th> Color/Design </vs-th>
+                    <vs-th> Edit/Delete </vs-th>
+                  </vs-tr>
+                </template>
+                <template #tbody>
+                  <vs-tr
+                    v-for="(tr, i) in $vs.getSearch(boxesData.data, search)"
+                    :key="i"
+                    :data="tr"
+                    :is-selected="!!selected.includes(tr)"
+                  >
+                    <vs-td checkbox>
+                      <vs-checkbox v-model="selected" :val="tr" />
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.name }}
+                    </vs-td>
+                    <vs-td>
+                      {{ tr.price }}
+                    </vs-td>
+                    <vs-td>
+                      {{ parseInt(tr.products.length) }}
+                    </vs-td>
+                    <vs-td>
+                      <div class="row">
+                        <v-swatches
+                          v-model="tr.detail.colour"
+                          style="width: 44px; height: 44px"
+                          class="mr-2"
+                          popover-x="left"
+                          disabled
+                        ></v-swatches>
+                        <vs-tooltip circle>
+                          <vs-avatar>
+                            <div
+                              class="logo"
+                              :style="{
+                                mask: `url(${
+                                  getDesignImage(tr.detail.design).image
+                                }) left top`,
+                                '-webkit-mask': `url(${
+                                  getDesignImage(tr.detail.design).image
+                                }) left top`,
+                                backgroundColor: tr.detail.colour,
+                              }"
+                            ></div>
+                          </vs-avatar>
 
-                            <template #tooltip>
-                              {{ tr.detail.design }}
-                            </template>
-                          </vs-tooltip>
-                        </div>
-                      </vs-td>
-                      <vs-td>
-                        <div class="row">
-                          <vs-button
-                            aria-label="edit box"
-                            primary
-                            gradient
-                            @click="editBox(tr)"
-                          >
-                            <i class="bx bxs-edit"></i>
-                            <template #animate> Edit </template>
-                          </vs-button>
-                          <vs-button
-                            aria-label="delete box"
-                            danger
-                            gradient
-                            style="min-width: 60px"
-                            @click="deleteBox(tr.id, tr.name)"
-                          >
-                            <i class="bx bx-trash"></i>
-                            <template #animate> Delete </template>
-                          </vs-button>
-                        </div>
-                      </vs-td>
-                    </vs-tr>
-                  </template>
-                </vs-table>
-              </client-only>
+                          <template #tooltip>
+                            {{ tr.detail.design }}
+                          </template>
+                        </vs-tooltip>
+                      </div>
+                    </vs-td>
+                    <vs-td>
+                      <div class="row">
+                        <vs-button
+                          aria-label="edit box"
+                          primary
+                          gradient
+                          @click="editBox(tr)"
+                        >
+                          <i class="bx bxs-edit"></i>
+                          <template #animate> Edit </template>
+                        </vs-button>
+                        <vs-button
+                          aria-label="delete box"
+                          danger
+                          gradient
+                          style="min-width: 60px"
+                          @click="deleteBox(tr.id, tr.name)"
+                        >
+                          <i class="bx bx-trash"></i>
+                          <template #animate> Delete </template>
+                        </vs-button>
+                      </div>
+                    </vs-td>
+                  </vs-tr>
+                </template>
+              </vs-table>
+              <!-- </client-only> -->
               <vs-button
                 v-if="selected.length > 0"
                 gradient
