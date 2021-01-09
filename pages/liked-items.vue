@@ -246,8 +246,12 @@ export default {
   // middleware: 'auth',
   middleware: 'custom-auth',
   async fetch() {
-    await this.GET_LIKED_ITEMS()
-    this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
+    try {
+      await this.GET_LIKED_ITEMS()
+      this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
+    } catch (e) {
+      console.log(e)
+    }
   },
   data() {
     return {
