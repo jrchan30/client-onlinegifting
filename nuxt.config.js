@@ -144,18 +144,18 @@ export default {
         provider: 'laravel/sanctum',
         url: process.env.SANCTUM_URL,
         user: {
-          url: '/user',
-          method: 'get',
-          propertyName: 'data',
+          // url: '/user',
+          // method: 'get',
+          // propertyName: 'data',
           property: 'data',
-          withCredentials: true,
-          data: {},
-          headers: {
-            Referer: `${process.env.REFERER}`, // <- here
-            Accept: 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/json',
-          },
+          // withCredentials: true,
+          // data: {},
+          // headers: {
+          //   Referer: `${process.env.REFERER}`, // <- here
+          //   Accept: 'application/json',
+          //   'X-Requested-With': 'XMLHttpRequest',
+          //   'Content-Type': 'application/json',
+          // },
         },
         endpoints: {
           logout: { url: '/logout', method: 'post' },
