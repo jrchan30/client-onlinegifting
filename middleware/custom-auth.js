@@ -4,6 +4,6 @@ export default async function ({ app, redirect }) {
   const user = await app.$cookies.get('auth._token.laravelSanctum')
   if (!user) {
     // redirect to homepage
-    redirect('/login')
+    redirect('/register')
   }
 }
