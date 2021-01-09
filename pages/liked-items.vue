@@ -12,7 +12,8 @@
           details about the product
         </p>
         <div data-aos="fade" data-aos-duration="1500">
-          <vs-table v-if="!$fetchState.pending">
+          <!-- <vs-table v-if="!$fetchState.pending"> -->
+          <vs-table>
             <template #header>
               <vs-input
                 v-model="search_product"
@@ -144,7 +145,8 @@
           details about the bundles
         </p>
         <div data-aos="fade" data-aos-duration="1500">
-          <vs-table v-if="!$fetchState.pending">
+          <!-- <vs-table v-if="!$fetchState.pending"> -->
+          <vs-table>
             <template #header>
               <vs-input
                 v-model="search_bundle"
@@ -251,14 +253,6 @@ export default {
   layout: 'default',
   // middleware: 'auth',
   middleware: 'custom-auth',
-  async fetch() {
-    try {
-      await this.GET_LIKED_ITEMS()
-      this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
-    } catch (e) {
-      console.log(e)
-    }
-  },
   data() {
     return {
       edit: null,
@@ -270,6 +264,14 @@ export default {
       isLoading: false,
       likedItemsData: {},
       // items: this.$auth.user.liked_products,
+    }
+  },
+  async mounted() {
+    try {
+      await this.GET_LIKED_ITEMS()
+      this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
+    } catch (e) {
+      console.log(e)
     }
   },
   computed: {
