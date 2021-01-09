@@ -114,6 +114,13 @@
                   </template>
                 </vs-table>
               </client-only>
+              <div v-if="selected.length > 0 && !weightExceeds">
+                <vs-alert color="danger">
+                  <template #title> Weight Exceeds Limit </template>
+                  Selected items must not exceeds 30.000 gr, trucking delivery
+                  service is currently not supported
+                </vs-alert>
+              </div>
               <div class="d-flex justify-content-between">
                 <vs-button
                   v-if="selected.length > 0"
@@ -127,11 +134,12 @@
                 </vs-button>
 
                 <vs-button
-                  v-if="selected.length > 0"
+                  v-if="selected.length > 0 && weightExceeds"
                   data-aos="fade"
                   gradient
                   color="#336699"
                   class="my-4"
+                  :disabled="!weightExceeds"
                   @click="checkoutPrompt"
                 >
                   <i class="far fa-credit-card mr-2"></i> Proceed to Checkout
@@ -513,7 +521,7 @@
         <div class="row py-3">
           <div class="col-12">
             <h4 class="font-weight-bold custom-color">
-              Fetching neccessary data
+              Fetching Necessary Data <i class="fas fa-boxes"></i>
             </h4>
             <p class="custom-color d-flex">
               Please wait for a bit, might take a while due to our limited
@@ -682,6 +690,17 @@ export default {
       } else {
         return true
       }
+    },
+    weightExceeds() {
+      let validity = true
+      if (this.selected) {
+        if (this.selected.reduce((sum, x) => sum + x.weight, 0) > 30000) {
+          validity = false
+        } else {
+          validity = true
+        }
+      }
+      return validity
     },
   },
   watch: {

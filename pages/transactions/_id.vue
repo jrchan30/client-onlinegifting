@@ -31,9 +31,10 @@
             </vs-button>
             <vs-button
               v-if="
-                transaction.data.transaction_status == 'success' ||
-                transaction.data.transaction_status == 'settlement' ||
-                transaction.data.transaction_status == 'challenge'
+                (transaction.data.transaction_status == 'success' ||
+                  transaction.data.transaction_status == 'settlement' ||
+                  transaction.data.transaction_status == 'challenge') &&
+                !transaction.data.is_arrived
               "
               success
               gradient
@@ -41,6 +42,17 @@
             >
               <i class="bx bxs-credit-card mr-2"></i> Confirm Arrival
             </vs-button>
+            <span
+              v-if="
+                (transaction.data.transaction_status == 'success' ||
+                  transaction.data.transaction_status == 'settlement' ||
+                  transaction.data.transaction_status == 'challenge') &&
+                transaction.data.is_arrived
+              "
+              class="my-auto"
+            >
+              Status: <b>Arrived</b> ({{ transaction.data.is_arrived }})
+            </span>
             <vs-button
               v-else-if="transaction.data.transaction_status == 'expire'"
               danger

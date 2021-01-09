@@ -13,13 +13,28 @@
           </template>
           <template v-slot:body>
             <!-- <client-only> -->
+
             <vs-table striped>
               <template #thead>
                 <vs-tr>
                   <vs-th> Transaction Number </vs-th>
                   <vs-th> Total Price (IDR)</vs-th>
                   <vs-th> Status </vs-th>
-                  <vs-th> Payment </vs-th>
+                  <vs-th>
+                    Actions
+                    <vs-button
+                      class="float-right p-0"
+                      circle
+                      icon
+                      color="#336699"
+                      animation-type="scale"
+                      :disabled="loading"
+                      @click="refresh()"
+                    >
+                      <i class="bx bx-refresh bx-lg"></i>
+                    </vs-button>
+                  </vs-th>
+                  <vs-th>Arrived At</vs-th>
                 </vs-tr>
               </template>
               <template #tbody>
@@ -44,15 +59,29 @@
                   </vs-td>
                   <vs-td
                     v-if="
-                      transaction.transaction_status == 'success' ||
-                      transaction.transaction_status == 'settlement' ||
-                      transaction.transaction_status == 'challenge'
+                      (transaction.transaction_status == 'success' ||
+                        transaction.transaction_status == 'settlement' ||
+                        transaction.transaction_status == 'challenge') &&
+                      !transaction.is_arrived
                     "
                     class="d-flex"
                   >
-                    <vs-button success gradient @click="confirmArrival()"
-                      ><span class="text-dark">Confirm Arrival</span></vs-button
+                    <vs-button success @click="confirmArrival(transaction.id)"
+                      ><span class="text-white"
+                        >Confirm Arrival</span
+                      ></vs-button
                     >
+                  </vs-td>
+                  <vs-td
+                    v-if="
+                      (transaction.transaction_status == 'success' ||
+                        transaction.transaction_status == 'settlement' ||
+                        transaction.transaction_status == 'challenge') &&
+                      transaction.is_arrived
+                    "
+                    class="d-flex"
+                  >
+                    Arrived
                   </vs-td>
                   <vs-td v-else-if="transaction.transaction_status == 'expire'">
                     <vs-button
@@ -72,6 +101,7 @@
                       Pay Now
                     </vs-button>
                   </vs-td>
+                  <vs-td>{{ transaction.is_arrived }}</vs-td>
                 </vs-tr>
               </template>
             </vs-table>
@@ -92,10 +122,23 @@ export default {
   async fetch() {
     await this.GET_TRANSACTIONS()
   },
+  data() {
+    return {
+      loading: false,
+    }
+  },
   computed: {
     ...mapGetters({
       TRANSACTIONS: 'transactions/TRANSACTIONS',
     }),
+    // isArrived(arriveDate) {
+    //   let message = ''
+    //   if (arriveDate) {
+    //     message = arriveDate
+    //   } else if (transaction) {
+    //   }
+    //   return message
+    // },
   },
   methods: {
     ...mapActions({
@@ -104,16 +147,29 @@ export default {
     async midtransSnap(snapToken) {
       try {
         window.snap.pay(snapToken)
-        //   this.$axios.$post('/checkout', form).then((response) => {
-        //   })
-        // await this.$axios.$post('/transactions', form)
         await this.GET_TRANSACTIONS()
       } catch (e) {
         alert(e)
       }
     },
-    confirmArrival() {
-      console.log('test')
+    async confirmArrival(id) {
+      const form = {
+        transaction_id: id,
+      }
+      const res = await this.$axios.$post('/arrive', form)
+      console.log(res)
+    },
+    async refresh() {
+      // this.loading = true
+      const loading = this.$vs.loading({
+        text: 'Refreshing...',
+      })
+      try {
+        await this.GET_TRANSACTIONS()
+      } finally {
+        // this.loading = false
+        loading.close()
+      }
     },
   },
   head() {
