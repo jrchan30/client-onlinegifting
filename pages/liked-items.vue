@@ -245,7 +245,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   layout: 'default',
@@ -269,6 +269,7 @@ export default {
       max: 100,
       isLoading: false,
       likedItemsData: {},
+      auth: this.$auth.isAuthenticated,
       // items: this.$auth.user.liked_products,
     }
   },
@@ -278,7 +279,6 @@ export default {
       // LIKED_BUNDLES: 'users/LIKED_BUNDLES',
       LIKED_ITEMS: 'users/LIKED_ITEMS',
     }),
-    ...mapState(['isLoggedIn']),
     // likedItemsComputed() {
     //   this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
     //   return this.likedItemsData

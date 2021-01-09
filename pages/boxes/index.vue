@@ -1,6 +1,6 @@
 <template>
   <div class="box-content">
-    <template v-if="!$fetchState.pending && BOXES.data">
+    <template v-if="!$fetchState.pending && !loading">
       <div
         class="bg-container"
         :class="{
@@ -601,8 +601,15 @@ export default {
   middleware: ['custom-auth'],
   async fetch() {
     // const loading = this.$vs.loading()
-    await this.GET_BOXES()
-    this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
+    this.loading = true
+    try {
+      await this.GET_BOXES()
+      this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.loading = false
+    }
   },
   data() {
     return {
@@ -623,6 +630,7 @@ export default {
       allCheck: false,
       selected: [],
       // items: [],
+      loading: false,
 
       isAlert: true,
 
