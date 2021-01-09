@@ -1,6 +1,6 @@
 <template>
   <div class="minheight">
-    <div v-if="$auth.user">
+    <div>
       <div
         class="container bg-white rounded p-3"
         data-aos="fade-right"
