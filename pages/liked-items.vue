@@ -1,238 +1,244 @@
 <template>
-  <div v-if="$auth.user" class="minheight">
-    <div
-      class="container bg-white rounded p-3"
-      data-aos="fade-right"
-      data-aos-duration="1000"
-    >
-      <h4 class="font-weight-bold custom-color">Liked Products</h4>
-      <p class="custom-color">
-        This is your latest liked products, click on each record to see more
-        details about the product
-      </p>
-      <div data-aos="fade" data-aos-duration="1500">
-        <vs-table v-if="!$fetchState.pending">
-          <template #header>
-            <vs-input
-              v-model="search_product"
-              aria-placeholder="search liked items"
-              aria-label="searchbar liked items"
-              border
-              color="#336699"
-              placeholder="Search"
-            />
-          </template>
-          <template #thead>
-            <vs-tr>
-              <vs-th
-                sort
-                @click="
-                  likedItemsData.liked_products = $vs.sortData(
-                    $event,
-                    likedItemsData.liked_products,
-                    'name'
-                  )
-                "
-              >
-                Name
-              </vs-th>
-              <vs-th
-                sort
-                @click="
-                  likedItemsData.liked_products = $vs.sortData(
-                    $event,
-                    likedItemsData.liked_products,
-                    'price'
-                  )
-                "
-              >
-                Price (IDR)
-              </vs-th>
-              <vs-th
-                sort
-                @click="
-                  likedItemsData.liked_products = $vs.sortData(
-                    $event,
-                    likedItemsData.liked_products,
-                    'stock'
-                  )
-                "
-              >
-                Stock
-              </vs-th>
-              <vs-th
-                sort
-                @click="
-                  likedItemsData.liked_products = $vs.sortData(
-                    $event,
-                    likedItemsData.liked_products,
-                    'weight'
-                  )
-                "
-              >
-                Weight (gr)
-              </vs-th>
-            </vs-tr>
-          </template>
+  <div class="minheight">
+    <div v-if="$auth.user">
+      <div
+        class="container bg-white rounded p-3"
+        data-aos="fade-right"
+        data-aos-duration="1000"
+      >
+        <h4 class="font-weight-bold custom-color">Liked Products</h4>
+        <p class="custom-color">
+          This is your latest liked products, click on each record to see more
+          details about the product
+        </p>
+        <div data-aos="fade" data-aos-duration="1500">
+          <vs-table v-if="!$fetchState.pending">
+            <template #header>
+              <vs-input
+                v-model="search_product"
+                aria-placeholder="search liked items"
+                aria-label="searchbar liked items"
+                border
+                color="#336699"
+                placeholder="Search"
+              />
+            </template>
+            <template #thead>
+              <vs-tr>
+                <vs-th
+                  sort
+                  @click="
+                    likedItemsData.liked_products = $vs.sortData(
+                      $event,
+                      likedItemsData.liked_products,
+                      'name'
+                    )
+                  "
+                >
+                  Name
+                </vs-th>
+                <vs-th
+                  sort
+                  @click="
+                    likedItemsData.liked_products = $vs.sortData(
+                      $event,
+                      likedItemsData.liked_products,
+                      'price'
+                    )
+                  "
+                >
+                  Price (IDR)
+                </vs-th>
+                <vs-th
+                  sort
+                  @click="
+                    likedItemsData.liked_products = $vs.sortData(
+                      $event,
+                      likedItemsData.liked_products,
+                      'stock'
+                    )
+                  "
+                >
+                  Stock
+                </vs-th>
+                <vs-th
+                  sort
+                  @click="
+                    likedItemsData.liked_products = $vs.sortData(
+                      $event,
+                      likedItemsData.liked_products,
+                      'weight'
+                    )
+                  "
+                >
+                  Weight (gr)
+                </vs-th>
+              </vs-tr>
+            </template>
 
-          <template #tbody>
-            <vs-tr
-              v-for="(tr, i) in $vs.getPage(
-                $vs.getSearch(likedItemsData.liked_products, search_product),
-                page,
-                max
-              )"
-              :key="i"
-            >
-              <vs-td>
-                {{ tr.name }}
-              </vs-td>
-              <vs-td> {{ tr.price }} </vs-td>
-              <vs-td>
-                {{ tr.stock }}
-              </vs-td>
-              <vs-td>
-                {{ tr.weight }}
-              </vs-td>
+            <template #tbody>
+              <vs-tr
+                v-for="(tr, i) in $vs.getPage(
+                  $vs.getSearch(likedItemsData.liked_products, search_product),
+                  page,
+                  max
+                )"
+                :key="i"
+              >
+                <vs-td>
+                  {{ tr.name }}
+                </vs-td>
+                <vs-td> {{ tr.price }} </vs-td>
+                <vs-td>
+                  {{ tr.stock }}
+                </vs-td>
+                <vs-td>
+                  {{ tr.weight }}
+                </vs-td>
 
-              <template #expand :style="{ display: expandShow(tr.id) }">
-                <div class="float-left">
-                  <div class="d-flex">
-                    <vs-avatar class="mb-auto" cursor>
-                      <img
-                        :src="tr.images[0].url"
-                        alt=""
-                        class="img-ratio"
-                        @click="expandImage(tr.images[0].url)"
-                      />
-                    </vs-avatar>
-                    <span class="ml-2 my-auto">
-                      {{ tr.name }}
-                    </span>
+                <template #expand :style="{ display: expandShow(tr.id) }">
+                  <div class="float-left">
+                    <div class="d-flex">
+                      <vs-avatar class="mb-auto" cursor>
+                        <img
+                          :src="tr.images[0].url"
+                          alt=""
+                          class="img-ratio"
+                          @click="expandImage(tr.images[0].url)"
+                        />
+                      </vs-avatar>
+                      <span class="ml-2 my-auto">
+                        {{ tr.name }}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div class="float-right">
-                  <div class="d-flex">
-                    <vs-button flat icon @click="goTo(tr.id, 'product')">
-                      See Details
-                    </vs-button>
-                    <vs-button border danger @click="unlike(tr.id, 'product')">
-                      Unlike
-                    </vs-button>
+                  <div class="float-right">
+                    <div class="d-flex">
+                      <vs-button flat icon @click="goTo(tr.id, 'product')">
+                        See Details
+                      </vs-button>
+                      <vs-button
+                        border
+                        danger
+                        @click="unlike(tr.id, 'product')"
+                      >
+                        Unlike
+                      </vs-button>
+                    </div>
                   </div>
-                </div>
-              </template>
-            </vs-tr>
-          </template>
-        </vs-table>
+                </template>
+              </vs-tr>
+            </template>
+          </vs-table>
+        </div>
       </div>
-    </div>
 
-    <div
-      class="container bg-white rounded p-3 mt-5"
-      data-aos="fade-left"
-      data-aos-duration="2000"
-    >
-      <h4 class="font-weight-bold custom-color">Liked Bundles</h4>
-      <p class="custom-color">
-        This is your latest bundles, click on bundle's record to see more
-        details about the bundles
-      </p>
-      <div data-aos="fade" data-aos-duration="1500">
-        <vs-table v-if="!$fetchState.pending">
-          <template #header>
-            <vs-input
-              v-model="search_bundle"
-              aria-placeholder="search liked items"
-              aria-label="searchbar liked items"
-              border
-              color="#336699"
-              placeholder="Search"
-            />
-          </template>
-          <template #thead>
-            <vs-tr>
-              <vs-th
-                sort
-                @click="
-                  likedItemsData.liked_bundles = $vs.sortData(
-                    $event,
-                    likedItemsData.liked_bundles,
-                    'name'
-                  )
-                "
+      <div
+        class="container bg-white rounded p-3 mt-5"
+        data-aos="fade-left"
+        data-aos-duration="2000"
+      >
+        <h4 class="font-weight-bold custom-color">Liked Bundles</h4>
+        <p class="custom-color">
+          This is your latest bundles, click on bundle's record to see more
+          details about the bundles
+        </p>
+        <div data-aos="fade" data-aos-duration="1500">
+          <vs-table v-if="!$fetchState.pending">
+            <template #header>
+              <vs-input
+                v-model="search_bundle"
+                aria-placeholder="search liked items"
+                aria-label="searchbar liked items"
+                border
+                color="#336699"
+                placeholder="Search"
+              />
+            </template>
+            <template #thead>
+              <vs-tr>
+                <vs-th
+                  sort
+                  @click="
+                    likedItemsData.liked_bundles = $vs.sortData(
+                      $event,
+                      likedItemsData.liked_bundles,
+                      'name'
+                    )
+                  "
+                >
+                  Name
+                </vs-th>
+                <vs-th
+                  sort
+                  @click="
+                    likedItemsData.liked_bundles = $vs.sortData(
+                      $event,
+                      likedItemsData.liked_bundles,
+                      'price'
+                    )
+                  "
+                >
+                  Price (IDR)
+                </vs-th>
+              </vs-tr>
+            </template>
+
+            <template #tbody>
+              <vs-tr
+                v-for="(tr, i) in $vs.getPage(
+                  $vs.getSearch(likedItemsData.liked_bundles, search_bundle),
+                  page,
+                  max
+                )"
+                :key="i"
               >
-                Name
-              </vs-th>
-              <vs-th
-                sort
-                @click="
-                  likedItemsData.liked_bundles = $vs.sortData(
-                    $event,
-                    likedItemsData.liked_bundles,
-                    'price'
-                  )
-                "
-              >
-                Price (IDR)
-              </vs-th>
-            </vs-tr>
-          </template>
+                <vs-td>
+                  {{ tr.name }}
+                </vs-td>
+                <vs-td> {{ tr.price }} </vs-td>
 
-          <template #tbody>
-            <vs-tr
-              v-for="(tr, i) in $vs.getPage(
-                $vs.getSearch(likedItemsData.liked_bundles, search_bundle),
-                page,
-                max
-              )"
-              :key="i"
-            >
-              <vs-td>
-                {{ tr.name }}
-              </vs-td>
-              <vs-td> {{ tr.price }} </vs-td>
-
-              <template #expand>
-                <div class="float-left">
-                  <div class="d-flex">
-                    <vs-avatar class="mb-auto" cursor>
-                      <img
-                        :src="tr.main_image"
-                        alt=""
-                        class="img-ratio"
-                        @click="expandImage(tr.main_image)"
-                      />
-                    </vs-avatar>
-                    <span class="ml-2 my-auto">
-                      {{ tr.name }}
-                    </span>
+                <template #expand>
+                  <div class="float-left">
+                    <div class="d-flex">
+                      <vs-avatar class="mb-auto" cursor>
+                        <img
+                          :src="tr.main_image"
+                          alt=""
+                          class="img-ratio"
+                          @click="expandImage(tr.main_image)"
+                        />
+                      </vs-avatar>
+                      <span class="ml-2 my-auto">
+                        {{ tr.name }}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div class="float-right">
-                  <div class="d-flex">
-                    <vs-button
-                      aria-label="see details"
-                      flat
-                      icon
-                      @click="goTo(tr.id, 'bundle')"
-                    >
-                      See Details
-                    </vs-button>
-                    <vs-button
-                      aria-label="unlike"
-                      border
-                      danger
-                      @click="unlike(tr.id, 'bundle')"
-                    >
-                      Unlike
-                    </vs-button>
+                  <div class="float-right">
+                    <div class="d-flex">
+                      <vs-button
+                        aria-label="see details"
+                        flat
+                        icon
+                        @click="goTo(tr.id, 'bundle')"
+                      >
+                        See Details
+                      </vs-button>
+                      <vs-button
+                        aria-label="unlike"
+                        border
+                        danger
+                        @click="unlike(tr.id, 'bundle')"
+                      >
+                        Unlike
+                      </vs-button>
+                    </div>
                   </div>
-                </div>
-              </template>
-            </vs-tr>
-          </template>
-        </vs-table>
+                </template>
+              </vs-tr>
+            </template>
+          </vs-table>
+        </div>
       </div>
     </div>
   </div>
