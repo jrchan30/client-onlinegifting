@@ -1,6 +1,7 @@
 <template>
   <div class="home-margin">
     <HomeSlider />
+    <div>{{ $auth.loggedIn }}</div>
     <div class="container-fluid">
       <div
         class="row mt-0 mt-md-5 justify-content-center"
