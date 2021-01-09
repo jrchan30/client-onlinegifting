@@ -12,11 +12,7 @@
           details about the product
         </p>
         <div data-aos="fade" data-aos-duration="1500">
-          <vs-table
-            v-if="
-              !$fetchState.pending && Object.keys(likedItemsData).length > 0
-            "
-          >
+          <vs-table v-if="Object.keys(likedItemsData).length > 0">
             <template #header>
               <vs-input
                 v-model="search_product"
@@ -148,11 +144,7 @@
           details about the bundles
         </p>
         <div data-aos="fade" data-aos-duration="1500">
-          <vs-table
-            v-if="
-              !$fetchState.pending && Object.keys(likedItemsData).length > 0
-            "
-          >
+          <vs-table v-if="Object.keys(likedItemsData).length > 0">
             <template #header>
               <vs-input
                 v-model="search_bundle"
@@ -259,9 +251,6 @@ export default {
   layout: 'default',
   // middleware: 'auth',
   middleware: ['auth-ssr', 'auth'],
-  mounted() {
-    return this.getData()
-  },
   data() {
     return {
       edit: null,
@@ -275,6 +264,9 @@ export default {
       auth: this.$auth.isAuthenticated,
       // items: this.$auth.user.liked_products,
     }
+  },
+  mounted() {
+    return this.getData()
   },
   computed: {
     ...mapGetters({
