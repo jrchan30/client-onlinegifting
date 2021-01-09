@@ -259,7 +259,7 @@ export default {
   layout: 'default',
   // middleware: 'auth',
   middleware: ['auth-ssr', 'auth'],
-  fetch() {
+  mounted() {
     return this.getData()
   },
   data() {
