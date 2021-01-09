@@ -63,7 +63,6 @@ export const actions = {
 
   nuxtServerInit({ commit }, { req, res }) {
     // console.log(req.headers.cookie)
-    console.log(res)
     if (req.session && req.session.authUser) {
       commit('SET_USER', req.session.authUser)
     }

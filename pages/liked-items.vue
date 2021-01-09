@@ -243,7 +243,8 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   layout: 'default',
-  middleware: 'auth',
+  // middleware: 'auth',
+  middleware: 'custom-auth',
   async fetch() {
     await this.GET_LIKED_ITEMS()
     this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))

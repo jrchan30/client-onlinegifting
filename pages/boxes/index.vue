@@ -1,6 +1,6 @@
 <template>
   <div class="box-content">
-    <template v-if="!$fetchState.pending && BOXES">
+    <template v-if="!$fetchState.pending && BOXES.data">
       <div
         class="bg-container"
         :class="{
