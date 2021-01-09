@@ -5,6 +5,7 @@
 <script>
 export default {
   layout: 'default',
+  middleware: 'custom-auth',
 }
 </script>
 
