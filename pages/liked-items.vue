@@ -258,7 +258,7 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
   layout: 'default',
   // middleware: 'auth',
-  middleware: 'custom-auth',
+  middleware: ['custom-auth', 'auth'],
   fetch() {
     return this.getData()
   },
