@@ -12,8 +12,7 @@
           details about the product
         </p>
         <div data-aos="fade" data-aos-duration="1500">
-          <!-- <vs-table v-if="!$fetchState.pending"> -->
-          <vs-table>
+          <vs-table v-if="!$fetchState.pending">
             <template #header>
               <vs-input
                 v-model="search_product"
@@ -145,8 +144,7 @@
           details about the bundles
         </p>
         <div data-aos="fade" data-aos-duration="1500">
-          <!-- <vs-table v-if="!$fetchState.pending"> -->
-          <vs-table>
+          <vs-table v-if="!$fetchState.pending">
             <template #header>
               <vs-input
                 v-model="search_bundle"
@@ -247,12 +245,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 
 export default {
   layout: 'default',
   // middleware: 'auth',
   middleware: 'custom-auth',
+  async fetch() {
+    try {
+      await this.GET_LIKED_ITEMS()
+      this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
+    } catch (e) {
+      console.log(e)
+    }
+  },
   data() {
     return {
       edit: null,
@@ -266,20 +272,13 @@ export default {
       // items: this.$auth.user.liked_products,
     }
   },
-  async mounted() {
-    try {
-      await this.GET_LIKED_ITEMS()
-      this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
-    } catch (e) {
-      console.log(e)
-    }
-  },
   computed: {
     ...mapGetters({
       // LIKED_PRODUCTS: 'users/LIKED_PRODUCTS',
       // LIKED_BUNDLES: 'users/LIKED_BUNDLES',
       LIKED_ITEMS: 'users/LIKED_ITEMS',
     }),
+    ...mapState(['isLoggedIn']),
     // likedItemsComputed() {
     //   this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
     //   return this.likedItemsData
@@ -288,6 +287,11 @@ export default {
       return JSON.parse(JSON.stringify(this.LIKED_ITEMS.liked_bundles))
     },
   },
+  watch:{
+    isLoggedIn(){
+      $fetch()
+    }
+  }
   methods: {
     ...mapActions({
       GET_LIKED_ITEMS: 'users/GET_LIKED_ITEMS',
