@@ -96,7 +96,7 @@
                   {{ tr.weight }}
                 </vs-td>
 
-                <template #expand :style="{ display: expandShow(tr.id) }">
+                <template #expand>
                   <div class="float-left">
                     <div class="d-flex">
                       <vs-avatar class="mb-auto" cursor>
@@ -254,9 +254,12 @@ export default {
   async fetch() {
     try {
       await this.GET_LIKED_ITEMS()
-      this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
+      return (this.likedItemsData = JSON.parse(
+        JSON.stringify(this.LIKED_ITEMS)
+      ))
     } catch (e) {
       console.log(e)
+      return false
     }
   },
   data() {
@@ -296,14 +299,14 @@ export default {
     ...mapActions({
       GET_LIKED_ITEMS: 'users/GET_LIKED_ITEMS',
     }),
-    expandShow(id) {
-      // this.likedItemsComputed().includes(id)
-      if (this.likedItemsComputed.liked_products.find((x) => x.id === id)) {
-        return true
-      } else {
-        return false
-      }
-    },
+    // expandShow(id) {
+    //   // this.likedItemsComputed().includes(id)
+    //   if (this.likedItemsComputed.liked_products.find((x) => x.id === id)) {
+    //     return true
+    //   } else {
+    //     return false
+    //   }
+    // },
     expandImage(url) {
       this.$swal({
         showCloseButton: true,
