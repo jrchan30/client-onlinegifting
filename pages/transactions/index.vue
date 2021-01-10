@@ -71,13 +71,12 @@
                     >
                   </vs-td>
                   <vs-td
-                    v-if="
+                    v-else-if="
                       (transaction.transaction_status == 'success' ||
                         transaction.transaction_status == 'settlement' ||
                         transaction.transaction_status == 'challenge') &&
                       transaction.is_arrived
                     "
-                    class="d-flex"
                   >
                     Arrived
                   </vs-td>
@@ -99,6 +98,7 @@
                       Pay Now
                     </vs-button>
                   </vs-td>
+
                   <vs-td>{{ transaction.is_arrived }}</vs-td>
                 </vs-tr>
               </template>

@@ -42,7 +42,7 @@
             >
               <i class="bx bxs-credit-card mr-2"></i> Confirm Arrival
             </vs-button>
-            <span
+            <div
               v-if="
                 (transaction.data.transaction_status == 'success' ||
                   transaction.data.transaction_status == 'settlement' ||
@@ -52,7 +52,7 @@
               class="my-auto"
             >
               Status: <b>Arrived</b> ({{ transaction.data.is_arrived }})
-            </span>
+            </div>
             <vs-button
               v-else-if="transaction.data.transaction_status == 'expire'"
               danger
@@ -110,6 +110,7 @@
                         x {{ product.quantity }} qty)
                       </div>
                     </div>
+                    <button @click="review(bundle)">Review bundle</button>
                   </div>
                 </div>
               </template>
@@ -161,6 +162,14 @@
                         }}
                         x {{ product.quantity }} qty)
                       </div>
+                      <div class="offset-1 col-10 d-flex">
+                        <u
+                          class="text-primary cursor"
+                          :disabled="reviewLoad"
+                          @click="review(product)"
+                          ><small>Add review</small></u
+                        >
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -172,8 +181,6 @@
           </div>
         </div>
       </div>
-
-      <div class=""></div>
       <vs-dialog
         v-model="isShow"
         scroll
@@ -267,6 +274,8 @@ export default {
       transaction: null,
       isShow: false,
       loading: false,
+      form: {},
+      reviewLoad: false,
     }
   },
   async created() {
@@ -291,6 +300,63 @@ export default {
     },
     priceFormatted(price) {
       return formatPrice(price)
+    },
+    review(item) {
+      this.$swal({
+        title: 'Rate!',
+        icon: 'question',
+        input: 'range',
+        inputLabel: 'How many stars?',
+        showCancelButton: true,
+        inputAttributes: {
+          min: 1,
+          max: 5,
+          step: 1,
+        },
+        inputValue: 1,
+      }).then((stars) => {
+        if (stars.isConfirmed) {
+          this.form.rating = stars.value
+          this.$swal({
+            title: 'How is it?',
+            icon: 'question',
+            input: 'text',
+            inputLabel: `Your thoughts on this ${item.type}`,
+            showCancelButton: true,
+            inputValidator: (value) => {
+              if (!value) {
+                return 'You need to write something!'
+              }
+            },
+          }).then(async (body) => {
+            if (body.isConfirmed) {
+              let itemId = 0
+              item.type === 'product'
+                ? (itemId = item.product_id)
+                : (itemId = item.bundle_id)
+              const form = {
+                id: itemId,
+                type: item.type,
+                body: body.value,
+                rating: parseInt(stars.value),
+                ...(item.type === 'product' && {
+                  paid_product_id: item.id,
+                }),
+                ...(item.type === 'bundle' && {
+                  paid_bundle_id: item.id,
+                }),
+              }
+              console.log(form)
+              try {
+                this.reviewLoad = true
+                await this.$axios.$post('/reviews', form)
+              } finally {
+                this.reviewLoad = false
+              }
+            }
+          })
+        }
+      })
     },
   },
   head() {
@@ -330,5 +396,9 @@ export default {
   background-color: rgba(255, 255, 255, 0.15);
 
   backdrop-filter: blur(5px);
+}
+
+.cursor {
+  cursor: pointer;
 }
 </style>

@@ -750,8 +750,8 @@ export default {
         title: 'Click here to see your cart!',
         text: `Nice... <strong>${name}</strong> is successfuly added to your cart.`,
         onClick: () => {
-          this.$router.push('/carts')
           boxNotif.close()
+          this.$router.push('/carts')
         },
       })
     },
