@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="$auth.user && !$fetchState.pending">
+    <template v-if="$auth.user && !loading">
       <div v-if="$auth.user.detail" class="container">
         <!-- Show only if not admin v-if="$auth.user.detail.type !== 'admin'" -->
         <CardSkeleton class="pt-0 pt-lg-5">
@@ -12,8 +12,6 @@
             </p>
           </template>
           <template v-slot:body>
-            <!-- <client-only> -->
-
             <vs-table striped>
               <template #thead>
                 <vs-tr>
@@ -105,7 +103,6 @@
                 </vs-tr>
               </template>
             </vs-table>
-            <!-- </client-only> -->
           </template>
         </CardSkeleton>
       </div>
@@ -118,28 +115,28 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'default',
-  middleware: 'auth',
-  async fetch() {
-    await this.GET_TRANSACTIONS()
-  },
+  middleware: ['auth-ssr', 'auth'],
   data() {
     return {
       loading: false,
     }
   },
+
   computed: {
     ...mapGetters({
       TRANSACTIONS: 'transactions/TRANSACTIONS',
     }),
-    // isArrived(arriveDate) {
-    //   let message = ''
-    //   if (arriveDate) {
-    //     message = arriveDate
-    //   } else if (transaction) {
-    //   }
-    //   return message
-    // },
   },
+
+  async created() {
+    this.loading = true
+    try {
+      await this.GET_TRANSACTIONS()
+    } finally {
+      this.loading = false
+    }
+  },
+
   methods: {
     ...mapActions({
       GET_TRANSACTIONS: 'transactions/GET_TRANSACTIONS',

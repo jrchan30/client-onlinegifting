@@ -1,6 +1,6 @@
 <template>
   <div class="bg-wave h-100 minheight">
-    <div v-if="!$fetchState.pending">
+    <div v-if="!loading">
       <div class="container">
         <div
           class="jumbotron bg-glass"
@@ -261,15 +261,23 @@ import { formatPrice } from '@/plugins/customUtil'
 
 export default {
   layout: 'default',
-  middleware: 'auth',
-  async fetch() {
-    const res = await this.$axios.$get(`/transactions/${this.$route.params.id}`)
-    this.transaction = res
-  },
+  middleware: ['auth-ssr', 'auth'],
   data() {
     return {
       transaction: null,
       isShow: false,
+      loading: false,
+    }
+  },
+  async created() {
+    this.loading = true
+    try {
+      const res = await this.$axios.$get(
+        `/transactions/${this.$route.params.id}`
+      )
+      this.transaction = res
+    } finally {
+      this.loading = false
     }
   },
   methods: {

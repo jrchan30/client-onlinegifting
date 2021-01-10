@@ -364,10 +364,6 @@ export default {
     }
   },
 
-  async created() {
-    await this.getData()
-  },
-
   computed: {
     ...mapGetters({
       LIKED_PRODUCTS: 'users/LIKED_PRODUCTS',
@@ -454,6 +450,10 @@ export default {
     tempPhoneNum: debounce(function (newVal) {
       this.phoneNum = newVal
     }, 500),
+  },
+
+  async created() {
+    await this.getData()
   },
 
   methods: {

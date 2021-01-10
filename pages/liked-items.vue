@@ -267,38 +267,26 @@ export default {
       max: 100,
       isLoading: false,
       likedItemsData: {},
-      // items: this.$auth.user.liked_products,
     }
   },
-  mounted() {
-    return this.getData()
-  },
+
   computed: {
     ...mapGetters({
-      // LIKED_PRODUCTS: 'users/LIKED_PRODUCTS',
-      // LIKED_BUNDLES: 'users/LIKED_BUNDLES',
       LIKED_ITEMS: 'users/LIKED_ITEMS',
     }),
-    // likedItemsComputed() {
-    //   this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
-    //   return this.likedItemsData
-    // },
     likedBundlesComputed() {
       return JSON.parse(JSON.stringify(this.LIKED_ITEMS.liked_bundles))
     },
   },
+
+  mounted() {
+    return this.getData()
+  },
+
   methods: {
     ...mapActions({
       GET_LIKED_ITEMS: 'users/GET_LIKED_ITEMS',
     }),
-    // expandShow(id) {
-    //   // this.likedItemsComputed().includes(id)
-    //   if (this.likedItemsComputed.liked_products.find((x) => x.id === id)) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // },
     async getData() {
       await this.GET_LIKED_ITEMS()
       this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
@@ -327,10 +315,7 @@ export default {
           id,
         }
         await this.$axios.$post('/likes', likeForm)
-        // this.GET_LIKED_ITEMS()
-        // this.$fetch()
         this.getData()
-        // this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
       } catch (e) {
         alert(e)
       } finally {
