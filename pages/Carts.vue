@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!$fetchState.pending">
+    <div v-if="!initialLoading">
       <div
         class="bg-container bg-none bg-md-block"
         :class="{
@@ -545,17 +545,12 @@ import { debounce } from '@/plugins/customUtil'
 export default {
   layout: 'default',
   middleware: 'auth',
-  async fetch() {
-    await this.GET_CART()
-    await this.GET_PROVINCES()
-    await this.GET_CITIES()
-    await this.GET_USER_DETAILS()
-  },
   data() {
     return {
       cartBoxBundle: {},
       allCheck: false,
       selected: [],
+      initialLoading: true,
       loading: false,
       courier: {},
       activePrompt: false,
@@ -578,6 +573,21 @@ export default {
         minDate: null,
       },
       shippingPrice: 0,
+    }
+  },
+
+  async created() {
+    try {
+      this.initialLoading = true
+      await this.GET_CART()
+      await this.GET_PROVINCES()
+      await this.GET_CITIES()
+      await this.GET_USER_DETAILS()
+      this.getNextWeek()
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.initialLoading = false
     }
   },
 
@@ -750,10 +760,6 @@ export default {
         this.shippingPrice = this.serviceDetails[0].cost[0].value
       }
     },
-  },
-
-  created() {
-    this.getNextWeek()
   },
 
   methods: {
