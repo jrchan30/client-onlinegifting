@@ -11,8 +11,8 @@ export default async function (context) {
     try {
       const cookies = parseCookie(context.req.headers.cookie)
       const token = cookies['auth._token.laravelSanctum'] || ''
-      console.log('headers.cookie token', token)
-      console.log('debugAuthMiddleware $auth 1', context.$auth.$state)
+      // console.log('headers.cookie token', token)
+      // console.log('debugAuthMiddleware $auth 1', context.$auth.$state)
       if (!token || token.includes('false')) {
         // sometimes it stores 'Bearer false' when it unsets
         return
@@ -22,7 +22,7 @@ export default async function (context) {
       if (!xsrf) {
         return
       }
-      console.log('xsrf', xsrf)
+      // console.log('xsrf', xsrf)
       await context.$auth.strategy.token.set('XSRF-TOKEN', xsrf)
       await context.$auth.setUser(context.$auth.user)
       context.$auth.$state.loggedIn = true
