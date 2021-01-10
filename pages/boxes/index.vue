@@ -598,7 +598,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'default',
-  middleware: ['custom-auth'],
+  middleware: ['auth-ssr', 'auth'],
   data() {
     return {
       boxesData: {},
