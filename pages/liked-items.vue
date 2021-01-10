@@ -256,7 +256,6 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   layout: 'default',
-  // middleware: 'auth',
   middleware: ['auth-ssr', 'auth'],
   data() {
     return {
@@ -268,7 +267,6 @@ export default {
       max: 100,
       isLoading: false,
       likedItemsData: {},
-      auth: this.$auth.isAuthenticated,
       // items: this.$auth.user.liked_products,
     }
   },
@@ -330,7 +328,8 @@ export default {
         }
         await this.$axios.$post('/likes', likeForm)
         // this.GET_LIKED_ITEMS()
-        this.$fetch()
+        // this.$fetch()
+        this.getData()
         // this.likedItemsData = JSON.parse(JSON.stringify(this.LIKED_ITEMS))
       } catch (e) {
         alert(e)
