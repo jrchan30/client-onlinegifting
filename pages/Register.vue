@@ -60,7 +60,7 @@
 <script>
 export default {
   layout: 'login-register',
-  middleware: ['guest'],
+  middleware: ['auth-ssr', 'guest'],
   data() {
     return {
       loading: false,

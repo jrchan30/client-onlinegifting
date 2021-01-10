@@ -64,8 +64,8 @@
 
 <script>
 export default {
-  middleware: ['guest'],
   layout: 'login-register',
+  middleware: ['auth-ssr', 'guest'],
   data() {
     return {
       loading: false,
