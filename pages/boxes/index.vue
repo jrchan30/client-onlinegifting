@@ -1,6 +1,6 @@
 <template>
   <div class="box-content">
-    <template v-if="!$fetchState.pending && !loading">
+    <template v-if="!loading">
       <div
         class="bg-container"
         :class="{
@@ -599,18 +599,6 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   layout: 'default',
   middleware: ['custom-auth'],
-  async fetch() {
-    // const loading = this.$vs.loading()
-    this.loading = true
-    try {
-      await this.GET_BOXES()
-      this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
-    } catch (e) {
-      console.log(e)
-    } finally {
-      this.loading = false
-    }
-  },
   data() {
     return {
       boxesData: {},
@@ -641,10 +629,22 @@ export default {
       isQtyChanged: false,
 
       showDesign: false,
-      // loading: false,
       productsToRemove: [],
     }
   },
+
+  async created() {
+    this.loading = true
+    try {
+      await this.GET_BOXES()
+      this.boxesData = JSON.parse(JSON.stringify(this.BOXES))
+    } catch (e) {
+      console.log(e)
+    } finally {
+      this.loading = false
+    }
+  },
+
   computed: {
     ...mapGetters({
       BOXES: 'boxes/BOXES',
@@ -872,8 +872,7 @@ export default {
       let form = {}
       const allProducts = {}
       if (this.isValid) {
-        // this.loading = true
-        const loading = this.$vs.loading()
+        const loadingvs = this.$vs.loading()
         try {
           form = {
             name: this.editForm.name,
@@ -898,7 +897,7 @@ export default {
         } catch (e) {
           alert(e)
         } finally {
-          loading.close()
+          loadingvs.close()
           // this.loading = false
         }
       } else {
