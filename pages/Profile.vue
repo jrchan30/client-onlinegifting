@@ -213,7 +213,7 @@
         </template>
 
         <div class="container">
-          <div v-if="!loading" class="row">
+          <div class="row">
             <div v-if="PROVINCES.length > 0" class="col-12 col-sm-6 py-4">
               <vs-select
                 v-model="province_selected"
