@@ -55,11 +55,11 @@
                           >Liked Items</nuxt-link
                         ></small
                       >
-                      <vs-avatar v-if="$fetchState.pending">
+                      <vs-avatar v-if="loading">
                         <i class="bx bx-loader-circle"></i>
                       </vs-avatar>
                       <div v-else>
-                        <div v-if="likedItems.length < 1">
+                        <div v-if="Object.keys(likedItems).length < 1">
                           <span class="font-weight-bold">0</span>
                         </div>
                         <vs-avatar-group v-else max="3">
@@ -98,7 +98,7 @@
                           >Transactions</nuxt-link
                         ></small
                       >
-                      <div v-if="!$fetchState.pending">
+                      <div v-if="!loading">
                         <span class="font-weight-bold">
                           {{ TRANSACTIONS.data.length }}</span
                         >
@@ -132,7 +132,7 @@
                   <h3 class="text-monospace">General Details</h3>
                 </div>
                 <div class="card-body">
-                  <dl v-if="!$fetchState.pending" class="row mb-0">
+                  <dl v-if="!loading" class="row mb-0">
                     <dt class="col-sm-4">Type</dt>
                     <dd class="col-sm-8">
                       {{ USER_DETAILS.data.type }}
@@ -152,7 +152,7 @@
                   <h3 class="text-monospace">User Details</h3>
                 </div>
                 <div class="card-body">
-                  <dl v-if="!$fetchState.pending" class="row mb-0">
+                  <dl v-if="!loading" class="row mb-0">
                     <dt class="col-sm-4">Name</dt>
                     <dd class="col-sm-8">
                       {{ $auth.user.name }}
@@ -213,7 +213,7 @@
         </template>
 
         <div class="container">
-          <div class="row">
+          <div v-if="!loading" class="row">
             <div v-if="PROVINCES.length > 0" class="col-12 col-sm-6 py-4">
               <vs-select
                 v-model="province_selected"
@@ -344,12 +344,6 @@ export default {
   layout: 'default',
   middleware: ['auth-ssr', 'auth'],
 
-  async fetch() {
-    await this.GET_LIKED_ITEMS()
-    await this.GET_TRANSACTIONS()
-    await this.GET_USER_DETAILS()
-  },
-
   data() {
     return {
       form: {
@@ -370,6 +364,10 @@ export default {
     }
   },
 
+  async created() {
+    await this.getData()
+  },
+
   computed: {
     ...mapGetters({
       LIKED_PRODUCTS: 'users/LIKED_PRODUCTS',
@@ -380,7 +378,11 @@ export default {
       CITIES_LOCAL: 'shipping/CITIES_LOCAL',
     }),
     likedItems() {
-      return this.LIKED_PRODUCTS.concat(this.LIKED_BUNDLES)
+      let items = {}
+      if (this.LIKED_PRODUCTS && this.LIKED_BUNDLES) {
+        items = this.LIKED_PRODUCTS.concat(this.LIKED_BUNDLES)
+      }
+      return items
     },
     validCity() {
       let validity = {}
@@ -462,6 +464,16 @@ export default {
       GET_PROVINCES: 'shipping/GET_PROVINCES',
       GET_CITIES: 'shipping/GET_CITIES',
     }),
+    async getData() {
+      try {
+        this.loading = true
+        await this.GET_LIKED_ITEMS()
+        await this.GET_TRANSACTIONS()
+        await this.GET_USER_DETAILS()
+      } finally {
+        this.loading = false
+      }
+    },
     clear() {
       Object.assign(this.$data, this.$options.data())
     },
