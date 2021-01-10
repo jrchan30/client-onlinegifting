@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box-content">
-      <template v-if="$auth.user">
+      <template v-if="!loading">
         <div class="container">
           <div v-if="$auth.user.detail">
             <template
