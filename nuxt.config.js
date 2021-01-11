@@ -161,6 +161,7 @@ export default {
           logout: { url: '/logout', method: 'post' },
         },
         watchLoggedIn: true,
+        autoLogout: false,
       },
     },
   },

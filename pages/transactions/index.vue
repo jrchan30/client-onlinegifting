@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="$auth.user && !loading">
+    <template v-if="$auth.user && !initialLoading">
       <div v-if="$auth.user.detail" class="container">
         <!-- Show only if not admin v-if="$auth.user.detail.type !== 'admin'" -->
         <CardSkeleton class="pt-0 pt-lg-5">
@@ -37,7 +37,7 @@
               </template>
               <template #tbody>
                 <vs-tr
-                  v-for="transaction in TRANSACTIONS.data"
+                  v-for="(transaction, index) in TRANSACTIONS.data"
                   :key="transaction.id"
                   :data="transaction"
                 >
@@ -64,7 +64,10 @@
                     "
                     class="d-flex"
                   >
-                    <vs-button success @click="confirmArrival(transaction.id)"
+                    <vs-button
+                      success
+                      :disabled="loading"
+                      @click="confirmArrival(transaction.id, index)"
                       ><span class="text-white"
                         >Confirm Arrival</span
                       ></vs-button
@@ -118,6 +121,7 @@ export default {
   middleware: ['auth-ssr', 'auth'],
   data() {
     return {
+      initialLoading: true,
       loading: false,
     }
   },
@@ -129,11 +133,11 @@ export default {
   },
 
   async created() {
-    this.loading = true
+    this.initialLoading = true
     try {
       await this.GET_TRANSACTIONS()
     } finally {
-      this.loading = false
+      this.initialLoading = false
     }
   },
 
@@ -149,22 +153,48 @@ export default {
         alert(e)
       }
     },
-    async confirmArrival(id) {
-      const form = {
-        transaction_id: id,
+    confirmArrival(id, idx) {
+      this.loading = true
+      try {
+        this.$swal({
+          title: 'Are you sure?',
+          text: 'Please confirm that your order have arrived safely',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, mark as arrived!',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const form = {
+              transaction_id: id,
+            }
+            const res = await this.$axios.$post('/arrive', form)
+            const payload = {
+              isArrived: res.data.is_arrived,
+              idx,
+            }
+            this.$store.commit(
+              'transactions/SET_IS_ARRIVED_TRANSACTIONS',
+              payload
+            )
+          }
+        })
+      } catch (e) {
+        alert(e)
+      } finally {
+        this.loading = false
       }
-      const res = await this.$axios.$post('/arrive', form)
-      console.log(res)
     },
     async refresh() {
-      // this.loading = true
+      this.loading = true
       const loading = this.$vs.loading({
         text: 'Refreshing...',
       })
       try {
         await this.GET_TRANSACTIONS()
       } finally {
-        // this.loading = false
+        this.loading = false
         loading.close()
       }
     },

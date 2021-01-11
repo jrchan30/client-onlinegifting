@@ -43,10 +43,11 @@ export const mutations = {
         description: payload.data.description,
         name: payload.data.name,
         images: [payload.data.detail.image],
-        categories: [],
+        detail: payload.data.detail,
         reviews: payload.data.reviews,
         discussions: payload.data.discussions,
         likes_count: payload.data.likes_count,
+        avg_rating: payload.data.avg_rating,
       },
     }
   },

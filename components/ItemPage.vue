@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div v-if="item.data">
-      <div class="container pb-4">
-        <div class="row">
+    <div class="bg-wave h-100 minheight pb-3">
+      <div v-if="item.data">
+        <div class="container">
+          <!-- <div class="row">
           <div class="col-12">
             <BreadCrumb />
           </div>
-        </div>
+        </div> -->
 
-        <div class="row justify-content-around pb-5">
-          <!-- Image -->
+          <!-- <div class="row justify-content-around pb-5">
           <template v-if="item.data.images.length > 0">
             <div class="col-12 col-md-6">
               <div class="row">
@@ -48,10 +48,8 @@
           <template v-else>
             <p class="text-danger col-12 col-md-6">Image cannot be found</p>
           </template>
-          <!-- End Image -->
 
           <div class="col-12 col-md-6">
-            <!-- Name, Rating, Likes, Seen -->
             <div class="row pt-3">
               <div class="col-12">
                 <div class="text-uppercase font-weight-bold">
@@ -63,9 +61,11 @@
               <div class="col-12">
                 <p class="font-weight-bold text-muted mb-0 text-size">
                   <template>
-                    {{ item.data.avg_rating }} <i class="fas fa-star"></i> ({{
-                      item.data.reviews.length
-                    }}) &bull;
+                    <span>{{
+                      parseFloat(item.data.avg_rating).toFixed(1)
+                    }}</span>
+                    <i class="fas fa-star" style="color: #ffdf00"></i> Rated by
+                    {{ item.data.reviews.length }} people &bull;
                   </template>
                   <template>
                     Liked by {{ item.data.likes_count }} people
@@ -73,9 +73,7 @@
                 </p>
               </div>
             </div>
-            <!-- End Name, Rating, Likes, Seen -->
 
-            <!-- Price -->
             <div class="row border-bottom py-3">
               <div class="col-12">
                 <span
@@ -89,9 +87,7 @@
                 >
               </div>
             </div>
-            <!-- End Price -->
 
-            <!-- Quantity -->
             <div class="row border-bottom py-3">
               <div class="col-12">
                 <div
@@ -113,9 +109,7 @@
                 </div>
               </div>
             </div>
-            <!-- End Quantity -->
 
-            <!-- Description -->
             <div class="row py-2">
               <div class="col-12">
                 <p class="text-uppercase text-primary font-weight-bold">
@@ -124,184 +118,332 @@
                 <span v-html="item.data.description"></span>
               </div>
             </div>
-            <!-- End Description -->
           </div>
-        </div>
+        </div> -->
 
-        <!-- Sub-Navigation Headers -->
-        <div class="row mt-5 sticky-top">
-          <div class="col-12 py-3 border-top border-bottom align-middle">
-            <vs-button-group>
-              <vs-button relief colour="#336699" href="#discussions">
-                DISCUSSIONS
-              </vs-button>
-              <vs-button relief colour="#336699" href="#reviews">
-                REVIEWS
-              </vs-button>
-              <vs-button
-                v-if="item.data.type == 'product'"
-                relief
-                colour="#336699"
-              >
-                BUNDLED
-              </vs-button>
-            </vs-button-group>
-          </div>
-        </div>
-        <!-- End Sub-Navigation Headers -->
-
-        <!-- Our Policy -->
-      </div>
-
-      <!-- Discussions -->
-      <div class="wrapper">
-        <div class="container mt-3">
-          <div id="discussions" class="row pb-4 border-bottom">
-            <div class="col-md-12 font-weight-bold mb-3">
-              DISCUSSIONS ({{ item.data.discussions.length }})
-            </div>
-            <div class="col-md-6 mb-2 d-flex">
-              <vs-input
-                v-model="newDiscussion"
-                primary
-                class="flex-grow-1"
-                state="dark"
-                type="text"
-                placeholder="Add Discussion"
-              />
-              <vs-button
-                circle
-                icon
-                color="#7d33ff"
-                relief
-                :disabled="isLoading"
-                @click="addDiscussion()"
-              >
-                <i class="bx bxs-paper-plane"></i>
-              </vs-button>
-            </div>
-            <template v-if="item.data.discussions.length > 0">
-              <div
-                v-for="(discussion, index) in item.data.discussions"
-                :key="'discussion' + discussion.id"
-                class="col-md-12 py-3 hover rounded"
-              >
-                <div class="media">
-                  <vs-avatar circle class="mr-2 shadow">
-                    <img
-                      :alt="`${discussion.user.name} profile picture`"
-                      :src="discussion.user.profile_pic"
-                    />
-                  </vs-avatar>
-                  <div class="media-body">
-                    <div class="row">
-                      <div class="col-8 d-flex">
-                        <small
-                          ><b> {{ discussion.user.name }} </b> -
-                          <span class="text-muted">{{
-                            discussion.created_at
-                          }}</span></small
-                        >
+          <div class="row">
+            <div v-if="item.data.images.length > 0" class="col-12 col-md-6">
+              <div class="card border-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-12">
+                      <img
+                        class="w-100 item-image"
+                        :src="item.data.images[currentImage.index].url"
+                        alt="image unavailable"
+                        loading="lazy"
+                        @click="
+                          expandImage(
+                            `${item.data.images[currentImage.index].url}`
+                          )
+                        "
+                      />
+                    </div>
+                    <template
+                      v-if="item.data.images.length > 1"
+                      class="col-12 border-top"
+                    >
+                      <div
+                        v-for="(image, index) in item.data.images"
+                        :key="'image' + index"
+                        class="col-3 pr-0 mt-2"
+                      >
+                        <img
+                          class="w-100 item-image-bottom"
+                          :class="{
+                            'active-image': index == currentImage.index,
+                          }"
+                          :src="image.url"
+                          alt="Image unavailable"
+                          loading="lazy"
+                          @click="activeImage(index)"
+                        />
                       </div>
-                      <div class="col-4">
-                        <div class="float-right reply">
-                          <button
-                            class="reply-button"
-                            @click="
-                              addReply(
-                                discussion.id,
-                                index,
-                                discussion.user.name
-                              )
-                            "
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <template v-else>
+              <p class="text-danger col-12 col-md-6">Image cannot be found</p>
+            </template>
+            <div class="col-12 col-md-6 pt-4 pt-md-0">
+              <div class="card border-0">
+                <div class="card-body">
+                  <h4 class="card-title mb-0">{{ item.data.name }}</h4>
+                  <small class="card-subtitle text-muted">
+                    <span>{{
+                      parseFloat(item.data.avg_rating).toFixed(1)
+                    }}</span>
+                    <i class="fas fa-star" style="color: #ffdf00"></i> Rated by
+                    {{ item.data.reviews.length }} people &bull; Liked by
+                    {{ item.data.likes_count }} people
+                  </small>
+                  <div class="row"></div>
+                  <div class="row pt-3">
+                    <div class="col-5">Price</div>
+                    <b class="col-7">{{ item.data.price }} IDR</b>
+                  </div>
+                  <div class="row pt-3">
+                    <div class="col-5">Weight</div>
+                    <b class="col-7">{{ item.data.weight }} gr</b>
+                  </div>
+                  <template v-if="item.data.detail">
+                    <div class="row pt-3">
+                      <div class="col-5">Categories</div>
+                      <div class="col-7">
+                        <b
+                          v-for="(category, cIdx) in item.data.detail
+                            .categories"
+                          :key="cIdx"
+                          >{{ category.label }}
+                          <b
+                            v-if="cIdx + 1 < item.data.detail.categories.length"
+                            >,</b
                           >
-                            <span class="text-primary"
-                              ><i class="fa fa-reply"></i> reply</span
+                        </b>
+                      </div>
+                    </div>
+                  </template>
+                  <div v-if="item.data.stock" class="row pt-3">
+                    <div class="col-5">Stock</div>
+                    <b class="col-7">
+                      {{ item.data.stock }}
+                    </b>
+                  </div>
+                  <div class="row pt-3">
+                    <div class="col-5">Type</div>
+                    <b class="col-7 text-capitalize">
+                      {{ item.data.type }}
+                    </b>
+                  </div>
+                  <div class="row pt-3">
+                    <div class="col-12 d-flex">
+                      <vs-button
+                        warn
+                        gradient
+                        block
+                        :disabled="!$auth.user"
+                        @click="
+                          add(item.data.id, item.data.name, item.data.type)
+                        "
+                      >
+                        <span v-if="item.data.type == 'product'">
+                          <i class="bx bx-box mr-2"></i> Add to Box
+                        </span>
+                        <span v-else
+                          ><i class="bx bxs-cart-add mr-2"></i> Add to
+                          Cart</span
+                        >
+                      </vs-button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row pt-4">
+            <div class="col-12">
+              <div class="card border-0">
+                <div class="card-body">
+                  <h4 class="card-title">Item Description</h4>
+                  <div class="row pt-3">
+                    <div class="col-12" v-html="item.data.description"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-Navigation Headers -->
+          <div class="row pt-4">
+            <div class="col-12 align-middle">
+              <div class="card border-0">
+                <div class="card-body">
+                  <vs-button-group>
+                    <vs-button
+                      v-if="item.data.type == 'product'"
+                      relief
+                      colour="#336699"
+                    >
+                      BUNDLED
+                    </vs-button>
+                    <vs-button v-else relief colour="#336699">
+                      PRODUCTS
+                    </vs-button>
+                    <vs-button relief colour="#336699" href="#discussions">
+                      DISCUSSIONS
+                    </vs-button>
+                    <vs-button relief colour="#336699" href="#reviews">
+                      REVIEWS
+                    </vs-button>
+                  </vs-button-group>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container pt-4">
+          <div class="card border-0">
+            <div class="card-body">
+              <div id="discussions" class="row">
+                <div class="col-md-12 font-weight-bold mb-3">
+                  DISCUSSIONS ({{ item.data.discussions.length }})
+                </div>
+                <div class="col-md-6 mb-2 d-flex">
+                  <vs-input
+                    v-model="newDiscussion"
+                    primary
+                    class="flex-grow-1"
+                    state="dark"
+                    type="text"
+                    placeholder="Add Discussion"
+                  />
+                  <vs-button
+                    circle
+                    icon
+                    color="#7d33ff"
+                    relief
+                    :disabled="isLoading"
+                    @click="addDiscussion()"
+                  >
+                    <i class="bx bxs-paper-plane"></i>
+                  </vs-button>
+                </div>
+                <template v-if="item.data.discussions.length > 0">
+                  <div
+                    v-for="(discussion, index) in item.data.discussions"
+                    :key="'discussion' + discussion.id"
+                    class="col-md-12 py-3 hover rounded"
+                  >
+                    <div class="media">
+                      <vs-avatar circle class="mr-2 shadow my-auto">
+                        <img
+                          :alt="`${discussion.user.name} profile picture`"
+                          :src="discussion.user.profile_pic"
+                        />
+                      </vs-avatar>
+                      <div class="media-body">
+                        <div class="row">
+                          <div class="col-8 d-flex">
+                            <small
+                              ><b> {{ discussion.user.name }} </b> -
+                              <span class="text-muted">{{
+                                discussion.created_at
+                              }}</span></small
                             >
-                          </button>
+                          </div>
+                          <div class="col-4">
+                            <div class="float-right reply">
+                              <button
+                                class="reply-button"
+                                @click="
+                                  addReply(
+                                    discussion.id,
+                                    index,
+                                    discussion.user.name
+                                  )
+                                "
+                              >
+                                <span class="text-primary"
+                                  ><i class="fa fa-reply"></i> reply</span
+                                >
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        {{ discussion.body }}
+                        <div
+                          v-for="reply in discussion.replies"
+                          :key="'reply' + reply.id"
+                          class="media mt-3"
+                        >
+                          <vs-avatar circle class="mr-2">
+                            <img
+                              :alt="`${reply.user.name} profile picture`"
+                              :src="reply.user.profile_pic"
+                            />
+                          </vs-avatar>
+                          <div class="media-body">
+                            <div class="row">
+                              <div class="col-12 d-flex">
+                                <small
+                                  ><b> {{ reply.user.name }} </b> -
+                                  <span class="text-muted">
+                                    {{ reply.created_at }}</span
+                                  ></small
+                                >
+                              </div>
+                            </div>
+                            {{ reply.body }}
+                          </div>
                         </div>
                       </div>
                     </div>
-                    {{ discussion.body }}
-                    <div
-                      v-for="reply in discussion.replies"
-                      :key="'reply' + reply.id"
-                      class="media mt-3"
-                    >
-                      <vs-avatar circle class="mr-2">
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="col-md-12">
+                    <p class="text-muted">There is no discussions</p>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container pt-4 mb-4">
+          <div class="card border-0">
+            <div class="card-body">
+              <div class="row">
+                <div id="reviews" class="col-md-12 font-weight-bold mb-3">
+                  REVIEWS ({{ item.data.reviews.length }})
+                </div>
+                <template v-if="item.data.reviews.length > 0">
+                  <div
+                    v-for="review in item.data.reviews"
+                    :key="'review' + review.id"
+                    class="col-md-12 py-3 hover rounded"
+                  >
+                    <div class="media">
+                      <vs-avatar circle class="mr-2 shadow">
                         <img
-                          :alt="`${reply.user.name} profile picture`"
-                          :src="reply.user.profile_pic"
+                          :alt="`${review.user.name} profile picture`"
+                          :src="review.user.profile_pic"
                         />
                       </vs-avatar>
                       <div class="media-body">
                         <div class="row">
                           <div class="col-12 d-flex">
                             <small
-                              ><b> {{ reply.user.name }} </b> -
-                              <span class="text-muted">
-                                {{ reply.created_at }}</span
-                              ></small
+                              ><b> {{ review.user.name }} </b>
+                              <span
+                                ><i
+                                  class="bx bxs-star"
+                                  style="color: #ffdf00"
+                                ></i
+                                >({{ review.rating }})</span
+                              >
+                              -
+                              <span class="text-muted">{{
+                                review.created_at
+                              }}</span></small
                             >
                           </div>
                         </div>
-                        {{ reply.body }}
+                        {{ review.body }}
                       </div>
                     </div>
                   </div>
-                </div>
+                </template>
+                <template v-else>
+                  <div class="col-md-12">
+                    <p class="text-muted">There is no reviews</p>
+                  </div>
+                </template>
               </div>
-            </template>
-            <template v-else>
-              <div class="col-md-12">
-                <p class="text-muted">There is no discussions</p>
-              </div>
-            </template>
-          </div>
-
-          <div class="row my-5">
-            <div id="reviews" class="col-md-12 font-weight-bold mb-3">
-              REVIEWS ({{ item.data.reviews.length }})
             </div>
-            <template v-if="item.data.reviews.length > 0">
-              <div
-                v-for="review in item.data.reviews"
-                :key="'review' + review.id"
-                class="col-md-12 py-3 hover rounded"
-              >
-                <div class="media">
-                  <vs-avatar circle class="mr-2 shadow">
-                    <img
-                      :alt="`${review.user.name} profile picture`"
-                      :src="review.user.profile_pic"
-                    />
-                  </vs-avatar>
-                  <div class="media-body">
-                    <div class="row">
-                      <div class="col-12 d-flex">
-                        <small
-                          ><b> {{ review.user.name }} </b>
-                          <span
-                            ><i class="bx bxs-star" style="color: #ffdf00"></i
-                            >({{ review.rating }})</span
-                          >
-                          -
-                          <span class="text-muted">{{
-                            review.created_at
-                          }}</span></small
-                        >
-                      </div>
-                    </div>
-                    {{ review.body }}
-                  </div>
-                </div>
-              </div>
-            </template>
-            <template v-else>
-              <div class="col-md-12">
-                <p class="text-muted">There is no reviews</p>
-              </div>
-            </template>
           </div>
         </div>
       </div>

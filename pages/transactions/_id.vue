@@ -1,6 +1,6 @@
 <template>
   <div class="bg-wave h-100 minheight">
-    <div v-if="!loading">
+    <div v-if="!initialLoading">
       <div class="container">
         <div
           class="jumbotron bg-glass"
@@ -9,8 +9,8 @@
         >
           <h1 class="display-4">Transaction</h1>
           <p class="lead">
-            {{ transaction.data.transaction_number }} (Created
-            {{ transaction.data.created_at }})
+            {{ TRANSACTION.transaction_number }} (Created
+            {{ TRANSACTION.created_at }})
           </p>
           <nuxt-link to="/transactions">
             See all transactions <i class="fas fa-greater-than"></i>
@@ -31,33 +31,33 @@
             </vs-button>
             <vs-button
               v-if="
-                (transaction.data.transaction_status == 'success' ||
-                  transaction.data.transaction_status == 'settlement' ||
-                  transaction.data.transaction_status == 'challenge') &&
-                !transaction.data.is_arrived
+                (TRANSACTION.transaction_status == 'success' ||
+                  TRANSACTION.transaction_status == 'settlement' ||
+                  TRANSACTION.transaction_status == 'challenge') &&
+                !TRANSACTION.is_arrived
               "
               success
               gradient
-              @click="confirmArrival()"
+              @click="confirmArrival(TRANSACTION.id)"
             >
               <i class="bx bxs-credit-card mr-2"></i> Confirm Arrival
             </vs-button>
             <div
-              v-if="
-                (transaction.data.transaction_status == 'success' ||
-                  transaction.data.transaction_status == 'settlement' ||
-                  transaction.data.transaction_status == 'challenge') &&
-                transaction.data.is_arrived
+              v-else-if="
+                (TRANSACTION.transaction_status == 'success' ||
+                  TRANSACTION.transaction_status == 'settlement' ||
+                  TRANSACTION.transaction_status == 'challenge') &&
+                TRANSACTION.is_arrived
               "
               class="my-auto"
             >
-              Status: <b>Arrived</b> ({{ transaction.data.is_arrived }})
+              Status: <b>Arrived</b> ({{ TRANSACTION.is_arrived }})
             </div>
             <vs-button
-              v-else-if="transaction.data.transaction_status == 'expire'"
+              v-else-if="TRANSACTION.transaction_status == 'expire'"
               danger
               gradient
-              @click="midtransSnap(transaction.data.token, transaction.data.id)"
+              @click="midtransSnap(TRANSACTION.token, TRANSACTION.id)"
             >
               <i class="bx bxs-credit-card mr-2"></i> Expired
             </vs-button>
@@ -65,7 +65,7 @@
               v-else
               warn
               gradient
-              @click="midtransSnap(transaction.data.token, transaction.data.id)"
+              @click="midtransSnap(TRANSACTION.token, TRANSACTION.id)"
             >
               <i class="bx bxs-credit-card mr-2"></i> Pay Now
             </vs-button>
@@ -75,11 +75,11 @@
           <div class="card">
             <div class="card-body">
               <h3 class="card-title">Bundles</h3>
-              <template v-if="transaction.data.paid_bundles.length > 0">
+              <template v-if="TRANSACTION.paid_bundles.length > 0">
                 <div
-                  v-for="bundle in transaction.data.paid_bundles"
+                  v-for="(bundle, indexBundle) in TRANSACTION.paid_bundles"
                   :key="bundle.id"
-                  class="row py-2 border-bottom"
+                  class="row py-2 border-bottom justify-content-center"
                 >
                   <div class="col-12 col-md-4">
                     <vs-card>
@@ -96,21 +96,48 @@
                       </template>
                     </vs-card>
                   </div>
+
                   <div class="col-12 mt-2 mt-md-0 col-md-8">
                     <h5>Products</h5>
                     <div
-                      v-for="(product, index) in bundle.paid_products"
+                      v-for="(product, indexProduct) in bundle.paid_products"
                       :key="product.id"
                       class="row"
                     >
                       <div class="col-10 text-truncate">
-                        {{ index + 1 }}. {{ product.name }} (Rp.{{
+                        {{ indexProduct + 1 }}. {{ product.name }} (Rp.{{
                           priceFormatted(product.price)
                         }}
                         x {{ product.quantity }} qty)
                       </div>
                     </div>
-                    <button @click="review(bundle)">Review bundle</button>
+                  </div>
+                  <vs-button
+                    v-if="bundle.review.length < 1 && TRANSACTION.is_arrived"
+                    class="col-9 mt-2"
+                    warn
+                    circle
+                    block
+                    floating
+                    :disabled="reviewLoad"
+                    animation-type="scale"
+                    @click="review(bundle, indexBundle, null)"
+                  >
+                    <i class="bx bx-star"></i> Review {{ bundle.name }}
+                    <template #animate>
+                      <i class="bx bxs-star"></i>
+                    </template>
+                  </vs-button>
+                  <div v-if="bundle.review.length > 0" class="col-12">
+                    <div class="text-muted text-center">
+                      <i
+                        v-for="(star, indexStar) in bundle.review[0].rating"
+                        :key="indexStar"
+                        class="bx bxs-star"
+                        style="color: #ffdf00"
+                      ></i
+                      ><span class="ml-2">{{ bundle.review[0].body }}</span>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -125,9 +152,9 @@
           <div class="card">
             <div class="card-body">
               <h3 class="card-title">Boxes</h3>
-              <template v-if="transaction.data.paid_boxes.length > 0">
+              <template v-if="TRANSACTION.paid_boxes.length > 0">
                 <div
-                  v-for="box in transaction.data.paid_boxes"
+                  v-for="(box, indexBox) in TRANSACTION.paid_boxes"
                   :key="box.id"
                   class="row py-2 border-bottom"
                 >
@@ -152,24 +179,46 @@
                   <div class="col-12 mt-2 mt-md-0 col-md-8">
                     <h5>Products</h5>
                     <div
-                      v-for="(product, index) in box.paid_products"
+                      v-for="(product, indexProduct) in box.paid_products"
                       :key="product.id"
-                      class="row"
+                      class="row d-flex"
                     >
-                      <div class="col-10 text-truncate">
-                        {{ index + 1 }}. {{ product.name }} (Rp.{{
+                      <div class="col-10 col-lg-8 text-truncate my-auto">
+                        {{ indexProduct + 1 }}. {{ product.name }} (Rp.{{
                           priceFormatted(product.price)
                         }}
                         x {{ product.quantity }} qty)
                       </div>
-                      <div class="offset-1 col-10 d-flex">
-                        <u
-                          class="text-primary cursor"
-                          :disabled="reviewLoad"
-                          @click="review(product)"
-                          ><small>Add review</small></u
-                        >
-                      </div>
+                      <vs-button
+                        v-if="
+                          product.review.length < 1 && TRANSACTION.is_arrived
+                        "
+                        class="col-2 col-lg-1"
+                        warn
+                        circle
+                        floating
+                        :disabled="reviewLoad"
+                        animation-type="scale"
+                        style="max-width: 35px"
+                        @click="review(product, indexBox, indexProduct)"
+                      >
+                        <i class="bx bx-star"></i>
+                        <template #animate>
+                          <i class="bx bxs-star"></i>
+                        </template>
+                      </vs-button>
+                      <span
+                        v-if="product.review.length > 0"
+                        class="col-10 offset-1 text-muted"
+                      >
+                        <i
+                          v-for="(star, indexStar) in product.review[0].rating"
+                          :key="indexStar"
+                          class="bx bxs-star"
+                          style="color: #ffdf00"
+                        ></i>
+                        {{ product.review[0].body }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -195,11 +244,11 @@
         <div>
           <h4>General Details</h4>
           <p>
-            Transaction created at <b>{{ transaction.data.created_at }}</b
+            Transaction created at <b>{{ TRANSACTION.created_at }}</b
             >, using
             <b
-              >{{ transaction.data.delivery_courier_code }} ({{
-                transaction.data.delivery_courier_service
+              >{{ TRANSACTION.delivery_courier_code }} ({{
+                TRANSACTION.delivery_courier_service
               }})</b
             >
             as its courier.
@@ -208,54 +257,54 @@
           <h4>Shipping Details</h4>
 
           <p>
-            - Shipping Cost: <b>{{ transaction.data.delivery_fee }} (IDR)</b>
+            - Shipping Cost: <b>{{ TRANSACTION.delivery_fee }} (IDR)</b>
             <br />
             <br />
-            - Courier: <b>{{ transaction.data.delivery_courier_code }}</b>
+            - Courier: <b>{{ TRANSACTION.delivery_courier_code }}</b>
             <br />
             <br />
-            - Service: <b>{{ transaction.data.delivery_courier_service }}</b>
+            - Service: <b>{{ TRANSACTION.delivery_courier_service }}</b>
             <br />
             <br />
-            - Total Weight: <b>{{ transaction.data.total_weight }}</b>
+            - Total Weight: <b>{{ TRANSACTION.total_weight }}</b>
             <br />
             <br />
             - City (Postal Code):
             <b
-              >{{ transaction.data.receiver_city }} ({{
-                transaction.data.receiver_postal_code
+              >{{ TRANSACTION.receiver_city }} ({{
+                TRANSACTION.receiver_postal_code
               }})</b
             >
             <br />
             <br />
-            - Full Address: <b>{{ transaction.data.receiver_full_address }}</b>
+            - Full Address: <b>{{ TRANSACTION.receiver_full_address }}</b>
             <br />
             <br />
             - Receiver Phone Num:
-            <b>{{ transaction.data.receiver_phone_number }}</b>
+            <b>{{ TRANSACTION.receiver_phone_number }}</b>
           </p>
 
           <h4>Payment Details</h4>
 
-          <p v-if="transaction.data.transaction_status == null">
+          <p v-if="TRANSACTION.transaction_status == null">
             <b>Initial payment hasn't been made yet.</b>
           </p>
           <p v-else>
             - Transaction/Order ID:
-            <b>{{ transaction.data.transaction_number }}</b>
+            <b>{{ TRANSACTION.transaction_number }}</b>
             <br />
             <br />
-            - Total Price: <b>{{ transaction.data.total_price }}</b>
+            - Total Price: <b>{{ TRANSACTION.total_price }}</b>
             <br />
             <br />
-            - Payment Type: <b>{{ transaction.data.payment_type }} (IDR)</b>
+            - Payment Type: <b>{{ TRANSACTION.payment_type }} (IDR)</b>
             <br />
             <br />
-            - Payment Status: <b>{{ transaction.data.payment_status }}</b>
+            - Payment Status: <b>{{ TRANSACTION.payment_status }}</b>
             <br />
             <br />
             - Transaction Status:
-            <b>{{ transaction.data.transaction_status }}</b>
+            <b>{{ TRANSACTION.transaction_status }}</b>
           </p>
         </div>
       </vs-dialog>
@@ -265,6 +314,7 @@
 
 <script>
 import { formatPrice } from '@/plugins/customUtil'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   layout: 'default',
@@ -273,27 +323,37 @@ export default {
     return {
       transaction: null,
       isShow: false,
+      initialLoading: false,
       loading: false,
       form: {},
       reviewLoad: false,
     }
   },
   async created() {
-    this.loading = true
+    this.initialLoading = true
     try {
-      const res = await this.$axios.$get(
-        `/transactions/${this.$route.params.id}`
+      await this.$store.dispatch(
+        'transactions/GET_TRANSACTION',
+        this.$route.params.id
       )
-      this.transaction = res
     } finally {
-      this.loading = false
+      this.initialLoading = false
     }
   },
+  computed: {
+    ...mapGetters({
+      TRANSACTION: 'transactions/TRANSACTION',
+    }),
+  },
   methods: {
+    ...mapActions({
+      GET_TRANSACTION: 'transactions/GET_TRANSACTION',
+    }),
     async midtransSnap(snapToken, id) {
       try {
         window.snap.pay(snapToken)
-        await this.$axios.$get(`/transactions/${id}`)
+        // await this.$axios.$get(`/transactions/${id}`)
+        await this.GET_TRANSACTION()
       } catch (e) {
         alert(e)
       }
@@ -301,7 +361,38 @@ export default {
     priceFormatted(price) {
       return formatPrice(price)
     },
-    review(item) {
+    confirmArrival(id) {
+      this.loading = true
+      try {
+        this.$swal({
+          title: 'Are you sure?',
+          text: 'Please confirm that your order have arrived safely',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, mark as arrived!',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            const form = {
+              transaction_id: id,
+            }
+            const res = await this.$axios.$post('/arrive', form)
+            this.$store.commit(
+              'transactions/SET_IS_ARRIVED_TRANSACTION',
+              res.data.is_arrived
+            )
+          } else {
+            this.loading = false
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loading = false
+      }
+    },
+    review(item, indexParent, indexProduct) {
       this.$swal({
         title: 'Rate!',
         icon: 'question',
@@ -346,10 +437,19 @@ export default {
                   paid_bundle_id: item.id,
                 }),
               }
-              console.log(form)
               try {
                 this.reviewLoad = true
-                await this.$axios.$post('/reviews', form)
+                const res = await this.$axios.$post('/reviews', form)
+                const payload = {
+                  res: res.data,
+                  type: item.type,
+                  idxParent: indexParent,
+                  idxProduct: indexProduct,
+                }
+                console.log(payload)
+                if (item.review.length < 1) {
+                  this.$store.commit('transactions/SET_REVIEW', payload)
+                }
               } finally {
                 this.reviewLoad = false
               }

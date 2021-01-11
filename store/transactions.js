@@ -35,6 +35,24 @@ export const mutations = {
     state.filter.orderBy = payload.orderBy
     state.filter.orderDir = payload.orderDir
   },
+  SET_IS_ARRIVED_TRANSACTIONS(state, payload) {
+    state.transactions.data[payload.idx].is_arrived = payload.isArrived
+  },
+  SET_IS_ARRIVED_TRANSACTION(state, payload) {
+    state.transaction.is_arrived = payload
+  },
+  SET_REVIEW(state, payload) {
+    if (payload.type === 'product') {
+      console.log('parent: ' + payload.idxParent)
+      console.log('idxProdcut: ' + payload.idxProduct)
+      console.log('res: ' + payload.res)
+      state.transaction.paid_boxes[payload.idxParent].paid_products[
+        payload.idxProduct
+      ].review[0] = payload.res
+    } else {
+      state.transaction.paid_bundles[payload.idxParent].review[0] = payload.res
+    }
+  },
 }
 
 export const actions = {

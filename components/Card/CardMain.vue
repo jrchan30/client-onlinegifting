@@ -23,7 +23,8 @@
             <span
               class="badge badge-pill badge-primary"
               style="background-color: #ffba00"
-              ><i class="bx bx-star"></i>{{ item.avg_rating }}</span
+              ><i class="bx bx-star"></i
+              ><span>{{ parseFloat(item.avg_rating).toFixed(1) }}</span></span
             >
           </div>
         </template>
