@@ -31,7 +31,7 @@
                         />
                       </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                       <div class="input-group input-group-merge">
                         <div class="input-group-prepend">
                           <span class="input-group-text">
@@ -44,6 +44,69 @@
                           placeholder="Colour"
                           type="text"
                         />
+                      </div>
+                    </div> -->
+                    <div class="form-group d-flex justify-content-between">
+                      <label class="form-control-label" for="colour"
+                        >Colour</label
+                      >
+                      <div id="colour" class="form__input">
+                        <v-swatches
+                          v-model="form.colour"
+                          popover-x="left"
+                        ></v-swatches>
+                      </div>
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                      <label class="form-control-label" for="design"
+                        >Design
+                        <span v-if="form.design">
+                          ({{ form.design }})</span
+                        ></label
+                      >
+                      <div id="design" class="form__input position-relative">
+                        <vs-avatar
+                          style="height: 44px; width: 44px"
+                          @click="showDesign = !showDesign"
+                        >
+                          <div
+                            class="logo"
+                            :style="{
+                              mask: `url(${form.designImage})  center`,
+                              '-webkit-mask': `url(${form.designImage})  center`,
+                              backgroundColor: form.colour,
+                            }"
+                          ></div>
+                        </vs-avatar>
+                        <div v-show="showDesign">
+                          <div class="card custom-card">
+                            <div class="card-body">
+                              <div class="row mb-2">
+                                <div class="col">
+                                  <u
+                                    class="text-primary"
+                                    @click="
+                                      ;(form.design = ''),
+                                        (form.designImage = ''),
+                                        (showDesign = false)
+                                    "
+                                    >Clear Design</u
+                                  >
+                                </div>
+                              </div>
+                              <div class="row justify-content-between">
+                                <div v-for="design in DESIGNS" :key="design.id">
+                                  <vs-avatar
+                                    class="m-2"
+                                    @click="changeDesign(design)"
+                                  >
+                                    <img :src="design.image" alt="" />
+                                  </vs-avatar>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -286,6 +349,7 @@ export default {
   async fetch() {
     await this.GET_CATEGORIES()
     await this.GET_ALL_PRODUCTS()
+    // await this.GET_DESIGNS()
   },
   data() {
     return {
@@ -293,10 +357,13 @@ export default {
         bundle_name: '',
         description: '',
         image: null,
-        colour: '',
+        colour: '#336699',
         products: [],
         categories: [],
+        design: '',
+        designImage: '',
       },
+      showDesign: false,
       editor: null,
       loading: false,
 
@@ -312,6 +379,7 @@ export default {
       CATEGORIES: 'categories/CATEGORIES',
       SUB_CATEGORIES: 'categories/SUB_CATEGORIES',
       ALL_PRODUCTS: 'products/ALL_PRODUCTS',
+      DESIGNS: 'designs/DESIGNS',
     }),
   },
   beforeDestroy() {
@@ -322,7 +390,7 @@ export default {
 
   beforeMount() {
     this.editor = new Editor({
-      content: '<p>Product description goes here!</p>',
+      content: '',
       extensions: [
         new BulletList(),
         new ListItem(),
@@ -346,6 +414,7 @@ export default {
     ...mapActions({
       GET_CATEGORIES: 'categories/GET_CATEGORIES',
       GET_ALL_PRODUCTS: 'products/GET_ALL_PRODUCTS',
+      // GET_DESIGNS: 'products/GET_ALL_PRODUCTS',
     }),
     closeForm() {
       Object.assign(this.$data, this.$options.data())
@@ -359,6 +428,11 @@ export default {
           'Old browser (not supported). Chrome latest updated browser is suggested'
         )
       }
+    },
+    changeDesign(design) {
+      this.form.design = design.label
+      this.form.designImage = design.image
+      this.showDesign = false
     },
     onRemoved() {
       this.image = ''
@@ -375,12 +449,14 @@ export default {
         confirmButtonText: 'Yes, insert it!',
       }).then(async (result) => {
         if (result.isConfirmed) {
-          this.loading = true
+          // this.loading = true
+          const loading = this.$vs.loading()
 
           const form = {
             name: this.form.bundle_name,
             description: this.form.description,
             colour: this.form.colour,
+            design: this.form.design,
           }
 
           const formData = new FormData()
@@ -404,7 +480,7 @@ export default {
             this.editor.destroy()
             this.closeForm()
             this.editor = new Editor({
-              content: '<p>Product description goes here!</p>',
+              content: '',
               extensions: [
                 new BulletList(),
                 new ListItem(),
@@ -429,7 +505,8 @@ export default {
               text: e.response.data?.message,
             })
           } finally {
-            this.loading = false
+            // this.loading = false
+            loading.close()
           }
         }
       })
@@ -438,4 +515,19 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.logo {
+  width: 44px;
+  height: 44px;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.custom-card {
+  width: 200px;
+  position: absolute !important;
+  bottom: -40px;
+  right: 50px;
+  z-index: 10000;
+}
+</style>

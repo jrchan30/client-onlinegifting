@@ -69,6 +69,14 @@ export const mutations = {
       state.bundles.data[payload.index].likes_count--
     }
   },
+  ADD_DISCUSSION(state, payload) {
+    state.bundle.data.discussions.unshift(payload)
+  },
+  ADD_REPLY(state, payload) {
+    state.bundle.data.discussions[payload.discussionIdx].replies.unshift(
+      payload.response
+    )
+  },
 }
 
 export const actions = {

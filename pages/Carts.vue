@@ -1,46 +1,41 @@
 <template>
   <div>
-    <div v-if="!initialLoading">
+    <template v-if="!initialLoading">
       <div
-        class="bg-container bg-none bg-md-block"
+        class="bg-container bg-none bg-md-block container"
         :class="{
           'bg-cart-empty':
-            CART.data[0].boxes.length < 1 && CART.data[0].bundles.length < 1,
+            CART.data.boxes.length < 1 && CART.data.bundles.length < 1,
         }"
       >
         <div
-          v-if="
-            CART.data[0].boxes.length < 1 && CART.data[0].bundles.length < 1
-          "
+          v-if="CART.data.boxes.length < 1 && CART.data.bundles.length < 1"
+          class="row"
         >
-          <div class="row">
-            <div
-              class="mt-md-5 col-7 offset-1 col-md-6 col-lg-5 col-xl-4 offset-md-1 offset-lg-2 offset-xl-3"
+          <div
+            class="mt-md-5 col-7 offset-1 col-md-6 col-lg-5 col-xl-4 offset-md-1 offset-lg-2 offset-xl-3"
+          >
+            <vs-alert
+              color="rgba(51, 102, 153, 0.2)"
+              class="px-0 px-xl-4"
+              shadow
+              data-aos="fade-right"
+              data-aos-duration="1000"
             >
-              <vs-alert
-                color="rgba(51, 102, 153, 0.2)"
-                class="px-0 px-xl-4"
-                shadow
-                data-aos="fade-right"
-                data-aos-duration="1000"
-              >
-                <template #title> Empty Cart </template>
-                <p class="d-none d-md-block">
-                  You have an empty cart, you can add your
-                  <b to="/boxes">custom boxes</b> or
-                  <b to="/bundles">premade bundles</b> to your cart.
-                </p>
-                <p>Let's get started by clicking one of the button below</p>
-                <div class="d-flex">
-                  <vs-button warn gradient to="/boxes">
-                    Custom Boxes
-                  </vs-button>
-                  <vs-button danger gradient to="/bundles">
-                    Premade Bundles
-                  </vs-button>
-                </div>
-              </vs-alert>
-            </div>
+              <template #title> Empty Cart </template>
+              <p class="d-none d-md-block">
+                You have an empty cart, you can add your
+                <b to="/boxes">custom boxes</b> or
+                <b to="/bundles">premade bundles</b> to your cart.
+              </p>
+              <p>Let's get started by clicking one of the button below</p>
+              <div class="d-flex">
+                <vs-button warn gradient to="/boxes"> Custom Boxes </vs-button>
+                <vs-button danger gradient to="/bundles">
+                  Premade Bundles
+                </vs-button>
+              </div>
+            </vs-alert>
           </div>
         </div>
         <div v-else>
@@ -57,7 +52,6 @@
                 Select box/bundles using the checkboxes to delete from cart or
                 proceed to payment
               </vs-alert>
-              <!-- <client-only> -->
               <vs-table
                 v-model="selected"
                 data-aos="fade"
@@ -111,7 +105,6 @@
                   </vs-tr>
                 </template>
               </vs-table>
-              <!-- </client-only> -->
               <div v-if="selected.length > 0 && !weightExceeds">
                 <vs-alert color="danger">
                   <template #title> Weight Exceeds Limit </template>
@@ -127,6 +120,7 @@
                   danger
                   width="6000"
                   class="my-4 px-2"
+                  @click="removeFromCart()"
                 >
                   <i class="bx bxs-trash mr-2"></i> Remove
                 </vs-button>
@@ -149,7 +143,6 @@
       </div>
 
       <div class="container">
-        <!-- <client-only> -->
         <vs-dialog v-model="activePrompt" overflow-hidden blur prevent-close>
           <template #header>
             <h4 class="not-margin">Checkout Details</h4>
@@ -446,7 +439,6 @@
                         <div>{{ item.price }} (IDR)</div>
                         <div>{{ item.weight }} (gr)</div>
                       </div>
-                      <!-- <p class="cursor-change"></p> -->
                     </template>
                   </vs-card>
                 </vs-card-group>
@@ -509,10 +501,9 @@
             </div>
           </template>
         </vs-dialog>
-        <!-- </client-only> -->
       </div>
-    </div>
-    <div v-else>
+    </template>
+    <template v-else>
       <div
         class="container bg-white rounded"
         data-aos="fade"
@@ -536,7 +527,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -607,8 +598,8 @@ export default {
       USER_DETAILS: 'users/USER_DETAILS',
     }),
     mergedCart() {
-      const arrBoxes = this.CART.data[0].boxes
-      const arrBundles = this.CART.data[0].bundles
+      const arrBoxes = this.CART.data.boxes
+      const arrBundles = this.CART.data.bundles
       Array.prototype.push.apply(arrBoxes, arrBundles)
       return arrBoxes
     },
@@ -833,7 +824,7 @@ export default {
         service:
           this.receiver.courier !== 'OGC' ? this.receiver.service : 'AOT',
         shippingFee: this.shippingPrice,
-        arrivalDate: this.receiver.arrivalDate,
+        arrival_date: this.receiver.arrivalDate,
         buyer_phoneNum: this.phoneNum,
         buyer_address: this.address,
       }
@@ -877,6 +868,38 @@ export default {
         }
       } else {
         alert('Please fill all inputs as instructed')
+      }
+    },
+    async removeFromCart() {
+      const vsLoad = this.$vs.loading()
+      const arrBundleToRemove = []
+      const arrBoxToRemove = []
+      this.selected.map((x) => {
+        if (x.type === 'bundle') {
+          arrBundleToRemove.push(x.id)
+        } else {
+          arrBoxToRemove.push(x.id)
+        }
+      })
+      const form = {
+        ...(arrBundleToRemove.length > 0 && {
+          arrBundleToRemove,
+        }),
+        ...(arrBoxToRemove.length > 0 && {
+          arrBoxToRemove,
+        }),
+      }
+
+      try {
+        const res = await this.$axios.$patch(
+          `/carts/${this.CART.data.id}`,
+          form
+        )
+        this.$store.commit('users/SET_CART', res)
+      } catch (e) {
+        alert(e)
+      } finally {
+        vsLoad.close()
       }
     },
   },

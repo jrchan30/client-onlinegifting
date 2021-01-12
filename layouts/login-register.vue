@@ -1,7 +1,9 @@
 <template>
   <div>
-    <LoginRegisterHeader />
-    <Nuxt />
+    <div class="minheight">
+      <LoginRegisterHeader />
+      <Nuxt />
+    </div>
     <LoginRegisterFooter :class="classFooter" />
   </div>
 </template>

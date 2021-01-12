@@ -6,7 +6,7 @@
       <AdminTopNav />
       <AdminHeader />
       <div class="container-fluid mt--6">
-        <Nuxt />
+        <Nuxt class="minheight-admin" />
         <AdminFooter />
       </div>
     </div>
@@ -85,4 +85,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.minheight {
+  min-height: calc(100vh - 15rem);
+}
+</style>

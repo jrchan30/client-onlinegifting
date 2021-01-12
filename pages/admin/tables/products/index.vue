@@ -518,6 +518,9 @@ export default {
       this.fields.stock.value = productCopy.stock
       this.fields.description.value = productCopy.description
       this.images = productCopy.images
+      this.images.map((x) => {
+        x.url += '?origin=' + window.location.host
+      })
       productCopy.categories.map((x) => this.categories.push(x.id))
       this.currentProductName = productCopy.name
       document.getElementById('edit').scrollIntoView()

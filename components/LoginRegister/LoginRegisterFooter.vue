@@ -1,7 +1,7 @@
 <template>
-  <footer class="py-2 text-center">
+  <footer class="py-2">
     <div class="container">
-      <div class="row">
+      <div class="row text-center">
         <nav class="col-6">
           <ul class="text-secondary list-inline">
             <li class="list-inline-item pr-3">

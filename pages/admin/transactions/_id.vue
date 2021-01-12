@@ -12,7 +12,12 @@
         <div class="row justify-content-center">
           <div class="col-lg-3 order-lg-2">
             <div class="card-profile-image">
-              <img src="/assets/img/theme/team-4.jpg" class="rounded-circle" />
+              <img
+                :src="TRANSACTION.user.profile_pic"
+                class="rounded-circle bg-white"
+                width="140px"
+                height="140px"
+              />
             </div>
           </div>
         </div>
@@ -42,6 +47,23 @@
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-body">
+          <vs-button block @click="showPayload = true"
+            >Show Full Payload</vs-button
+          >
+        </div>
+      </div>
+      <vs-dialog v-model="showPayload">
+        <template #header>
+          <h4 class="not-margin">Transaction <b>Payload</b></h4>
+        </template>
+
+        <pre>
+            {{ JSON.parse(TRANSACTION.payloads) }}
+          </pre
+        >
+      </vs-dialog>
       <div class="card">
         <div class="card-header"><h3>Items</h3></div>
         <div class="card-body">
@@ -186,6 +208,7 @@
         </div>
       </div>
     </div>
+
     <!-- </template> -->
   </div>
 </template>
@@ -202,6 +225,7 @@ export default {
   fetchOnServer: false,
   data() {
     return {
+      showPayload: false,
       transaction_info: {
         invoice: {
           class: 'col-lg-6',

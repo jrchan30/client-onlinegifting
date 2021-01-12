@@ -70,6 +70,9 @@ export const mutations = {
   SET_USER_DETAILS(state, payload) {
     state.userDetails = payload
   },
+  // SET_UPDATED_CART(state, payload) {
+  //   state.cart = payload
+  // },
 }
 
 export const actions = {

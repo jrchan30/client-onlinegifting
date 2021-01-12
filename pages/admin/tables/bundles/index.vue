@@ -90,7 +90,7 @@
                 </td>
                 <td class="rating">
                   <span v-if="bundle.avg_rating == null">Not rated</span
-                  >{{ bundle.avg_rating }}
+                  >{{ parseFloat(bundle.avg_rating).toFixed(1) }}
                 </td>
                 <td class="likes">
                   {{ bundle.likes_count }}
@@ -190,14 +190,77 @@
                       />
                     </div>
                   </div>
-                  <div class="col-md-4">
-                    <div class="form-group">
-                      <label class="form-control-label">Colour</label>
-                      <input
+                  <div class="col-md-2">
+                    <div
+                      class="form-group d-flex d-md-block justify-content-between"
+                    >
+                      <label class="form-control-label" for="colour"
+                        >Colour</label
+                      >
+                      <!-- <input
                         v-model="form.colour"
                         class="form-control"
                         type="text"
-                      />
+                      /> -->
+                      <div id="colour" class="form__input">
+                        <v-swatches
+                          v-model="form.colour"
+                          popover-x="left"
+                        ></v-swatches>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div
+                      class="form-group d-flex d-md-block justify-content-between"
+                    >
+                      <label class="form-control-label" for="design"
+                        >Design
+                      </label>
+                      <div id="design" class="form__input position-relative">
+                        <vs-avatar
+                          style="height: 44px; width: 44px"
+                          @click="showDesign = !showDesign"
+                        >
+                          <div
+                            class="logo"
+                            :style="{
+                              mask: `url(${form.designImage})  center`,
+                              '-webkit-mask': `url(${form.designImage})  center`,
+                              backgroundColor: form.colour,
+                            }"
+                          ></div>
+                        </vs-avatar>
+                        <div v-show="showDesign">
+                          <div class="card custom-card">
+                            <div class="card-body">
+                              <div class="row mb-2">
+                                <div class="col">
+                                  <u
+                                    class="text-primary"
+                                    @click="
+                                      ;(form.design = ''),
+                                        (form.designImage = ''),
+                                        (showDesign = false)
+                                    "
+                                    >Clear Design</u
+                                  >
+                                </div>
+                              </div>
+                              <div class="row justify-content-between">
+                                <div v-for="design in DESIGNS" :key="design.id">
+                                  <vs-avatar
+                                    class="m-2"
+                                    @click="changeDesign(design)"
+                                  >
+                                    <img :src="design.image" alt="" />
+                                  </vs-avatar>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="col-md-4">
@@ -344,6 +407,13 @@
                       </div>
                     </div>
                   </div>
+                  <button
+                    type="button"
+                    class="btn btn-info btn-lg btn-block"
+                    @click="submitEdit"
+                  >
+                    Save
+                  </button>
                 </div>
               </div>
             </form>
@@ -400,13 +470,19 @@ export default {
       //   },
       // },
       form: {
+        bundle_id: '',
         bundle_name: '',
         description: '',
         image: null,
+        image_id: null,
+        new_image: null,
         colour: '',
         products: [],
         categories: [],
+        design: '',
+        designImage: '',
       },
+      showDesign: false,
       editor: null,
       filter: {
         search: '',
@@ -433,6 +509,7 @@ export default {
       CATEGORIES: 'categories/CATEGORIES',
       SUB_CATEGORIES: 'categories/SUB_CATEGORIES',
       ALL_PRODUCTS: 'products/ALL_PRODUCTS',
+      DESIGNS: 'designs/DESIGNS',
     }),
   },
   beforeDestroy() {
@@ -450,10 +527,34 @@ export default {
     ...mapMutations({
       SET_FILTER: 'bundles/SET_FILTER',
     }),
+    changeDesign(design) {
+      this.form.design = design.label
+      this.form.designImage = design.image
+      this.showDesign = false
+    },
+    getDesignImage(label) {
+      let result = {}
+      const design = this.DESIGNS.find((x) => x.label === label)
+      if (design) {
+        result = {
+          id: design.id,
+          label: design.label,
+          image: design.image,
+        }
+      } else {
+        result = {
+          id: 0,
+          label: 'none',
+          image: '/image/design/none.svg',
+        }
+      }
+      return result
+    },
     onChange() {
       const file = this.$refs.pictureInput.file
       if (file) {
         this.form.image = file
+        this.form.new_image = file
       } else {
         alert(
           'Old browser (not supported). Chrome latest updated browser is suggested'
@@ -507,12 +608,21 @@ export default {
       }
       this.closeForm()
       const bundleCopy = JSON.parse(JSON.stringify(bundle))
+      console.log(bundleCopy)
       this.isEdit = true
+      this.form.bundle_id = bundleCopy.id
       this.form.bundle_name = bundleCopy.name
       this.form.image = bundleCopy.detail.image
+      this.form.image.url += '?origin=' + window.location.host
+      this.form.image_id = bundleCopy.detail.image.id
       this.currentBundleName = bundleCopy.name
       this.form.colour = bundleCopy.detail.colour
+      this.form.design = bundleCopy.detail.design
       this.form.description = bundleCopy.description
+      this.form.designImage = this.getDesignImage(
+        bundleCopy.detail.design,
+        'edit'
+      ).image
       this.editor = new Editor({
         content: this.form.description,
         extensions: [
@@ -608,15 +718,82 @@ export default {
     submitEdit() {
       this.$swal({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text: 'Please recheck before saving!',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes, save it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const loading = this.$vs.loading()
+
+          const form = {
+            name: this.form.bundle_name,
+            colour: this.form.colour,
+            description: this.form.description,
+            design: this.form.design,
+          }
+
+          console.log(form)
+
+          const formData = new FormData()
+          for (const x in form) {
+            formData.append(x, form[x])
+          }
+
+          for (const y in this.form.categories) {
+            formData.append('categories[]', this.form.categories[y])
+          }
+
+          for (const z in this.form.products) {
+            formData.append('products[]', this.form.products[z])
+          }
+
+          if (this.form.new_image) {
+            formData.append('new_image', this.form.new_image)
+            formData.append('delete_image', this.form.image_id)
+          }
+
+          formData.append('_method', 'patch')
+          console.log(formData)
+          try {
+            await this.$axios.$post(`/bundles/${this.form.bundle_id}`, formData)
+            this.$swal('Inserted!', 'Bundle has been inserted.', 'success')
+            this.editor.destroy()
+            this.closeForm()
+            this.editor = new Editor({
+              content: '',
+              extensions: [
+                new BulletList(),
+                new ListItem(),
+                new OrderedList(),
+                new Link(),
+                new Bold(),
+                new Italic(),
+                new Strike(),
+                new Underline(),
+                new History(),
+              ],
+              onUpdate: ({ getJSON, getHTML }) => {
+                this.json = getJSON()
+                this.html = getHTML()
+                this.description = this.html
+              },
+            })
+          } catch (e) {
+            this.$swal({
+              icon: 'error',
+              title: 'Oops...',
+              text: e.response.data?.message,
+            })
+          } finally {
+            // this.loading = false
+            loading.close()
+            this.closeForm()
+          }
+        }
       })
-      this.closeForm()
-      console.log('submit edit button clicked')
     },
   },
 }
@@ -637,5 +814,20 @@ export default {
 
 .item-image-bottom:hover {
   transform: scale(1.1);
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.custom-card {
+  width: 200px;
+  position: absolute !important;
+  bottom: -40px;
+  right: 100px;
+  z-index: 10000;
 }
 </style>

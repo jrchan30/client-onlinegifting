@@ -1,12 +1,22 @@
 <template>
-  <ItemPage :item="BUNDLE"></ItemPage>
+  <ItemPage :item="BUNDLE" :loading="loading"></ItemPage>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
 export default {
   async fetch({ store, params }) {
-    await store.dispatch('bundles/GET_BUNDLE', params.id)
+    try {
+      this.loading = true
+      await store.dispatch('bundles/GET_BUNDLE', params.id)
+    } finally {
+      this.loading = false
+    }
+  },
+  data() {
+    return {
+      loading: false,
+    }
   },
   computed: {
     ...mapGetters({

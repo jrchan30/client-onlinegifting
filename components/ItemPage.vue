@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="bg-wave h-100 minheight pb-3">
-      <div v-if="item.data">
+      <div v-if="item.data && !loading">
         <div class="container">
           <!-- <div class="row">
           <div class="col-12">
@@ -120,6 +120,17 @@
             </div>
           </div>
         </div> -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="card border-0">
+                <div class="card-body">
+                  <h2 class="text-center text-capitalize font-weight-bold">
+                    {{ item.data.type }}
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div class="row">
             <div v-if="item.data.images.length > 0" class="col-12 col-md-6">
@@ -204,6 +215,35 @@
                         </b>
                       </div>
                     </div>
+                    <div v-if="item.data.detail.colour" class="row pt-3">
+                      <div class="col-5">Colour</div>
+                      <div class="col-7">
+                        <v-swatches
+                          v-model="item.data.detail.colour"
+                          popover-x="left"
+                          disabled
+                        ></v-swatches>
+                      </div>
+                    </div>
+                    <div v-if="item.data.detail.design" class="row pt-3">
+                      <div class="col-5">Design</div>
+                      <div class="col-7">
+                        <vs-avatar style="height: 44px; width: 44px">
+                          <div
+                            class="logo"
+                            :style="{
+                              mask: `url(${
+                                getDesignImage(item.data.detail.design).image
+                              }) left top`,
+                              '-webkit-mask': `url(${
+                                getDesignImage(item.data.detail.design).image
+                              }) left top`,
+                              backgroundColor: item.data.detail.colour,
+                            }"
+                          ></div>
+                        </vs-avatar>
+                      </div>
+                    </div>
                   </template>
                   <div v-if="item.data.stock" class="row pt-3">
                     <div class="col-5">Stock</div>
@@ -265,6 +305,7 @@
                       v-if="item.data.type == 'product'"
                       relief
                       colour="#336699"
+                      disabled
                     >
                       BUNDLED
                     </vs-button>
@@ -318,12 +359,14 @@
                     class="col-md-12 py-3 hover rounded"
                   >
                     <div class="media">
-                      <vs-avatar circle class="mr-2 shadow my-auto">
-                        <img
-                          :alt="`${discussion.user.name} profile picture`"
-                          :src="discussion.user.profile_pic"
-                        />
-                      </vs-avatar>
+                      <div>
+                        <vs-avatar circle class="mr-2 shadow my-auto">
+                          <img
+                            :alt="`${discussion.user.name} profile picture`"
+                            :src="discussion.user.profile_pic"
+                          />
+                        </vs-avatar>
+                      </div>
                       <div class="media-body">
                         <div class="row">
                           <div class="col-8 d-flex">
@@ -359,12 +402,14 @@
                           :key="'reply' + reply.id"
                           class="media mt-3"
                         >
-                          <vs-avatar circle class="mr-2">
-                            <img
-                              :alt="`${reply.user.name} profile picture`"
-                              :src="reply.user.profile_pic"
-                            />
-                          </vs-avatar>
+                          <div>
+                            <vs-avatar circle class="mr-2">
+                              <img
+                                :alt="`${reply.user.name} profile picture`"
+                                :src="reply.user.profile_pic"
+                              />
+                            </vs-avatar>
+                          </div>
                           <div class="media-body">
                             <div class="row">
                               <div class="col-12 d-flex">
@@ -487,6 +532,7 @@ export default {
   computed: {
     ...mapGetters({
       BOXES: 'boxes/BOXES',
+      DESIGNS: 'designs/DESIGNS',
     }),
   },
 
@@ -501,6 +547,24 @@ export default {
     },
     activeImage(index) {
       this.currentImage.index = index
+    },
+    getDesignImage(label) {
+      let result = {}
+      const design = this.DESIGNS.find((x) => x.label === label)
+      if (design) {
+        result = {
+          id: design.id,
+          label: design.label,
+          image: design.image,
+        }
+      } else {
+        result = {
+          id: 0,
+          label: 'none',
+          image: '/image/design/none.svg',
+        }
+      }
+      return result
     },
     expandImage(url) {
       this.$swal({
@@ -763,5 +827,12 @@ input {
 
 .vs-button-group {
   justify-content: left;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
 }
 </style>
