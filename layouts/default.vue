@@ -79,6 +79,7 @@ html {
   overflow-y: scroll;
   overflow-y: overlay;
   scroll-behavior: smooth;
+  /* max-width: 100wh; */
 }
 body {
   font-family: 'Raleway', sans-serif;

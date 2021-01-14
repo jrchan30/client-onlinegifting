@@ -4,6 +4,10 @@
       v-for="(item, index) in items"
       :key="item.id"
       class="col-6 col-sm-4 col-lg-3 pb-4 h-100"
+      :class="{
+        'pr-1 px-sm-3 pr-lg-3': index % 2 == 0,
+        'pl-1 px-sm-3 pl-lg-3': index % 2 == 1,
+      }"
     >
       <vs-card>
         <template #title>
@@ -12,6 +16,7 @@
         <template #img>
           <img
             :src="item.main_image"
+            loading="lazy"
             alt="item image"
             class="img-ratio"
             @click="goTo(item.id)"
@@ -265,10 +270,11 @@ export default {
         }
       } else {
         try {
-          await this.$axios.post(`/carts`, {
+          const res = await this.$axios.post(`/carts`, {
             type: 'bundle',
             ids: [id],
           })
+          this.$store.commit('users/SET_CART', res.data)
           this.addCartNotification(name)
         } catch (e) {
           alert(e)

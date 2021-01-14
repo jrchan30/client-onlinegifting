@@ -297,7 +297,9 @@
                 @click="goToCart()"
               >
                 <i class="bx bx-cart"></i>
-                <template #badge> {{ getCartItemCount }} </template>
+                <template v-if="getCartItemCount > 0" #badge>
+                  {{ getCartItemCount }}
+                </template>
               </vs-avatar>
             </vs-row>
           </template>
@@ -318,11 +320,22 @@ export default {
       search: '',
       cart_qty: 0,
       activeTooltip1: false,
+      initialLoad: true,
+    }
+  },
+  async mounted() {
+    try {
+      if (this.$auth.loggedIn) {
+        this.initialLoad = true
+        await this.GET_CART()
+      }
+    } finally {
+      this.initialLoad = false
     }
   },
   computed: {
     ...mapGetters({
-      // CARTS: 'users/CARTS',
+      CART: 'users/CART',
     }),
     colourOnOff() {
       if (this.$nuxt.isOnline) {
@@ -332,18 +345,19 @@ export default {
       }
     },
     getCartItemCount() {
-      if (this.$auth.user.cart) {
+      if (this.$auth.user && !this.initialLoad && this.$auth.loggedIn) {
         return (
-          this.$auth.user.cart.boxes.length +
-          this.$auth.user.cart.bundles.length
+          this.$store.state.users.cart.data.boxes.length +
+          this.$store.state.users.cart.data.bundles.length
         )
+      } else {
+        return '0'
       }
-      return '0'
     },
   },
   methods: {
     ...mapActions({
-      // GET_CART: 'users/GET_CART',
+      GET_CART: 'users/GET_CART',
     }),
     goToCart() {
       this.$router.push('/carts')

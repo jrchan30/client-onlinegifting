@@ -112,7 +112,12 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
+    '@aceforth/nuxt-optimized-images',
   ],
+
+  optimizedImages: {
+    optimizeImages: true
+  },
   /*
    ** Nuxt.js modules
    */
@@ -125,6 +130,7 @@ export default {
     'cookie-universal-nuxt',
     'vue-swatches/nuxt',
     '@nuxtjs/pwa',
+    // '@nuxt/image',
   ],
   axios: {
     credentials: true,
@@ -188,6 +194,13 @@ export default {
     //   enabled: true, // should be off actually per workbox docs due to complications when used in prod
     // },
   },
+  // image: {
+  //   providers: {
+  //     cloudinary: {
+  //       baseURL: 'https://online-gifting.s3.ap-southeast-1.amazonaws.com/'
+  //     }
+  //   }
+  // },
   /*
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/

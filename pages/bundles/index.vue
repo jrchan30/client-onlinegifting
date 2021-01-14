@@ -279,4 +279,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.filter-padding {
+  min-height: 90px;
+}
+</style>
