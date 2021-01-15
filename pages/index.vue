@@ -78,6 +78,11 @@ export default {
       })
     },
   },
+  mounted() {
+    Echo.channel('DemoChannel').on('WebsocketDemoEvent', (e) => {
+      console.log(e)
+    })
+  },
 }
 </script>
 

@@ -13,6 +13,7 @@
 <script>
 export default {
   name: 'Default',
+
   head() {
     return {
       link: [

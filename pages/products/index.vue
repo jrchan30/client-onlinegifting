@@ -214,6 +214,8 @@ export default {
     await this.GET_CATEGORIES()
   },
 
+  mounted() {},
+
   computed: {
     ...mapGetters({
       PRODUCTS: 'products/PRODUCTS',

@@ -100,6 +100,7 @@ export default {
     { src: '~plugins/tiptap.js', mode: 'client' },
     { src: '~plugins/vuesax.js' },
     { src: '@/plugins/aos.js', mode: 'client' },
+    {src: '@/plugins/echo.js', mode: 'client'}
   ],
   /*
    ** Auto import components
@@ -131,6 +132,8 @@ export default {
     'vue-swatches/nuxt',
     '@nuxtjs/pwa',
     // '@nuxt/image',
+    // 'pusher-js',
+    // '@nuxtjs/laravel-echo',
   ],
   axios: {
     credentials: true,
