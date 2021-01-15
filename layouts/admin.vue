@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style>
-.minheight {
+.minheight-admin {
   min-height: calc(100vh - 15rem);
 }
 </style>
