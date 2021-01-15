@@ -846,7 +846,7 @@ export default {
         this.$router.push('/transactions')
       } catch (e) {
         alert(e)
-      }finally{
+      } finally {
         loading.close()
       }
     },
@@ -930,7 +930,7 @@ export default {
   background-position: center;
   background-size: contain;
   width: 100vw;
-  min-height: calc(100vh - 15rem);
+  min-height: calc(100vh - 9rem);
 }
 
 .vs-select-content {

@@ -2,7 +2,7 @@
   <div class="bg-wave minheight">
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-11 col-md-6 col-lg-3 my-3 p-0">
+        <div class="col-11 col-md-6 col-lg-4 my-3 p-0">
           <CardForm
             :loading="loading"
             :alert-class="alert.class"
