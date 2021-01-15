@@ -133,6 +133,7 @@ body {
 }
 
 .minheight {
+  /* min-height: calc(100vh - 9rem); */
   min-height: calc(100vh - 9rem);
 }
 </style>

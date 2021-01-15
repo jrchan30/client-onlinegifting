@@ -129,7 +129,7 @@
               <!-- <div class="col-lg-5"> -->
               <div class="card my-4 card-shadow">
                 <div class="card-header border-0">
-                  <h3 class="text-monospace">General Details</h3>
+                  <h4>General Details</h4>
                 </div>
                 <div class="card-body">
                   <dl v-if="!loading" class="row mb-0">
@@ -149,7 +149,7 @@
             <div class="col-md-6 col-lg-7">
               <div class="card card-shadow mb-4">
                 <div class="card-header border-0">
-                  <h3 class="text-monospace">User Details</h3>
+                  <h4>User Details</h4>
                 </div>
                 <div class="card-body">
                   <dl v-if="!loading" class="row mb-0">

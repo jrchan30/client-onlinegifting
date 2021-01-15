@@ -244,12 +244,12 @@
               </template>
               Facebook
             </vs-sidebar-item>
-            <vs-sidebar-item id="Line">
+            <!-- <vs-sidebar-item id="Line">
               <template #icon>
                 <i class="fab fa-line"></i>
               </template>
               Line
-            </vs-sidebar-item>
+            </vs-sidebar-item> -->
             <vs-sidebar-item id="tutorial" disabled>
               <template #icon>
                 <i class="fas fa-info"></i>

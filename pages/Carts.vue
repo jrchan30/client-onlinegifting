@@ -790,6 +790,7 @@ export default {
       this.activePrompt = !this.activePrompt
     },
     async midtransSnap() {
+      const loading = this.$vs.loading()
       const arrBundles = []
       const arrBoxes = []
       this.selected.map((x) => {
@@ -845,6 +846,8 @@ export default {
         this.$router.push('/transactions')
       } catch (e) {
         alert(e)
+      }finally{
+        loading.close()
       }
     },
     payment() {

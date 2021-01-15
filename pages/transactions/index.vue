@@ -3,6 +3,18 @@
     <template v-if="$auth.user && !initialLoading">
       <div v-if="$auth.user.detail" class="container">
         <!-- Show only if not admin v-if="$auth.user.detail.type !== 'admin'" -->
+        <vs-alert
+          color="primary"
+          v-if="
+            this.$route.query.order_id && this.$route.query.transaction_status
+          "
+        >
+          <template #title> Payment Notification </template>
+          Your payment request for transaction
+          <b>{{ this.$route.query.order_id }}</b> was received with a response
+          of
+          <b>{{ this.$route.query.transaction_status }}</b>
+        </vs-alert>
         <CardSkeleton class="pt-0 pt-lg-5">
           <template v-slot:title>
             <h4 class="font-weight-bold custom-color">Past Transactions</h4>
