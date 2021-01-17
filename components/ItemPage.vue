@@ -210,8 +210,8 @@
                           >{{ category.label }}
                           <b
                             v-if="cIdx + 1 < item.data.detail.categories.length"
-                            >,</b
-                          >
+                            >,
+                          </b>
                         </b>
                       </div>
                     </div>
