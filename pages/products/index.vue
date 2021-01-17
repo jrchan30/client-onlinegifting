@@ -135,9 +135,9 @@
               >
             </div>
           </div>
-          <div v-if="CATEGORIES" class="mt-4">
-            <label for="category">Categories</label>
-            <client-only>
+          <client-only>
+            <div v-if="CATEGORIES" class="mt-4">
+              <label for="category">Categories</label>
               <treeselect
                 id="category"
                 v-model="categories"
@@ -147,8 +147,8 @@
                 value-consists-of="LEAF_PRIORITY"
                 :normalizer="normalizer"
               />
-            </client-only>
-          </div>
+            </div>
+          </client-only>
           <div class="mt-4 ml-auto pr-3">
             <vs-button
               block

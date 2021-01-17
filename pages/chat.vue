@@ -10,9 +10,16 @@
                 class="list-unstyled"
                 style="min-height: 300px; overflow-y: scroll"
               >
-                <li class="p-2" v-for="message in MESSAGES" :key="message.id">
-                  <strong>Jonathan Russell Chan</strong>
-                  message text
+                <li class="media" v-for="message in MESSAGES" :key="message.id">
+                  <img src="/image/bx-user.svg" width="30px" />
+                  <div class="media-body">
+                    <div>
+                      <small class="mt-0 mb-1 d-inline">{{
+                        message.user.name
+                      }}</small>
+                    </div>
+                    {{ message.message }}
+                  </div>
                 </li>
               </ul>
             </div>
