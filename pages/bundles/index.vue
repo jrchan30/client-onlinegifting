@@ -134,20 +134,20 @@
               >
             </div>
           </div>
-          <client-only>
-            <div v-if="CATEGORIES" class="mt-4">
-              <label for="category">Categories</label>
-              <treeselect
-                id="category"
-                v-model="categories"
-                :multiple="true"
-                :options="CATEGORIES"
-                placeholder="Select categories..."
-                value-consists-of="LEAF_PRIORITY"
-                :normalizer="normalizer"
-              />
-            </div>
-          </client-only>
+          <!-- <client-only> -->
+          <div v-if="CATEGORIES" class="mt-4">
+            <label for="category">Categories</label>
+            <treeselect
+              id="category"
+              v-model="categories"
+              :multiple="true"
+              :options="CATEGORIES"
+              placeholder="Select categories..."
+              value-consists-of="LEAF_PRIORITY"
+              :normalizer="normalizer"
+            />
+          </div>
+          <!-- </client-only> -->
         </div>
 
         <div class="mt-4 ml-auto pr-3">
