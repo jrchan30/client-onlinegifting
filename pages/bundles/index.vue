@@ -134,9 +134,9 @@
               >
             </div>
           </div>
-          <!-- <client-only> -->
           <div v-if="CATEGORIES" class="mt-4">
             <label for="category">Categories</label>
+            <!-- <client-only> -->
             <treeselect
               id="category"
               v-model="categories"
@@ -146,8 +146,8 @@
               value-consists-of="LEAF_PRIORITY"
               :normalizer="normalizer"
             />
+            <!-- </client-only> -->
           </div>
-          <!-- </client-only> -->
         </div>
 
         <div class="mt-4 ml-auto pr-3">
@@ -205,9 +205,6 @@ export default {
     }
   },
 
-  // async asyncData({ store }) {
-  //   await store.dispatch('categories/GET_CATEGORIES')
-  // },
   async mounted() {
     await this.GET_CATEGORIES()
   },

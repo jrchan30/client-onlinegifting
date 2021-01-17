@@ -206,15 +206,10 @@ export default {
       tempMin: 0,
     }
   },
-  // async asyncData({ store }) {
-  //   await store.dispatch('categories/GET_CATEGORIES')
-  // },
 
   async mounted() {
     await this.GET_CATEGORIES()
   },
-
-  mounted() {},
 
   computed: {
     ...mapGetters({
@@ -248,24 +243,7 @@ export default {
     ...mapMutations({
       SET_FILTER: 'products/SET_FILTER',
     }),
-    // pushRouter(by, query) {
-    //   let url = ''
-    //   if (this.$route.fullPath.includes('?')) {
-    //     if (this.$route.fullPath.includes(`${by}`)) {
-    //       // url = this.$route.query.by
-    //       // url = this.$route.fullPath + by + '=' + query
-    //       url = this.$router.replace({
-    //         name: this.$route.path,
-    //         query: { ...this.$route.query, by: query },
-    //       })
-    //     } else {
-    //       url = this.$route.fullPath + '&' + by + '=' + query
-    //     }
-    //   } else {
-    //     url = this.$route.path + '?' + by + query
-    //   }
-    //   this.$router.push(url)
-    // },
+
     updateQueryStringParameter(key, value) {
       const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i')
       let uri = this.$route.fullPath
