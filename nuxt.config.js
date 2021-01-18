@@ -100,7 +100,7 @@ export default {
     { src: '~plugins/tiptap.js', mode: 'client' },
     { src: '~plugins/vuesax.js' },
     { src: '@/plugins/aos.js', mode: 'client' },
-    {src: '@/plugins/echo.js', mode: 'client'}
+    { src: '@/plugins/echo.js', mode: 'client'}
   ],
   /*
    ** Auto import components
@@ -114,6 +114,22 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     // '@nuxtjs/eslint-module',
     '@aceforth/nuxt-optimized-images',
+    // 'pusher-js',
+    // ['@nuxtjs/laravel-echo', {
+    //     broadcaster: 'pusher',
+    //     authModule: true,
+    //     connectOnLogin: true,
+    //     cluster: 'mt1',
+    //     key: process.env.WEBSOCKET_KEY,
+    //     wsHost: 'localhost',
+    //     wsPort: process.env.WEBSOCKET_PORT,
+    //     wssPort: process.env.WEBSOCKET_PORT,
+    //     authEndpoint: 'http://localhost:8000/broadcasting/auth',
+    //   }
+    // ],
+    // echo: {
+
+    // }
   ],
 
   optimizedImages: {
@@ -132,8 +148,7 @@ export default {
     'vue-swatches/nuxt',
     '@nuxtjs/pwa',
     // '@nuxt/image',
-    // 'pusher-js',
-    // '@nuxtjs/laravel-echo',
+    
   ],
   axios: {
     credentials: true,
@@ -153,18 +168,7 @@ export default {
         provider: 'laravel/sanctum',
         url: process.env.SANCTUM_URL,
         user: {
-          // url: '/user',
-          // method: 'get',
-          // propertyName: 'data',
           property: 'data',
-          // withCredentials: true,
-          // data: {},
-          // headers: {
-          //   Referer: `${process.env.REFERER}`, // <- here
-          //   Accept: 'application/json',
-          //   'X-Requested-With': 'XMLHttpRequest',
-          //   'Content-Type': 'application/json',
-          // },
         },
         endpoints: {
           logout: { url: '/logout', method: 'post' },

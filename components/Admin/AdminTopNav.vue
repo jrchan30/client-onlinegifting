@@ -61,7 +61,7 @@
               <i class="ni ni-zoom-split-in"></i>
             </a>
           </li>
-          <!-- <li class="nav-item dropdown">
+          <li class="nav-item dropdown">
             <a
               class="nav-link"
               href="#"
@@ -135,13 +135,14 @@
                   </div>
                 </a>
               </div>
-              <a
-                href="#!"
+              <nuxt-link
+                tag="a"
+                to="/admin/chats"
                 class="dropdown-item text-center text-primary font-weight-bold py-3"
-                >View all</a
+                >View all</nuxt-link
               >
             </div>
-          </li> -->
+          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link"
