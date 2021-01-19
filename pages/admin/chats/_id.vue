@@ -118,10 +118,10 @@ export default {
     return {
       room: null,
       messageToSend: '',
-      initialLoad: false,
+      initialLoad: true,
     }
   },
-  async created() {
+  async mounted() {
     // Echo.private('chat.' + this.$route.params.id).on('MessageSent', (e) => {
     //   console.log(e)
     // })
@@ -143,6 +143,7 @@ export default {
             room_id: msg.room_id,
             user: msg.user,
             user_id: msg.user_id,
+            created_at: new Date().toLocaleString(),
           },
         }
         this.$store.commit('rooms/ADD_MESSAGE', toUpdate)
@@ -164,7 +165,7 @@ export default {
           message: this.messageToSend,
           room_id: this.$route.params.id,
         })
-        console.log(res)
+        this.messageToSend = ''
         this.$store.commit('rooms/ADD_MESSAGE', res)
       } catch (e) {
         console.log(e)

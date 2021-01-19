@@ -62,7 +62,10 @@
             </a>
           </li>
           <li class="nav-item dropdown">
-            <a
+            <nuxt-link tag="a" to="/admin/chats" class="nav-link">
+              <i class="ni ni-bell-55"></i>
+            </nuxt-link>
+            <!-- <a
               class="nav-link"
               href="#"
               role="button"
@@ -71,8 +74,8 @@
               aria-expanded="false"
             >
               <i class="ni ni-bell-55"></i>
-            </a>
-            <div
+            </a> -->
+            <!-- <div
               class="dropdown-menu dropdown-menu-xl dropdown-menu-right py-0 overflow-hidden"
             >
               <div class="px-3 py-3">
@@ -141,7 +144,7 @@
                 class="dropdown-item text-center text-primary font-weight-bold py-3"
                 >View all</nuxt-link
               >
-            </div>
+            </div> -->
           </li>
           <li class="nav-item dropdown">
             <a

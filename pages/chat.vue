@@ -135,10 +135,15 @@ export default {
     return {
       messageToSend: '',
       room: null,
-      initialLoad: false,
+      initialLoad: true,
     }
   },
-  async created() {
+  async mounted() {
+    this.$vs.notification({
+      duration: 20000,
+      title: `<b>Caution</b>`,
+      text: `Our live chat feature is currently underdevelopment, <u>sending personal information or sensitive data is prohibited!</u>`,
+    })
     try {
       this.initialLoad = true
       await this.$store.dispatch('rooms/GET_ROOM', this.$auth.user.room_id)
@@ -184,6 +189,7 @@ export default {
         const res = await this.$axios.$post('/messages', {
           message: this.messageToSend,
         })
+        this.messageToSend = ''
         this.$store.commit('rooms/ADD_MESSAGE', res)
       } catch (e) {
         console.log(e)

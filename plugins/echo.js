@@ -1,4 +1,5 @@
 import Echo from 'laravel-echo'
+// import Echo from ''
 import { parse as parseCookie } from 'cookie'
 
 export default function (context) {
@@ -16,7 +17,8 @@ export default function (context) {
         forceTLS: false, //tadi false
         logToConsole: true,
         // encrypted: false, //tadi false
-        wsHost: window.location.hostname,
+        // wsHost: window.location.hostname,
+        wsHost: '127.0.0.1',
         wsPort: process.env.WEBSOCKET_PORT,
         // wssPort: process.env.WEBSOCKET_PORT,
         disableStats: true,
@@ -31,9 +33,10 @@ export default function (context) {
                         socket_id: socketId,
                         channel_name: channel.name
                     },
-                    {
-                        Authorization: test['XSRF-TOKEN '], withCredentials: true
-                    })
+                    // {
+                    //     Authorization: test['XSRF-TOKEN '], withCredentials: true
+                    // }
+                    )
                     .then(response => {
                         callback(false, response.data);
                     })

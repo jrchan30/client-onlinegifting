@@ -788,6 +788,7 @@ export default {
               text: e.response.data?.message,
             })
           } finally {
+            this.GET_BUNDLES()
             // this.loading = false
             loading.close()
             this.closeForm()

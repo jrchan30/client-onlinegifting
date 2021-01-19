@@ -127,11 +127,8 @@ export default {
     //     authEndpoint: 'http://localhost:8000/broadcasting/auth',
     //   }
     // ],
-    // echo: {
-
-    // }
   ],
-
+  
   optimizedImages: {
     optimizeImages: true
   },

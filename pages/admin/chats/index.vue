@@ -5,7 +5,10 @@
         <nuxt-link class="card" :to="`/admin/chats/${room.id}`">
           <div class="card-header">{{ room.user.name }}</div>
           <div class="card-body">
-            {{ room.messages[room.messages.length - 1].message }}
+            <span v-if="room.messages.length > 0">{{
+              room.messages[room.messages.length - 1].message
+            }}</span>
+            <span v-else class="text-muted">No Chats</span>
           </div>
         </nuxt-link>
       </div>
