@@ -256,7 +256,7 @@
               </template>
               Tutorial (Unavailable)
             </vs-sidebar-item>
-            <vs-sidebar-item id="chat" to="/chat">
+            <vs-sidebar-item id="chat" to="/chat" disabled>
               <template #icon>
                 <i class="bx bx-chat"></i>
               </template>

@@ -100,7 +100,7 @@ export default {
     { src: '~plugins/tiptap.js', mode: 'client' },
     { src: '~plugins/vuesax.js' },
     { src: '@/plugins/aos.js', mode: 'client' },
-    { src: '@/plugins/echo.js', mode: 'client'}
+    // { src: '@/plugins/echo.js', mode: 'client'}
   ],
   /*
    ** Auto import components
