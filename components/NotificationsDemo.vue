@@ -31,8 +31,8 @@ export default {
     pushButtonDisabled: true,
   }),
   mounted() {
-    this.registerServiceWorker()
-    // this.initialiseServiceWorker()
+    // this.registerServiceWorker()
+    this.initialiseServiceWorker()
   },
   methods: {
     /**
