@@ -180,19 +180,26 @@ export default {
     source: './static/icon-og.png',
   },
   pwa: {
-    icon: {
-      source: './static/icon-og.png',
-    },
-    meta: {
-      theme_color: '#336699',
-    },
-    manifest: {
-      name: 'Online Gifting',
-      short_name: 'OG',
-      description: 'Choose your gifts, we handle the rest',
-      author: 'Jonathan Russell Chan',
-      start_url: '/',
-    },
+      icon: {
+        source: './static/icon-og.png',
+      },
+      meta: {
+        theme_color: '#336699',
+      },
+      manifest: {
+        name: 'Online Gifting',
+        short_name: 'OG',
+        description: 'Choose your gifts, we handle the rest',
+        author: 'Jonathan Russell Chan',
+        start_url: '/',
+      },
+      workbox: {
+        // swURL: './push-sw.js',
+        // enabled: true,
+        importScripts: [
+          './push-sw.js'
+      ],
+      }
     // workbox: {
     //   cachingExtensions: '@/plugins/workbox-sync.js',
     //   enabled: true, // should be off actually per workbox docs due to complications when used in prod
