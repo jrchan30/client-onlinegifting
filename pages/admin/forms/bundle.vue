@@ -151,6 +151,22 @@
                 </div>
               </div>
             </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input
+                      v-model="form.isNotif"
+                      type="checkbox"
+                      aria-label="Checkbox for following text input"
+                    />
+                  </div>
+                </div>
+                <span class="form-control" style="cursor: default"
+                  >Send as notification to subscribers</span
+                >
+              </div>
+            </div>
           </div>
         </div>
         <!-- End Image Section -->
@@ -362,6 +378,7 @@ export default {
         categories: [],
         design: '',
         designImage: '',
+        isNotif: false,
       },
       showDesign: false,
       editor: null,
@@ -457,6 +474,7 @@ export default {
             description: this.form.description,
             colour: this.form.colour,
             design: this.form.design,
+            isNotif: this.form.isNotif == true ? 1 : 0,
           }
 
           const formData = new FormData()
@@ -495,7 +513,7 @@ export default {
               onUpdate: ({ getJSON, getHTML }) => {
                 this.json = getJSON()
                 this.html = getHTML()
-                this.description = this.html
+                this.form.description = this.html
               },
             })
           } catch (e) {

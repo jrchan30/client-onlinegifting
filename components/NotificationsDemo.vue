@@ -31,8 +31,8 @@ export default {
     pushButtonDisabled: true,
   }),
   mounted() {
-    // this.registerServiceWorker()
-    this.initialiseServiceWorker()
+    this.registerServiceWorker()
+    // this.initialiseServiceWorker()
   },
   methods: {
     /**
@@ -90,13 +90,10 @@ export default {
       navigator.serviceWorker.ready.then((registration) => {
         const options = { userVisibleOnly: true }
         const vapidPublicKey = process.env.VAPID_PUBLIC_KEY
-        console.log(process.env.VAPID_PUBLIC_KEY)
-        // console.log(vapidPublicKey)
         if (vapidPublicKey) {
           options.applicationServerKey = this.urlBase64ToUint8Array(
             vapidPublicKey
           )
-          console.log(options.applicationServerKey)
         }
         registration.pushManager
           .subscribe(options)
@@ -201,7 +198,7 @@ export default {
     sendNotification() {
       this.loading = true
       this.$axios
-        .$post('/notifications')
+        .post('/notifications')
         .catch((error) => console.log(error))
         .then(() => {
           this.loading = false

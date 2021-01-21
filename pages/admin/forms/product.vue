@@ -115,6 +115,22 @@
                 </button>
               </div>
             </div>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <input
+                      v-model="isNotif"
+                      type="checkbox"
+                      aria-label="Checkbox for following text input"
+                    />
+                  </div>
+                </div>
+                <span class="form-control" style="cursor: default"
+                  >Send as notification to subscribers</span
+                >
+              </div>
+            </div>
           </div>
         </div>
 
@@ -216,14 +232,16 @@
           </div>
         </div>
 
-        <button
-          type="submit"
-          class="btn btn-info btn-lg btn-block"
-          :disabled="loading"
-        >
-          <i v-if="loading" class="fas fa-spinner fa-spin"></i>
-          Submit
-        </button>
+        <div class="col-lg-12">
+          <button
+            type="submit"
+            class="btn btn-info btn-lg btn-block"
+            :disabled="loading"
+          >
+            <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+            Submit
+          </button>
+        </div>
       </div>
     </form>
   </div>
@@ -302,6 +320,7 @@ export default {
       editor: null,
       description: '',
       loading: false,
+      isNotif: false,
 
       normalizer(node) {
         if (node.children == null || node.children === 'null') {
@@ -386,6 +405,7 @@ export default {
             price: this.fields.price.value,
             stock: this.fields.stock.value,
             weight: this.fields.weight.value,
+            isNotif: this.isNotif == true ? 1 : 0,
           }
 
           const formData = new FormData()

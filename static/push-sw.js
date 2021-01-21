@@ -16,6 +16,7 @@
        * @param {NotificationEvent} event
        */
       notificationPush (event) {
+        console.log(event)
         if (!(self.Notification && self.Notification.permission === 'granted')) {
           return
         }
@@ -37,10 +38,14 @@
        */
       notificationClick (event) {
         // console.log(event.notification)
-  
-        if (event.action === 'some_action') {
-          // Do something...
-        } else {
+        console.log(event)
+        if (event.action.includes('view_product')) {
+          var arrStr = event.action.split("|")
+          self.clients.openWindow(`/products/${arrStr[1]}`)
+        } else if(event.action.includes('view_bundle')){
+          var arrStr = event.action.split("|")
+          self.clients.openWindow(`/bundles/${arrStr[1]}`)
+        }else {
           self.clients.openWindow('/')
         }
       },
@@ -68,7 +73,7 @@
        * @param {PushMessageData|Object} data
        */
       sendNotification (data) {
-        console.log(data)
+        // console.log(data)
         return self.registration.showNotification(data.title, data)
       },
   

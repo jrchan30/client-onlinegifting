@@ -170,6 +170,9 @@ export default {
         endpoints: {
           logout: { url: '/logout', method: 'post' },
         },
+        token: {
+          maxAge: 60*60*24*365
+        },
         watchLoggedIn: true,
         autoLogout: false,
       },
