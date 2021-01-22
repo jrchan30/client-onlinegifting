@@ -17,6 +17,11 @@ export const mutations = {
     state.isLoggedIn = payload.auth ?? false
     state.auth.user = payload.user ?? null
   },
+  CHANGE_PROFILE_PICTURE(state, payload){
+    state.auth.user.profile_pic = payload.data.profile_pic
+    state.auth.user.detail.image.path = payload.data.detail.image.path
+    state.auth.user.detail.image.url = payload.data.detail.image.url
+  }
 }
 
 export const actions = {

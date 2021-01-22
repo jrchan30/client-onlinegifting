@@ -1,11 +1,9 @@
 <template>
   <div>
     <Navbar />
-    <!-- <div class="pt-5"> -->
     <div class="minheight" :class="{ 'mt-5 pt-5': $nuxt.isOnline }">
       <Nuxt />
     </div>
-    <!-- </div> -->
     <LoginRegisterFooter />
   </div>
 </template>
@@ -13,7 +11,30 @@
 <script>
 export default {
   name: 'Default',
-
+  data() {
+    return {
+      admin: {
+        active: true,
+      },
+    }
+  },
+  mounted() {
+    if (this.$auth.loggedIn) {
+      if (this.$auth.user.type == 'admin') {
+        const noti = this.$vs.notification({
+          title: '<b>Warning Admin</b>',
+          duration: 10000,
+          buttonClose: false,
+          progress: 'auto',
+          text: `Please refrain from using any functionalities in the customer pages, you can navigate to admin page by clicking this notification`,
+          onClick: () => {
+            noti.close()
+            this.$router.push('/admin')
+          },
+        })
+      }
+    }
+  },
   head() {
     return {
       link: [
@@ -66,6 +87,11 @@ export default {
 
 .swal-container {
   z-index: 100000;
+}
+
+.vs-avatar img {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .bg-wave {

@@ -4,7 +4,7 @@
       <template v-if="!loading">
         <div class="container">
           <div v-if="$auth.user.detail">
-            <template
+            <!-- <template
               v-if="$auth.user.detail.type == 'admin'"
               data-aos="fade-up"
               data-aos-duration="1000"
@@ -18,7 +18,7 @@
                 in the admin section provided
                 <nuxt-link to="/admin/profile">HERE!</nuxt-link>
               </vs-alert>
-            </template>
+            </template> -->
           </div>
           <div class="bg-top pt-0">
             <div class="row pt-0 pt-md-5">
@@ -111,10 +111,10 @@
                         circle
                         icon
                         border
-                        danger
-                        @click="deleteUser()"
+                        primary
+                        @click="editProfilePic()"
                       >
-                        <i class="bx bxs-trash"></i>
+                        <i class="bx bxs-file-image"></i>
                       </vs-button>
                       <vs-button circle color="#336699" @click="editPrompt"
                         >Edit Profile
@@ -331,6 +331,41 @@
           </div>
         </div>
       </vs-dialog>
+
+      <vs-dialog width="550px" prevent-close v-model="showProfilePicPrompt">
+        <template #header>
+          <h4 class="not-margin">Add or change <b>profile picture</b></h4>
+        </template>
+
+        <div class="container">
+          <div>
+            <picture-input
+              ref="pictureInput"
+              width="600"
+              height="600"
+              size="3"
+              margin="16"
+              :z-index="10"
+              button-class="btn mb-0 mt-1"
+              remove-button-class="btn my-0"
+              radius="5"
+              :removable="false"
+              :custom-strings="{
+                upload: '<h1>Bummer!</h1>',
+                drag: 'Drag an image',
+                remove: 'Remove',
+                change: 'Change',
+              }"
+              @change="onChange()"
+            >
+            </picture-input>
+          </div>
+        </div>
+
+        <template #footer>
+          <vs-button block @click="saveProfilePic" primary> Save </vs-button>
+        </template>
+      </vs-dialog>
     </template>
     <!-- </div> -->
   </div>
@@ -349,10 +384,14 @@ export default {
       form: {
         image: null,
       },
+      profilePicture: {
+        image: null,
+      },
       admin: {
         active: true,
       },
       activePrompt: false,
+      showProfilePicPrompt: false,
       province_selected: '',
       city_selected: '',
       loading: false,
@@ -480,7 +519,7 @@ export default {
     onChange() {
       const file = this.$refs.pictureInput.file
       if (file) {
-        this.form.image = file
+        this.profile_picture.image = file
       } else {
         alert(
           'Old browser (not supported). Chrome latest updated browser is suggested'
@@ -592,6 +631,40 @@ export default {
           }
         }
       })
+    },
+    onChange() {
+      const file = this.$refs.pictureInput.file
+      if (file) {
+        this.profilePicture.image = file
+      } else {
+        alert(
+          'Old browser (not supported). Chrome latest updated browser is suggested'
+        )
+      }
+    },
+    editProfilePic() {
+      this.showProfilePicPrompt = true
+    },
+    async saveProfilePic() {
+      const loading = this.$vs.loading()
+      try {
+        const formData = new FormData()
+        formData.append('profile_pic', this.profilePicture.image)
+        formData.append('_method', 'patch')
+        const res = await this.$axios.$post('/edit-profile-picture', formData)
+        // this.$store.commit('index/CHANGE_PROFILE_PICTURE', res)
+        this.$auth.setUser(res.data)
+        this.showProfilePicPrompt = false
+        this.$swal('Updated!', 'Profile picture has been updated.', 'success')
+      } catch (e) {
+        this.$swal({
+          icon: 'error',
+          title: 'Oops...',
+          text: e.response.data?.message,
+        })
+      } finally {
+        loading.close()
+      }
     },
   },
 }

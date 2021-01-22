@@ -12,7 +12,7 @@ export default function (context) {
         namespace: 'App.Events',
         broadcaster: 'pusher',
         key: process.env.WEBSOCKET_KEY,
-        // cluster: 'mt1',
+        cluster: 'eu',
         // authEndpoint: 'http://localhost:8000/api/broadcasting/auth',
         forceTLS: false, //tadi false
         logToConsole: true,

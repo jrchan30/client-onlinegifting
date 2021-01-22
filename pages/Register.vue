@@ -130,7 +130,16 @@ export default {
         this.alert.show = true
         this.alert.text = `Success! Please verify your email <strong>${this.form.email.val}</strong>.`
       } catch (e) {
-        this.errors = e.response.data.errors
+        if (e.response.data.errors) {
+          this.errors = e.response.data.errors
+        } else if (e.message.includes('500')) {
+          this.$vs.notification({
+            title: '<b>An Error Occured</b>',
+            color: 'danger',
+            text: `Possibly because the username has already been taken.`,
+          })
+          // this.error = e
+        }
       } finally {
         this.loading = false
       }

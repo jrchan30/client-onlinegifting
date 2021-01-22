@@ -756,7 +756,6 @@ export default {
           }
 
           formData.append('_method', 'patch')
-          console.log(formData)
           try {
             await this.$axios.$post(`/bundles/${this.form.bundle_id}`, formData)
             this.$swal('Inserted!', 'Bundle has been inserted.', 'success')

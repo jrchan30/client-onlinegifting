@@ -1,7 +1,7 @@
 <template>
   <div>
-    <notifications-dropdown></notifications-dropdown>
-    <NotificationsDemo />
+    <!-- <notifications-dropdown></notifications-dropdown> -->
+    <!-- <NotificationsDemo /> -->
   </div>
 </template>
 
