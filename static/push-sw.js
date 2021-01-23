@@ -16,7 +16,6 @@
        * @param {NotificationEvent} event
        */
       notificationPush (event) {
-        console.log(event)
         if (!(self.Notification && self.Notification.permission === 'granted')) {
           return
         }
@@ -37,8 +36,6 @@
        * @param {NotificationEvent} event
        */
       notificationClick (event) {
-        // console.log(event.notification)
-        console.log(event)
         if (event.action.includes('view_product')) {
           var arrStr = event.action.split("|")
           self.clients.openWindow(`/products/${arrStr[1]}`)

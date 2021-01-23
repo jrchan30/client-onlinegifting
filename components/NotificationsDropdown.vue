@@ -146,8 +146,10 @@ export default {
      * Listen for Echo push notifications.
      */
     listen() {
-      window.Echo.private(`App.Models.User.${window.Laravel.user.id}`)
+      console.log(window.Echo)
+      window.Echo.private(`App.User.${this.$auth.user.id}`)
         .notification((notification) => {
+          console.log(notification)
           this.total++
           this.notifications.unshift(notification)
         })
@@ -164,6 +166,14 @@ export default {
           this.total = 0
           this.notifications = []
         })
+    },
+    listen() {
+      window.Echo.private(`App.User.${this.$auth.user.id}`).listen(
+        'WebsocketDemoEvent',
+        (res) => {
+          console.log(res)
+        }
+      )
     },
     /**
      * Initialize the notifications dropdown.

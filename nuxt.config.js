@@ -100,8 +100,9 @@ export default {
     { src: '~plugins/tiptap.js', mode: 'client' },
     { src: '~plugins/vuesax.js' },
     { src: '@/plugins/aos.js', mode: 'client' },
-    { src: '~/plugins/axios'}
+    { src: '~/plugins/axios'},
     // { src: '@/plugins/echo.js', mode: 'client'}
+    // { src: '@/plugins/Echos.js', mode: 'client'}
   ],
   /*
    ** Auto import components
@@ -116,6 +117,7 @@ export default {
     // '@nuxtjs/eslint-module',
     '@aceforth/nuxt-optimized-images',
     // 'pusher-js',
+    // '@nuxtjs/laravel-echo'
     // ['@nuxtjs/laravel-echo', {
     //     broadcaster: 'pusher',
     //     authModule: true,
@@ -146,7 +148,19 @@ export default {
     'vue-swatches/nuxt',
     '@nuxtjs/pwa',
     // '@nuxt/image',
-    
+  //   ['@nuxtjs/laravel-echo', {
+  //     broadcaster: 'pusher',
+  //     // authModule: true,
+  //     // connectOnLogin: true,
+  //     cluster: 'eu',
+  //     key: process.env.WEBSOCKET_KEY,
+  //     wsHost: 'localhost',
+  //     forceTLS: true,
+  //     wsPort: process.env.WEBSOCKET_PORT,
+  //     wssPort: process.env.WEBSOCKET_PORT,
+  //     authEndpoint: 'http://localhost:8000/broadcasting/auth',
+  //   }
+  // ],
   ],
   axios: {
     credentials: true,

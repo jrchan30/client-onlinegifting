@@ -215,67 +215,92 @@ export default {
     },
     async add(id, idx) {
       await this.GET_BOXES()
-      const productInfo = await this.GET_PRODUCT_INFO({
-        idx,
-        storeState: 'latest',
-      })
-      try {
-        const { value: index } = await this.$swal({
-          title: 'Choose box to add to',
-          input: 'select',
-          inputOptions: this.BOXES.data.map((x) => {
-            return x.name
-          }),
-          inputPlaceholder: 'Select a box',
+      if (this.BOXES.data.length < 1) {
+        this.$swal({
+          icon: 'question',
+          title: 'You have no box',
+          text: 'Create one now?',
           showCancelButton: true,
-          inputValidator: (value) => {
-            return new Promise((resolve) => {
-              if (value) {
-                resolve()
-              } else {
-                resolve('You need to choose one')
-              }
-            })
-          },
+          confirmButtonText: `Sure`,
+          denyButtonText: `Nope, later`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$router.push('/boxes')
+          }
         })
-        this.inputs.box_id = this.BOXES.data[index].id
+      } else {
+        const productInfo = await this.GET_PRODUCT_INFO({
+          idx,
+          storeState: this.storeState,
+        })
+        try {
+          this.$swal({
+            title: 'Choose box to add to',
+            input: 'select',
+            inputOptions: this.BOXES.data.map((x) => {
+              return x.name
+            }),
+            inputPlaceholder: 'Select a box',
+            showCancelButton: true,
+            inputValidator: (value) => {
+              return new Promise((resolve) => {
+                if (value) {
+                  resolve()
+                } else {
+                  resolve('You need to choose one')
+                }
+              })
+            },
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.inputs.box_id = this.BOXES.data[result.value].id
 
-        const { value: qty } = await this.$swal({
-          title: 'Input quantity',
-          input: 'range',
-          inputLabel:
-            'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
-          inputAttributes: {
-            min: 1,
-            max: productInfo.stock,
-            step: 1,
-          },
-          inputValue: 1,
-          inputValidator: (value) => {
-            return new Promise((resolve) => {
-              if (value || value <= productInfo.stock) {
-                resolve()
-              } else {
-                resolve('You need to choose one')
-              }
-            })
-          },
-        })
+              this.$swal({
+                title: 'Input quantity',
+                input: 'range',
+                inputLabel:
+                  'Before payment, you might need to rechoose if product exceeds available stocks at that moment',
+                showCancelButton: true,
+                inputAttributes: {
+                  min: 1,
+                  max: productInfo.stock,
+                  step: 1,
+                },
+                inputValue: 1,
+                inputValidator: (value) => {
+                  return new Promise((resolve) => {
+                    if (value || value <= productInfo.stock) {
+                      resolve()
+                    } else {
+                      resolve('You need to choose one')
+                    }
+                  })
+                },
+              }).then(async (result2) => {
+                if (result2.isConfirmed) {
+                  const allProducts = {}
+                  this.BOXES.data[result.value].products.map((x) => {
+                    allProducts[x.id] = { quantity: x.quantity }
+                  })
+                  allProducts[id] = { quantity: result2.value }
 
-        const allProducts = {}
-        this.BOXES.data[index].products.map((x) => {
-          allProducts[x.id] = { quantity: x.quantity }
-        })
-        allProducts[id] = { quantity: qty }
-
-        await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
-          allProducts: JSON.stringify(allProducts),
-        })
-        alert('success')
-      } catch (e) {
-        alert(e)
-      } finally {
-        this.clear()
+                  await this.$axios.$patch(`/boxes/${this.inputs.box_id}`, {
+                    allProducts: JSON.stringify(allProducts),
+                  })
+                  this.addBoxNotification(
+                    name,
+                    this.BOXES.data[result.value].name,
+                    result2.value
+                  )
+                }
+              })
+            }
+          })
+        } catch (e) {
+          alert(e)
+        } finally {
+          this.clear()
+        }
       }
     },
     goTo(id) {

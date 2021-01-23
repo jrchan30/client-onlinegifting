@@ -18,9 +18,9 @@ export default function (context) {
         logToConsole: true,
         // encrypted: false, //tadi false
         // wsHost: window.location.hostname,
-        wsHost: '127.0.0.1',
+        wsHost: 'localhost',
         wsPort: process.env.WEBSOCKET_PORT,
-        // wssPort: process.env.WEBSOCKET_PORT,
+        wssPort: process.env.WEBSOCKET_PORT,
         disableStats: true,
         enabledTransports: ['ws', 'wss'],
         // headers: {
