@@ -48,6 +48,7 @@ export const mutations = {
         discussions: payload.data.discussions,
         likes_count: payload.data.likes_count,
         avg_rating: payload.data.avg_rating,
+        products: payload.data.products
       },
     }
   },

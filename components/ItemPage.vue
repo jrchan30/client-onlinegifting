@@ -3,123 +3,6 @@
     <div class="bg-wave h-100 minheight pb-3">
       <div v-if="item.data && !loading">
         <div class="container">
-          <!-- <div class="row">
-          <div class="col-12">
-            <BreadCrumb />
-          </div>
-        </div> -->
-
-          <!-- <div class="row justify-content-around pb-5">
-          <template v-if="item.data.images.length > 0">
-            <div class="col-12 col-md-6">
-              <div class="row">
-                <div class="col-12 py-2 border-bottom">
-                  <img
-                    class="w-100 item-image"
-                    :src="item.data.images[currentImage.index].url"
-                    alt="image unavailable"
-                    loading="lazy"
-                    @click="
-                      expandImage(`${item.data.images[currentImage.index].url}`)
-                    "
-                  />
-                </div>
-                <template v-if="item.data.images.length > 1" class="col-12">
-                  <div
-                    v-for="(image, index) in item.data.images"
-                    :key="'image' + index"
-                    class="col-3 pr-0 mt-2"
-                  >
-                    <img
-                      class="w-100 item-image-bottom"
-                      :class="{
-                        'active-image': index == currentImage.index,
-                      }"
-                      :src="image.url"
-                      alt="Image unavailable"
-                      loading="lazy"
-                      @click="activeImage(index)"
-                    />
-                  </div>
-                </template>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <p class="text-danger col-12 col-md-6">Image cannot be found</p>
-          </template>
-
-          <div class="col-12 col-md-6">
-            <div class="row pt-3">
-              <div class="col-12">
-                <div class="text-uppercase font-weight-bold">
-                  {{ item.data.name }}
-                </div>
-              </div>
-            </div>
-            <div class="row border-bottom pb-3">
-              <div class="col-12">
-                <p class="font-weight-bold text-muted mb-0 text-size">
-                  <template>
-                    <span>{{
-                      parseFloat(item.data.avg_rating).toFixed(1)
-                    }}</span>
-                    <i class="fas fa-star" style="color: #ffdf00"></i> Rated by
-                    {{ item.data.reviews.length }} people &bull;
-                  </template>
-                  <template>
-                    Liked by {{ item.data.likes_count }} people
-                  </template>
-                </p>
-              </div>
-            </div>
-
-            <div class="row border-bottom py-3">
-              <div class="col-12">
-                <span
-                  class="text-uppercase text-muted font-weight-bold text-size"
-                  >PRICE</span
-                >
-                <span
-                  id="price-value"
-                  class="font-weight-bold text-secondary ml-3"
-                  >Rp.{{ item.data.price }}</span
-                >
-              </div>
-            </div>
-
-            <div class="row border-bottom py-3">
-              <div class="col-12">
-                <div
-                  class="text-uppercase text-muted font-weight-bold text-size"
-                >
-                  <vs-button
-                    warn
-                    gradient
-                    :disabled="!$auth.user"
-                    @click="add(item.data.id, item.data.name, item.data.type)"
-                  >
-                    <span v-if="item.data.type == 'product'">
-                      <i class="bx bx-box mr-2"></i> Add to Box
-                    </span>
-                    <span v-else
-                      ><i class="bx bxs-cart-add mr-2"></i> Add to Cart</span
-                    >
-                  </vs-button>
-                </div>
-              </div>
-            </div>
-
-            <div class="row py-2">
-              <div class="col-12">
-                <p class="text-uppercase text-primary font-weight-bold">
-                  item DESCRIPTION
-                </p>
-                <span v-html="item.data.description"></span>
-              </div>
-            </div>
-          </div>
-        </div> -->
           <div class="row mb-4">
             <div class="col-12">
               <div class="card border-0">
@@ -305,11 +188,11 @@
                       v-if="item.data.type == 'product'"
                       relief
                       colour="#336699"
-                      disabled
+                      href="#bundled"
                     >
                       BUNDLED
                     </vs-button>
-                    <vs-button v-else relief colour="#336699">
+                    <vs-button v-else relief colour="#336699" href="#products">
                       PRODUCTS
                     </vs-button>
                     <vs-button relief colour="#336699" href="#discussions">
@@ -320,6 +203,92 @@
                     </vs-button>
                   </vs-button-group>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container pt-4" v-if="item.data.type == 'bundle'">
+          <div class="card border-0">
+            <div class="card-body">
+              <div class="row">
+                <div id="products" class="col-md-12 font-weight-bold mb-3">
+                  PRODUCTS ({{ item.data.products.length }})
+                </div>
+                <div
+                  class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0"
+                  v-for="(product, index) in item.data.products"
+                  :key="index"
+                >
+                  <vs-card type="1" @click="redirectToItem(product.id)">
+                    <template #title>
+                      <h3>{{ product.name }}</h3>
+                    </template>
+                    <template #img>
+                      <img
+                        :src="product.main_image"
+                        :alt="`${product.name} image`"
+                      />
+                    </template>
+                    <template #text>
+                      <span v-html="product.description"></span>
+                    </template>
+                  </vs-card>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="container pt-4"
+          id="bundled"
+          v-if="item.data.type == 'product'"
+        >
+          <div class="card border-0">
+            <div class="card-body">
+              <div class="row">
+                <div id="products" class="col-md-12 font-weight-bold mb-3">
+                  BUNDLED
+                  <span v-if="!$fetchState.pending"
+                    >({{ bundled.data.length }})</span
+                  >
+                </div>
+                <template v-if="!$fetchState.pending">
+                  <div
+                    class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0"
+                    v-for="(bundle, index) in bundled.data"
+                    :key="index"
+                  >
+                    <vs-card type="1" @click="redirectToItem(bundle.id)">
+                      <template #title>
+                        <h3>{{ bundle.name }}</h3>
+                      </template>
+                      <template #img>
+                        <img
+                          :src="bundle.main_image"
+                          :alt="`${bundle.name} image`"
+                        />
+                      </template>
+                      <template #text>
+                        <span v-html="bundle.description"></span>
+                      </template>
+                    </vs-card>
+                  </div>
+                  <div v-if="bundled.data.length < 1" class="col-12">
+                    <p class="text-muted">
+                      Currently no bundle uses this product
+                    </p>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="col-12">
+                    <content-placeholders :rounded="true">
+                      <content-placeholders-img />
+                      <content-placeholders-heading />
+                    </content-placeholders>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
@@ -526,6 +495,14 @@ export default {
       newDiscussion: '',
       newReview: '',
       isLoading: false,
+      bundled: {},
+      bundledLoad: {},
+    }
+  },
+
+  async fetch() {
+    if (this.item.data.type == 'product') {
+      this.bundled = await this.$axios.$get(`/get-bundled/${this.item.data.id}`)
     }
   },
 
@@ -713,6 +690,13 @@ export default {
         this.isLoading = false
       }
     },
+    redirectToItem(id) {
+      let route = ''
+      this.item.data.type == 'product'
+        ? (route = `/bundles/${id}`)
+        : `/products/${id}`
+      this.$router.push(route)
+    },
     addReply(discussionId, discussionIdx, name) {
       this.$swal({
         title: `Reply to ${name.substring(0, 18)}`,
@@ -746,6 +730,19 @@ export default {
   },
 }
 </script>
+
+<style>
+.vs-card__text {
+  width: 100% !important;
+}
+.vs-card-content.type-4 .vs-card {
+  max-width: 100%;
+}
+
+.vs-card {
+  max-width: 100%;
+}
+</style>
 
 <style scoped>
 .list-inline-item {
