@@ -1,12 +1,17 @@
 <template>
   <div>
-    <notifications-dropdown></notifications-dropdown>
-    <NotificationsDemo />
+    <div>
+      <!-- <notifications-dropdown></notifications-dropdown> -->
+      <div class="justify-content-center">
+        <NotificationsDemo />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  middleware: ['auth-ssr', 'auth', 'admin-only'],
   //   components: { Notifications },
   // data: () => ({
   //   total: 0,

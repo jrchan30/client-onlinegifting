@@ -132,8 +132,9 @@ export default {
     } finally {
       this.initialLoad = false
     }
-    const laravelEcho = Echo.channel(`chat.${this.$route.params.id}`)
+    const laravelEcho = window.echo.private(`chat.${this.$route.params.id}`)
     laravelEcho.on('MessageSent', (res) => {
+      console.log(res)
       if (res.message.user_id !== this.$auth.user.id) {
         const msg = res.message
         const toUpdate = {
@@ -147,8 +148,15 @@ export default {
           },
         }
         this.$store.commit('rooms/ADD_MESSAGE', toUpdate)
+        var objDiv = document.getElementById('chat-area')
+        objDiv.scrollTop = objDiv.scrollHeight
       }
     })
+    // window.echo
+    //   .private(`App.Models.User.${this.$auth.user.id}`)
+    //   .notification((data) => {
+    //     console.log(data)
+    //   })
   },
   computed: {
     ...mapGetters({
@@ -172,9 +180,9 @@ export default {
       }
     },
   },
-  beforeDestroy() {
-    Echo.leave(`chat.${this.$route.params.id}`)
-  },
+  // beforeDestroy() {
+  //   Echo.leave(`chat.${this.$route.params.id}`)
+  // },
 }
 </script>
 

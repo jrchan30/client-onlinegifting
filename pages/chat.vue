@@ -108,11 +108,10 @@
                 type="text"
                 v-model="messageToSend"
                 placeholder="Type a message"
-                aria-describedby="button-addon2"
                 class="form-control border-0 py-4 bg-light"
               />
               <div class="input-group-append">
-                <button id="button-addon2" type="submit" class="btn btn-link">
+                <button type="submit" class="btn btn-link">
                   <i class="fa fa-paper-plane"></i>
                 </button>
               </div>
@@ -150,25 +149,29 @@ export default {
     } finally {
       this.initialLoad = false
     }
-    const laravelEcho = Echo.channel(`chat.${this.$auth.user.room_id}`)
-    laravelEcho.on('MessageSent', (res) => {
-      console.log(res)
-      if (res.message.user_id !== this.$auth.user.id) {
-        const msg = res.message
+    if (window.echo) {
+      const laravelEcho = window.echo.private(`chat.${this.$auth.user.room_id}`)
+      laravelEcho.on('MessageSent', (res) => {
         console.log(res)
-        const toUpdate = {
-          data: {
-            id: msg.id,
-            message: msg.message,
-            room_id: msg.room_id,
-            user: msg.user,
-            user_id: msg.user_id,
-            created_at: new Date().toLocaleString(),
-          },
+        if (res.message.user_id !== this.$auth.user.id) {
+          const msg = res.message
+          console.log(res)
+          const toUpdate = {
+            data: {
+              id: msg.id,
+              message: msg.message,
+              room_id: msg.room_id,
+              user: msg.user,
+              user_id: msg.user_id,
+              created_at: new Date().toLocaleString(),
+            },
+          }
+          this.$store.commit('rooms/ADD_MESSAGE', toUpdate)
+          var objDiv = document.getElementById('chat-area')
+          objDiv.scrollTop = objDiv.scrollHeight
         }
-        this.$store.commit('rooms/ADD_MESSAGE', toUpdate)
-      }
-    })
+      })
+    }
   },
 
   computed: {
@@ -196,9 +199,9 @@ export default {
       }
     },
   },
-  beforeDestroy() {
-    Echo.leave(`chat.${this.$auth.user.room_id}`)
-  },
+  // beforeDestroy() {
+  //   Echo.leave(`chat.${this.$auth.user.room_id}`)
+  // },
 }
 </script>
 

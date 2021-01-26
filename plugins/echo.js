@@ -8,7 +8,7 @@ export default function (context) {
     const cookies = parseCookie(context.$cookies.getAll().toString())
     // console.log(cookies)
     // console.log(test['XSRF-TOKEN'])
-    window.Echo = new Echo({
+    window.echo = new Echo({
         namespace: 'App.Events',
         broadcaster: 'pusher',
         key: process.env.WEBSOCKET_KEY,
@@ -23,9 +23,6 @@ export default function (context) {
         wssPort: process.env.WEBSOCKET_PORT,
         disableStats: true,
         enabledTransports: ['ws', 'wss'],
-        // headers: {
-        //     'X-CSRF-TOKEN':  test['XSRF-TOKEN']
-        // },
         authorizer: (channel, options) => {
             return {
                 authorize: (socketId, callback) => {
@@ -33,12 +30,9 @@ export default function (context) {
                         socket_id: socketId,
                         channel_name: channel.name
                     },
-                    // {
-                    //     Authorization: test['XSRF-TOKEN '], withCredentials: true
-                    // }
                     )
                     .then(response => {
-                        callback(false, response.data);
+                        callback(false, response);
                     })
                     .catch(error => {
                         callback(true, error);

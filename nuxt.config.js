@@ -101,7 +101,7 @@ export default {
     { src: '~plugins/vuesax.js' },
     { src: '@/plugins/aos.js', mode: 'client' },
     { src: '~/plugins/axios'},
-    // { src: '@/plugins/echo.js', mode: 'client'}
+    { src: '@/plugins/echo.js', mode: 'client'}
     // { src: '@/plugins/Echos.js', mode: 'client'}
   ],
   /*
@@ -117,20 +117,27 @@ export default {
     // '@nuxtjs/eslint-module',
     '@aceforth/nuxt-optimized-images',
     // 'pusher-js',
-    // '@nuxtjs/laravel-echo'
-    // ['@nuxtjs/laravel-echo', {
+    // [
+    //   '@nuxtjs/laravel-echo',
+    //   {
     //     broadcaster: 'pusher',
-    //     authModule: true,
-    //     connectOnLogin: true,
-    //     cluster: 'mt1',
     //     key: process.env.WEBSOCKET_KEY,
+    //     cluster: process.env.WEBSOCKET_CLUSTER,
+    //     encrypted: false,
     //     wsHost: 'localhost',
-    //     wsPort: process.env.WEBSOCKET_PORT,
-    //     wssPort: process.env.WEBSOCKET_PORT,
-    //     authEndpoint: 'http://localhost:8000/broadcasting/auth',
+    //     wsPort: 6001,
+    //     forceTLS: false,
+    //     disableStats: true,
+    //     authEndpoint: process.env.SANCTUM_URL + '/api/broadcasting/auth'
     //   }
     // ],
   ],
+
+  echo: {
+    // authModule: true,
+    connectOnLogin: true,
+    disconnectOnLogout: true
+  },
   
   optimizedImages: {
     optimizeImages: true
