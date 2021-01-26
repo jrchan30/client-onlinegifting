@@ -256,11 +256,11 @@
               </template>
               Tutorial (Unavailable)
             </vs-sidebar-item>
-            <vs-sidebar-item id="chat" to="/chat" disabled>
+            <vs-sidebar-item id="chat" to="/chat">
               <template #icon>
                 <i class="bx bx-chat"></i>
               </template>
-              Chat (Unavailable)
+              Chat (In Development)
             </vs-sidebar-item>
           </vs-sidebar-group>
           <div class="row ml-1">
