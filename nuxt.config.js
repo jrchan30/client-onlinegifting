@@ -101,7 +101,7 @@ export default {
     { src: '~plugins/vuesax.js' },
     { src: '@/plugins/aos.js', mode: 'client' },
     { src: '~/plugins/axios'},
-    { src: '@/plugins/echo.js', mode: 'client'}
+    // { src: '@/plugins/echo.js', mode: 'client'}
     // { src: '@/plugins/Echos.js', mode: 'client'}
   ],
   /*
