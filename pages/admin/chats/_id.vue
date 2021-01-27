@@ -132,26 +132,30 @@ export default {
     } finally {
       this.initialLoad = false
     }
-    const laravelEcho = window.echo.private(`chat.${this.$route.params.id}`)
-    laravelEcho.on('MessageSent', (res) => {
-      console.log(res)
-      if (res.message.user_id !== this.$auth.user.id) {
-        const msg = res.message
-        const toUpdate = {
-          data: {
-            id: msg.id,
-            message: msg.message,
-            room_id: msg.room_id,
-            user: msg.user,
-            user_id: msg.user_id,
-            created_at: new Date().toLocaleString(),
-          },
+
+    if (window.echo) {
+      const laravelEcho = window.echo.private(`chat.${this.$route.params.id}`)
+      laravelEcho.on('MessageSent', (res) => {
+        console.log(res)
+        if (res.message.user_id !== this.$auth.user.id) {
+          const msg = res.message
+          const toUpdate = {
+            data: {
+              id: msg.id,
+              message: msg.message,
+              room_id: msg.room_id,
+              user: msg.user,
+              user_id: msg.user_id,
+              created_at: new Date().toLocaleString(),
+            },
+          }
+          this.$store.commit('rooms/ADD_MESSAGE', toUpdate)
+          var objDiv = document.getElementById('chat-area')
+          objDiv.scrollTop = objDiv.scrollHeight
         }
-        this.$store.commit('rooms/ADD_MESSAGE', toUpdate)
-        var objDiv = document.getElementById('chat-area')
-        objDiv.scrollTop = objDiv.scrollHeight
-      }
-    })
+      })
+    }
+
     // window.echo
     //   .private(`App.Models.User.${this.$auth.user.id}`)
     //   .notification((data) => {

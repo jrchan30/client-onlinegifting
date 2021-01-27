@@ -219,11 +219,9 @@ export default {
         start_url: '/',
       },
       workbox: {
-        // swURL: './push-sw.js',
-        // enabled: true,
         importScripts: [
           './push-sw.js'
-      ],
+        ],
       }
     // workbox: {
     //   cachingExtensions: '@/plugins/workbox-sync.js',

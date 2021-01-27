@@ -17,6 +17,12 @@
           >
             <i class="text-primary bx bx-menu"></i>
           </vs-button>
+          <img
+            class="ml-2"
+            width="40px"
+            src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
+            alt=""
+          />
         </template>
         <vs-input
           v-model="search"
