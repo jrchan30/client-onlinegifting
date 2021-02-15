@@ -19,7 +19,7 @@
       <div class="carousel-item active">
         <img
           class="d-block w-100"
-          src="/image/slider/Slider1.png"
+          src="/image/slider/Banner-1.svg"
           alt="First slide"
         />
       </div>
