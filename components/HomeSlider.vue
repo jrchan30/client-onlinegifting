@@ -26,14 +26,14 @@
       <div class="carousel-item">
         <img
           class="d-block w-100"
-          src="/image/slider/Slider2.png"
+          src="/image/slider/Banner-2.svg"
           alt="Second slide"
         />
       </div>
       <div class="carousel-item">
         <img
           class="d-block w-100"
-          src="/image/slider/Slider3.png"
+          src="/image/slider/Banner-3.svg"
           alt="Third slide"
         />
       </div>
