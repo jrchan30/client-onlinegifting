@@ -22,6 +22,7 @@ export default {
   },
   head() {
     return {
+      title: 'Online Gifting Admin',
       meta: [
         {
           title: 'testing',
@@ -31,7 +32,7 @@ export default {
         {
           rel: 'icon',
           type: 'image/png',
-          href: '/assets/img/brand/favicon.png',
+          href: '/icon-og.png',
         },
         {
           rel: 'stylesheet',
