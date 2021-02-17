@@ -22,6 +22,8 @@
             width="40px"
             src="/image/SVG-OnlineGifting-LogoCrop-ColorChanged.svg"
             alt=""
+            style="cursor: pointer"
+            @click="$router.push('/')"
           />
         </template>
         <vs-input
